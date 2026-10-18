@@ -82,6 +82,16 @@ in a list.
 | H   | Sheet                | the video is a card; controls stand on solid ground below            |
 | I   | Quiet                | one button, and it carries the dish name and price                   |
 | J   | F, without the bar   | **F's language, order in the rail, B's info block**                  |
+| K   | The bag              | TikTok Shop — one clip, several dishes, a drawer                     |
+| L   | Peek                 | Instagram Reels — a price chip, then a product sheet                 |
+| M   | Moods                | Netflix Clips — browse by occasion, three actions                    |
+| N   | Yours                | Spotify — your own shortcuts pinned above the feed                   |
+| O   | Deck                 | Feed Me / Crave — swipe a deck, not a feed                           |
+| P   | Table                | Chicken Tinder — everyone votes, the tally decides                   |
+| Q   | Live                 | Whatnot — a stream, a chat, order while it is hot                    |
+| R   | Shelf                | EasyEat — nine dishes at once, not one                               |
+| S   | Chapters             | stories — one kitchen, several dishes                                |
+| T   | Tray                 | live commerce — a basket that fills as you scroll                    |
 | E   | Everything           | all four at once, so the cost is arguable not imagined               |
 
 Each variant prints its own argument and its own costs under the phone. **E
