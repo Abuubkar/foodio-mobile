@@ -19,6 +19,8 @@ import { colors } from '@/theme';
 import type { Clip } from '../types/clip.types';
 import { isCustomerClip } from '../types/clip.types';
 
+import { ClipProgress } from './ClipProgress';
+
 type ClipFeedCellProps = {
   clip: Clip;
   height: number;
@@ -57,6 +59,13 @@ export function ClipFeedCell({
   });
 
   const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
+
+  /*
+    Paused by a tap, as opposed to paused because the Clip scrolled away or
+    has not started. Only this one earns the play glyph: an overlay on a Clip
+    that is merely buffering would say the wrong thing.
+  */
+  const [pausedByTap, setPausedByTap] = useState(false);
   // "Playing" is ExoPlayer's clock, not its canvas — frames can lag it. The
   // poster must outlive play() until pixels actually hit the surface.
   const [hasRenderedFrame, setHasRenderedFrame] = useState(false);
@@ -75,6 +84,12 @@ export function ClipFeedCell({
   useEffect(() => {
     // Reduce motion: never autoplay, play once on request.
     player.loop = !reduceMotion;
+    // Four times a second is enough for a 2dp bar and cheap enough for the
+    // hardware this pilot targets.
+    player.timeUpdateEventInterval = 0.25;
+
+    // A Clip scrolled away and back starts again; it does not come back paused.
+    setPausedByTap(false);
 
     if (!isActive) {
       player.pause();
@@ -83,6 +98,17 @@ export function ClipFeedCell({
     }
     if (!reduceMotion) player.play();
   }, [player, isActive, reduceMotion]);
+
+  /** The gesture anyone who has used a short-video feed tries first. */
+  const togglePlayback = () => {
+    if (player.playing) {
+      player.pause();
+      setPausedByTap(true);
+      return;
+    }
+    player.play();
+    setPausedByTap(false);
+  };
 
   const author = isCustomerClip(clip)
     ? t('clips.customerClipLabel', { restaurant: clip.restaurantName, caption: clip.caption })
@@ -111,6 +137,26 @@ export function ClipFeedCell({
           contentFit="cover"
         />
       )}
+
+      {/*
+        Under every control, so the mute button and View menu keep their own
+        taps — later siblings are on top. The bottom overlay is `box-none` for
+        the same reason, or it would swallow a tap on the caption.
+      */}
+      <Pressable
+        onPress={togglePlayback}
+        accessibilityRole="button"
+        accessibilityLabel={isPlaying ? t('clips.pause') : t('clips.play')}
+        className="absolute inset-0"
+      />
+
+      {pausedByTap ? (
+        <View pointerEvents="none" className="absolute inset-0 items-center justify-center">
+          <View className="h-16 w-16 items-center justify-center rounded-full bg-black/50">
+            <Ionicons name="play" size={30} color={colors.white} />
+          </View>
+        </View>
+      ) : null}
 
       {reduceMotion && isActive && !isPlaying ? (
         <Pressable
@@ -151,7 +197,10 @@ export function ClipFeedCell({
         }}
       />
 
+      <ClipProgress player={player} bottomInset={ownsBottomEdge ? insets.bottom : 0} />
+
       <View
+        pointerEvents="box-none"
         style={{ paddingBottom: 20 + (ownsBottomEdge ? insets.bottom : 0) }}
         className="absolute inset-x-0 bottom-0 p-4"
       >
