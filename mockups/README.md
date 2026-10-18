@@ -71,14 +71,17 @@ carries a mute button, the ours/theirs badge, a caption and _View menu_ — so
 the only thing you can do with a dish you just watched is go and look for it
 in a list.
 
-| key | name                 | what it argues                                           |
-| --- | -------------------- | -------------------------------------------------------- |
-| A   | The pairing          | one dish per page, their clip above the customer's below |
-| B   | Shoppable            | the dish named, priced and added where you are standing  |
-| C   | The rail             | like, save, share — the convention, minus Follow         |
-| D   | Steered              | filters over the feed, and closed said on the clip       |
-| F   | Steered + rail + act | **D and C together, plus a way to get the dish**         |
-| E   | Everything           | all four at once, so the cost is arguable not imagined   |
+| key | name                 | what it argues                                                       |
+| --- | -------------------- | -------------------------------------------------------------------- |
+| A   | The pairing          | one dish per page, their clip above the customer's below             |
+| B   | Shoppable            | the dish named, priced and added where you are standing              |
+| C   | The rail             | like, save, share — the convention, minus Follow                     |
+| D   | Steered              | filters over the feed, and closed said on the clip                   |
+| F   | Steered + rail + act | D and C together, plus a way to get the dish — **rejected on looks** |
+| G   | Edge                 | F's features as type on the edges: no boxes anywhere                 |
+| H   | Sheet                | the video is a card; controls stand on solid ground below            |
+| I   | Quiet                | one button, and it carries the dish name and price                   |
+| E   | Everything           | all four at once, so the cost is arguable not imagined               |
 
 Each variant prints its own argument and its own costs under the phone. **E
 exists to be rejected** — if everything at once looks wrong, that is the
@@ -87,7 +90,7 @@ finding, and it is cheaper to see it here than after it ships.
 No Follow in C on purpose: there is no feed-by-restaurant to follow into, and
 a button that only changes its own label is a lie.
 
-**F is the one to look at.** D and C were the two picked, and what neither of
+**F had the right features and the wrong looks** — see G, H and I below. D and C were the two picked, and what neither of
 them does is let you get the dish. The button is decided by the dish rather
 than by the layout, because issue #148 already made that rule real on the
 menu row:
@@ -113,6 +116,29 @@ scroll — four of six clips carry a dish, and one of those has options.
   the prototype inventing it, and it does blunt A's argument. The real app has
   the same mismatch. Prices show as USD for the same reason; the backend seed
   is PKR.
+
+### G, H, I — the same features, three ways of looking
+
+F was right about **what** and wrong about **how**: three bands of chrome on a
+suffocated video, every element its own floating rounded box, and a closed
+banner that read like an error toast dropped mid-screen. G, H and I carry F's
+feature set exactly and argue only about the looks.
+
+| direction   | the idea                                                                                                                                          | what it costs                                                         |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **G Edge**  | No boxes. Filters are words with the live one underlined, the rail is outline icons with no discs, the dish is one hairline and one line of type. | Nothing has a tap target you can see; it all leans on the scrim.      |
+| **H Sheet** | Stop fighting the footage. The video is a card and the controls stand under it on solid ground.                                                   | The video loses a third of its height; reads as a post, not a feed.   |
+| **I Quiet** | One button that _is_ the dish — `Choose Birria Tacos · $14.99`. The filter becomes a tappable title.                                              | One filter visible at a time, and a long dish name has nowhere to go. |
+
+**Closed is a banner in none of them.** G puts it where the delivery estimate
+was — _"Bella Italia Ristorante · Closed, opens 11:00"_, amber, same sentence,
+no new object. H puts it beside the ETA in the sheet. I changes what the
+button offers: _Order Truffle Tagliatelle for later_. The warning box over the
+video was the worst of the three answers and is gone.
+
+The rail icons are inline SVG rather than unicode: there is no bookmark glyph
+worth looking at, and a coloured emoji inside a monochrome rail reads as a
+mistake.
 
 Regenerate `data.js` from the mock after a seed change:
 
