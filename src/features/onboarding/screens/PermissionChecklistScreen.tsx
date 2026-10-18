@@ -13,18 +13,24 @@ import { useOnboardingStore } from '@/stores/onboarding.store';
 
 import { PermissionRow } from '../components/PermissionRow';
 
+/**
+ * Location only.
+ *
+ * Notifications used to sit here too and were the colder of the two asks: a
+ * Person who has not yet seen a Restaurant has no reason to say yes, Android
+ * never asks twice, and a refusal here silently costs every Order-status
+ * notification they would have had. It is asked at the first placed Order
+ * instead, where there is a reason to give — see #151.
+ *
+ * Location stays because it pays off on the very next screen: Restaurants
+ * near you.
+ */
 const PERMISSIONS = [
   {
     type: PermissionType.Location,
     icon: 'location-outline',
     titleKey: 'onboarding.location.title',
     descriptionKey: 'onboarding.location.description',
-  },
-  {
-    type: PermissionType.Notification,
-    icon: 'notifications-outline',
-    titleKey: 'onboarding.notifications.title',
-    descriptionKey: 'onboarding.notifications.description',
   },
 ] as const satisfies readonly {
   type: PermissionType;

@@ -14,4 +14,10 @@ export type PermissionResult = {
 
 export type PermissionPort = {
   request: (type: PermissionType) => Promise<PermissionResult>;
+  /**
+   * What the OS already thinks, without asking. Needed before showing a
+   * prompt of our own: there is no point explaining why notifications help
+   * to somebody who has already said yes, or already said no for good.
+   */
+  status: (type: PermissionType) => Promise<PermissionResult>;
 };
