@@ -107,6 +107,9 @@ const ORDER_REVIEW_PATH = /^\/orders\/([^/]+)\/review$/;
 const RESTAURANT_REVIEWS_PATH = /^\/restaurants\/([^/]+)\/reviews$/;
 const RESTAURANT_ITEM_PATH = /^\/restaurants\/[^/]+$/;
 const ADDRESS_ITEM_PATH = /^\/me\/addresses\/([^/]+)$/;
+const PUSH_TOKEN_ITEM_PATH = /^\/me\/push-tokens\/(.+)$/;
+
+const isPushTokenList = (req) => req.path === '/me/push-tokens';
 
 const isAddressList = (req) => req.path === '/me/addresses';
 
@@ -125,6 +128,8 @@ function invalidAddress(body) {
   if (required.some((key) => typeof body[key] !== 'string' || body[key].trim() === '')) return true;
   return typeof body.latitude !== 'number' || typeof body.longitude !== 'number';
 }
+
+const PUSH_PLATFORMS = new Set(['ios', 'android']);
 
 /** E.164, the one form the contract stores and compares. */
 const PHONE = /^\+[1-9]\d{7,14}$/;
@@ -215,7 +220,8 @@ module.exports = function mockApi(req, res, next) {
   // `personId` the client never sees, so one Person's addresses cannot be
   // listed by asking for them.
   const item = ADDRESS_ITEM_PATH.exec(req.path);
-  if (req.path === '/me' || isAddressList(req) || item) {
+  const pushToken = PUSH_TOKEN_ITEM_PATH.exec(req.path);
+  if (req.path === '/me' || isAddressList(req) || item || isPushTokenList(req) || pushToken) {
     const person = findPerson(req, personIdFrom(req));
     if (!person) {
       respondLater(res, 401, errorBody(401));
@@ -244,6 +250,39 @@ module.exports = function mockApi(req, res, next) {
         .assign({ ...(named ? { displayName } : {}), ...(numbered ? { phone } : {}) })
         .write();
       respondLater(res, 200, people.find({ id: person.id }).value());
+      return;
+    }
+
+    /*
+      Where a notification would be sent, if the mock sent any. It does not —
+      there is no FCM here — but the app registers a token the moment it has a
+      session, and a 404 there is an error state on a screen that has nothing
+      to do with notifications.
+    */
+    if (req.method === 'POST' && isPushTokenList(req)) {
+      const { token, platform } = req.body ?? {};
+      if (typeof token !== 'string' || token === '' || !PUSH_PLATFORMS.has(platform)) {
+        respondLater(res, 400, errorBody(400));
+        return;
+      }
+
+      const tokens = req.app.db.get('pushTokens');
+      // One row per device: registering the same token twice is not two devices.
+      const existing = tokens.find({ token }).value();
+      if (existing) void tokens.find({ token }).assign({ personId: person.id, platform }).write();
+      else void tokens.push({ token, platform, personId: person.id }).write();
+
+      respondLater(res, 201, { token, platform });
+      return;
+    }
+
+    // Signing out deregisters exactly what was registered.
+    if (req.method === 'DELETE' && pushToken) {
+      void req.app.db
+        .get('pushTokens')
+        .remove({ token: decodeURIComponent(pushToken[1]) })
+        .write();
+      endLater(res, 204);
       return;
     }
 
