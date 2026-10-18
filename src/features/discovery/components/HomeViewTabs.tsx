@@ -25,7 +25,7 @@ export function HomeViewTabs({ view, onChange }: HomeViewTabsProps) {
     // The rule is the row's own bottom edge, so the air the first card needs
     // goes under the rule, not above it. Padding inside the bordered view would
     // push the rule down instead, away from the tabs it belongs to.
-    <View className="bg-white pb-4" accessibilityRole="tablist">
+    <View className="bg-white px-3 pb-4" accessibilityRole="tablist">
       <View className="border-b border-gray-200">
         <ScrollView
           horizontal
