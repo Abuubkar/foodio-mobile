@@ -16,16 +16,12 @@
   },
   "onboarding": {
     "checklist": {
-      "title": "A couple of permissions",
-      "description": "Both are optional — you can change them later in Settings."
+      "title": "One permission",
+      "description": "Optional — you can change it later in Settings."
     },
     "location": {
       "title": "Enable Location",
       "description": "Find restaurants and deals near you"
-    },
-    "notifications": {
-      "title": "Stay Updated",
-      "description": "Get notified about orders and deals"
     },
     "notNow": "Not now"
   },
@@ -596,6 +592,14 @@
     "creating": "Creating…",
     "errors": {
       "name": "Give your restaurant a name."
+    }
+  },
+  "notifications": {
+    "prompt": {
+      "title": "Tell you when your food is on its way?",
+      "description": "We will let you know when the restaurant accepts your order and when it leaves for you.",
+      "accept": "Yes, tell me",
+      "decline": "Not now"
     }
   }
 }

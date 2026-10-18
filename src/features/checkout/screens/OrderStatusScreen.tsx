@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { EmptyState, ErrorState, LoadingState, ScreenHeader } from '@/components/shared';
 import { Button, Text } from '@/components/ui';
+import { OrderNotificationPrompt, useOrderNotificationPrompt } from '@/features/notifications';
 import { colors } from '@/theme';
 import { formatMoney } from '@/utils/currency';
 
@@ -17,6 +18,9 @@ import { RateOrderSheet } from '../components/RateOrderSheet';
 import { useCancelOrder, useOrder } from '../hooks/useOrders';
 import { customerPaymentKey } from '../lib/payment';
 import { isCancellable } from '../types/order.types';
+
+/** An Order that has stopped moving has nothing left to notify about. */
+const SETTLED = new Set(['delivered', 'rejected', 'cancelled', 'delivery_failed']);
 
 export function OrderStatusScreen() {
   const { t, i18n } = useTranslation();
@@ -29,6 +33,10 @@ export function OrderStatusScreen() {
   /* Beside the scroll, not inside it: the sheet's Submit loses its first tap
      to the ScrollView while the comment keyboard is up (#211). */
   const [rating, setRating] = useState(false);
+
+  /* The first placed Order is where notifications can be asked for with a
+     reason, rather than cold on the second onboarding screen (#151). */
+  const notify = useOrderNotificationPrompt();
 
   if (isPending) {
     return (
@@ -77,6 +85,15 @@ export function OrderStatusScreen() {
         </Text>
 
         <OrderStatusTimeline status={order.status} />
+
+        {/* Only while the Order is still moving: there is nothing left to be
+            told about one that has already arrived. */}
+        {notify.visible && !SETTLED.has(order.status) ? (
+          <OrderNotificationPrompt
+            onAccept={() => void notify.accept()}
+            onDecline={notify.decline}
+          />
+        ) : null}
 
         <View className="mt-6 rounded-2xl bg-gray-50 p-4">
           <View className="flex-row items-start">
