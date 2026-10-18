@@ -1101,3 +1101,100 @@ body {
 .v-i .i-mute {
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55));
 }
+
+/* ================= J — F, without the bar ========================= */
+
+/* The filter row owns the top edge, as in D. */
+.v-j .mute {
+  top: 84px;
+}
+
+/* F's language. The order lives in the rail above Share, and the slab that
+   sat on the tab bar is gone, so the video keeps the frame. */
+
+.v-j .j-rail {
+  position: absolute;
+  right: 10px;
+  bottom: 138px;
+  z-index: 7;
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  text-align: center;
+}
+
+.v-j .j-rail .act {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: #fff;
+}
+
+.v-j .j-rail .glyph {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.42);
+  font-size: 19px;
+}
+
+.v-j .j-rail .act.on .glyph {
+  background: rgba(255, 152, 0, 0.92);
+  color: #111;
+}
+
+/* The order is the only filled disc: it is the one thing here that spends
+   money, and it should not look like another toggle. */
+.v-j .j-rail .order .glyph {
+  background: var(--primary);
+  color: #111;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* A dish that asks a question is a door, not an add. */
+.v-j .j-rail .order .glyph.ghost {
+  background: rgba(255, 255, 255, 0.95);
+  color: #111827;
+  font-size: 15px;
+}
+
+.v-j .j-foot {
+  position: absolute;
+  left: 16px;
+  right: 74px;
+  bottom: 70px;
+  z-index: 6;
+}
+
+.v-j .j-dish {
+  margin-top: 8px;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.v-j .j-line {
+  margin-top: 3px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Closed takes the delivery time's slot — same sentence, no new object. */
+.v-j .j-line .shut {
+  font-style: normal;
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+/* The liked heart fills; the rest stay outlines inside their disc. */
+.v-j .j-rail .glyph svg {
+  display: block;
+}
+
+.v-j .j-rail .act.on .glyph svg {
+  fill: currentColor;
+}

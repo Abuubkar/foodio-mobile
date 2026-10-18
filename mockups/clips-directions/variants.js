@@ -478,6 +478,75 @@ function variantI() {
   };
 }
 
+/* ============ J — F, without the bar ============================== */
+/* F's language kept: pill filters, a rail of discs. What changed is where
+   the order lives — in the rail, above Share — and the slab above the tab
+   bar is gone. The info block is B's shape: the dish, then its restaurant,
+   its time and its price on one line. */
+
+function variantJ() {
+  const page = (c, i) => {
+    const closed = i === 1;
+    const dish = c.dish;
+    const liked = i === 0;
+    const saved = i === 2;
+
+    /* #148's rule, said in one word: a dish that asks a question opens the
+       dish page, it is not added behind the customer's back. */
+    const order = !dish
+      ? { glyph: '&#9776;', label: 'Menu', ghost: true }
+      : dish.optionGroups.length
+        ? { glyph: '&rsaquo;', label: 'Choose', ghost: true }
+        : { glyph: '&#43;', label: 'Add', ghost: false };
+
+    const title = dish ? dish.name : c.restaurantName;
+    const line = dish
+      ? `${c.restaurantName} &middot; ${closed ? `<em class="shut">opens 11:00</em>` : eta(c.restaurant)} &middot; ${money(dish.priceMinor, c.restaurant.currency)}`
+      : `${c.restaurant.cuisines.join(' · ')} &middot; ${closed ? `<em class="shut">opens 11:00</em>` : eta(c.restaurant)}`;
+
+    return `
+    <div class="cell v-j">
+      ${media(c)}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+
+      <div class="filters">
+        <span class="pill on">All</span>
+        <span class="pill">Delivers to you</span>
+        <span class="pill">Open now</span>
+        <span class="pill">${c.restaurant.cuisines[0]}</span>
+      </div>
+      <div class="count">${theirs.length} clips near Gulberg</div>
+      <div class="mute">&#128263;</div>
+
+      <div class="j-rail">
+        <div class="act ${liked ? 'on' : ''}">
+          <span class="glyph">${icon('heart', 21)}</span>${124 + i * 17}
+        </div>
+        <div class="act ${saved ? 'on' : ''}">
+          <span class="glyph">${icon('bookmark', 21)}</span>${saved ? 'Saved' : 'Save'}
+        </div>
+        <div class="act order">
+          <span class="glyph ${order.ghost ? 'ghost' : ''}">${order.glyph}</span>${order.label}
+        </div>
+        <div class="act"><span class="glyph">${icon('share', 21)}</span>Share</div>
+      </div>
+
+      <div class="j-foot">
+        ${authorBadge(c)}
+        <div class="j-dish">${title}</div>
+        <div class="j-line">${line}</div>
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: "F with the slab above the tab bar removed and the order moved into the rail, directly above Share. The info is B's shape — the dish, then its restaurant, delivery time and price on one line. Closed takes the slot the delivery time was in rather than arriving as a banner. The video gets back the third of the frame F had taken from it.",
+  };
+}
+
 /* ============ E — Everything ====================================== */
 /* All four at once, on purpose: the honest way to see what it costs. */
 
@@ -546,6 +615,7 @@ const VARIANTS = [
   ['G', 'Edge', variantG],
   ['H', 'Sheet', variantH],
   ['I', 'Quiet', variantI],
+  ['J', 'F, without the bar', variantJ],
   ['E', 'Everything', variantE],
 ];
 
