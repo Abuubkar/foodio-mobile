@@ -45,3 +45,9 @@ yarn-error.*
 
 # workflow agent worktrees
 .claude/worktrees/
+
+# Firebase. Environment-specific and never committed: this repository is
+# public. `google-services.json` is not a secret (it ships inside the APK),
+# but the FCM V1 service-account key under .secrets/ very much is.
+google-services.json
+.secrets/

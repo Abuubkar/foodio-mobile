@@ -112,6 +112,25 @@ the dev machine's address from Expo, so an Android emulator or a physical device
 works without editing anything. Copy `.env.example` to `.env` only when you need
 to point at a deployed API.
 
+Push notifications on Android need `GOOGLE_SERVICES_JSON` in `.env`, pointing
+at the `google-services.json` downloaded from the Firebase console for
+`com.hedonarc.foodio`. It is not a secret — it ships inside the APK — but it is
+gitignored, because this repository is public. Without it an Android build
+registers no push token and every notification goes nowhere, silently.
+
+That file alone is not enough. `getExpoPushTokenAsync` also needs an Expo
+`projectId`, which this project does not yet have, so the Expo push service has
+nothing to address. Two account-bound commands close that, and only the account
+holder can run them:
+
+```bash
+npx eas-cli@latest login && npx eas-cli@latest init
+npx eas-cli@latest credentials --platform android
+```
+
+The first writes `extra.eas.projectId` into `app.json`; the second uploads the
+FCM V1 service-account key, under Push Notifications. See issue #143.
+
 The delivery-area map needs `GOOGLE_MAPS_API_KEY` in `.env` on Android — put
 the Maps SDK key there, never in `app.json`, because this repository is public.
 `app.config.ts` reads it at build time and fails an EAS Android build outright
