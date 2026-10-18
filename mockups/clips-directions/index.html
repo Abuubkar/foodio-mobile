@@ -1,0 +1,38 @@
+<!doctype html>
+<!--
+  THROWAWAY PROTOTYPE — not production code, not React Native.
+  Five directions for what lives on a Clip, switchable via ?variant=A|B|C|D|E.
+  Real data from mocks/db.json.
+  Question it answers: the Clips tab plays video and offers almost nothing to
+  do — what should be on a clip, and how much is too much?
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Foodio — clip directions</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="stage">
+      <div class="phone">
+        <div class="phone-notch" aria-hidden="true"></div>
+        <div class="screen" id="screen"></div>
+      </div>
+    </div>
+
+    <nav class="switcher" aria-label="Prototype variant switcher">
+      <button id="prev" aria-label="Previous variant">&larr;</button>
+      <span class="switcher-label">
+        <b id="vkey">A</b>
+        <span id="vname">The pairing</span>
+      </span>
+      <button id="next" aria-label="Next variant">&rarr;</button>
+    </nav>
+
+    <p class="note" id="vnote"></p>
+
+    <script src="data.js"></script>
+    <script src="variants.js"></script>
+  </body>
+</html>
