@@ -1074,6 +1074,20 @@ const filmedCount = (k) => k.menu.flatMap((c) => c.items).filter((d) => d.clipId
 const menuPill = (k) =>
   `<span class="k-menu">Menu <i>${k.menu.flatMap((c) => c.items).length}</i></span>`;
 
+/* The kitchen's identity, and — set apart by a hairline, because it is yours
+   and not theirs — the way into Saved. The Clips tab is where a clip gets
+   saved, so it is where you go looking for it again. */
+const kitchenHead = (k, saved = true) => `
+  <div class="u-head">
+    <img src="${k.restaurant.image}" alt="" />
+    <div class="u-who">
+      <b>${k.name}</b>
+      <span>${eta(k.restaurant)} &middot; ${fee(k.restaurant)}</span>
+    </div>
+    ${menuPill(k)}
+    ${saved ? `<span class="u-saved" data-goto="Y" title="Saved clips">${icon('bookmark', 19)}</span>` : ''}
+  </div>`;
+
 /* ============ U — Kitchen ========================================= */
 /* The straight synthesis, and the one I would build. Down is the next
    kitchen; the segments across the top are the dishes this kitchen filmed.
@@ -1100,14 +1114,7 @@ function variantU() {
           .join('')}
       </div>
 
-      <div class="u-head">
-        <img src="${r.image}" alt="" />
-        <div class="u-who">
-          <b>${k.name}</b>
-          <span>${eta(r)} &middot; ${fee(r)}</span>
-        </div>
-        ${menuPill(k)}
-      </div>
+      ${kitchenHead(k)}
 
       <div class="u-foot">
         <div class="u-dish">
@@ -1399,6 +1406,7 @@ function variantY() {
     html: `<div class="cell v-y" style="height:820px">
       <div class="y-head">
         <div class="y-title">
+          <span class="y-back" data-goto="Z" title="Back to Clips">&#8249;</span>
           <b>Saved</b>
           <span>${count} clips &middot; ${saved.length} kitchens</span>
         </div>
@@ -1451,7 +1459,130 @@ function variantY() {
       </div>
       ${tabbar(2)}
     </div>`,
-    note: 'R moved to the screen it was always for. A shelf is the wrong shape for a feed — nine autoplaying tiles is the decoder problem the clips-feed spec fought — and the right shape for a collection, where everything is already chosen and comparison is the whole job. Posters, not video, so it costs nothing to render. Shown on the Kitchens tab, grouped under the same header the other four use, so a save is a way back into a kitchen rather than a loose clip; All would be one ungrouped shelf, which is R exactly. Costs: saves have no order here — no recency, no "ordered twice" — and a tile is a poster, so a saved clip you remember by its motion is hard to find.',
+    note: 'R moved to the screen it was always for. A shelf is the wrong shape for a feed — nine autoplaying tiles is the decoder problem the clips-feed spec fought — and the right shape for a collection, where everything is already chosen and comparison is the whole job. Posters, not video, so it costs nothing to render. Shown on the Kitchens tab, grouped under the same header the other four use, so a save is a way back into a kitchen rather than a loose clip; All would be one ungrouped shelf, which is R exactly. Reached by the bookmark on the Clips feed, which makes it a pushed screen rather than a tab — hence the back chevron, and hence the tab bar still showing Clips. Costs: saves have no order here — no recency, no “ordered twice” — and a tile is a poster, so a clip you remember by its motion is hard to find.',
+  };
+}
+
+/* ============ Z — Kitchen, with the menu drawer =================== */
+/* The one that was chosen: U's screen, W's drawer. Resting, it is U —
+   kitchen header, M's text, three actions, and a lip naming what else is
+   in the clip. Pulled up, the lip becomes W's menu, by category, with the
+   filmed dishes badged. One object at two heights, so the drawer is never
+   behind a bag and the menu is never a separate screen.
+   Cells alternate so both heights are visible: 1st and 3rd rest, 2nd and
+   4th are raised. */
+
+function variantZ() {
+  const page = (k, i) => {
+    const chapters = chaptersOf(k);
+    const at = Math.min(i, chapters.length - 1);
+    const clip = chapters[at] ?? k.clips[0];
+    const also = inClip(k, clip);
+    const r = k.restaurant;
+    const raised = i % 2 === 1;
+
+    /* The dish, never the kitchen: the header above has already said that. */
+    const dishLine = clip.dish
+      ? `${money(clip.dish.priceMinor, r.currency)}${clip.dish.rating ? ' &middot; &#9733; ' + clip.dish.rating : ''}${clip.dish.needsChoosing ? ' &middot; pick a ' + clip.dish.optionGroups[0].toLowerCase() : ''}`
+      : 'No dish tagged &mdash; the menu is the only way in';
+
+    const acts = `
+      <div class="u-acts">
+        <span class="primary">${primaryFor(clip)}</span>
+        <span>${icon('bookmark', 17)} List</span>
+        <span>${icon('share', 17)} Share</span>
+      </div>`;
+
+    const segs = `
+      <div class="u-segs">
+        ${chapters.map((_, n) => `<i><b style="width:${n < at ? 100 : n === at ? 52 : 0}%"></b></i>`).join('')}
+      </div>`;
+
+    if (!raised) {
+      return `
+      <div class="cell v-u v-z">
+        ${media(clip)}
+        <div class="scrim-top"></div>
+        <div class="scrim tall"></div>
+        ${segs}
+        ${kitchenHead(k)}
+
+        <div class="u-foot">
+          <div class="u-dish">
+            ${clip.dish ? clip.dish.name : clip.caption}
+            ${clip.dish && also.length > 1 ? '<i class="u-more">and more</i>' : ''}
+          </div>
+          <div class="u-line">${dishLine}</div>
+          ${acts}
+
+          <div class="u-lip" data-goto="Z">
+            <div class="u-grab"></div>
+            <div class="u-lip-row">
+              <div class="u-thumbs">${also.map((d) => `<img src="${d.image}" alt="" />`).join('')}</div>
+              <b>${also
+                .slice(1)
+                .map((d) => d.name)
+                .join(', ')}</b>
+              <span>&#8963;</span>
+            </div>
+          </div>
+        </div>
+        ${tabbar(2)}
+      </div>`;
+    }
+
+    return `
+      <div class="cell v-u v-w v-z up">
+        <div class="w-stage">
+          ${media(clip, 'w-video')}
+          <div class="scrim-top"></div>
+          <div class="scrim"></div>
+          <div class="w-over">
+            <div class="w-dish">
+              ${clip.dish ? clip.dish.name : clip.caption}
+              ${clip.dish && also.length > 1 ? '<i class="u-more">and more</i>' : ''}
+            </div>
+            <div class="w-line">${dishLine}</div>
+            ${acts}
+          </div>
+        </div>
+        ${segs}
+        ${kitchenHead(k)}
+
+        <div class="w-sheet">
+          <div class="w-grab"></div>
+          <div class="w-sheet-head">
+            <b>Menu</b>
+            <span>${filmedCount(k)} of ${k.menu.flatMap((c) => c.items).length} dishes filmed</span>
+          </div>
+          ${k.menu
+            .map(
+              (cat) => `
+            <div class="w-cat">${cat.name}</div>
+            ${cat.items
+              .map(
+                (d) => `
+              <div class="w-row ${d.clipId ? 'filmed' : ''}">
+                <img src="${d.image}" alt="" />
+                <div class="w-meta">
+                  <b>${d.name}</b>
+                  <span>${money(d.priceMinor, r.currency)}${d.clipId ? ' &middot; has a clip' : ''}</span>
+                </div>
+                ${d.clipId ? `<span class="w-play">${icon('play', 12)}</span>` : ''}
+                <span class="w-add">${d.needsChoosing ? '&#8250;' : '+'}</span>
+              </div>`,
+              )
+              .join('')}`,
+            )
+            .join('')}
+        </div>
+        ${tabbar(2)}
+      </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${kitchens.map(page).join('')}</div>`,
+    note: 'The chosen one: U’s screen with W’s drawer. Resting it is U — kitchen header, the dish in M’s type, three actions, and a lip naming the rest of what is in the clip. Pulled up, that same lip is W’s menu by category, with the filmed dishes badged, so the drawer is never behind a bag and the menu is never a separate screen. Cells alternate between the two heights so both are visible: scroll down to see it open and shut. The bookmark beside Menu, set off by a hairline because it is yours and not the kitchen’s, opens Saved — tap it. Costs: the lip and the Add button are neighbours at the bottom edge and a thumb will sometimes take the wrong one; and raised, the video is a 300dp header, so the clip stops being the point exactly when someone is deciding.',
   };
 }
 
@@ -1539,10 +1670,22 @@ const VARIANTS = [
   ['W', 'Menu', variantW],
   ['X', 'Two axes', variantX],
   ['Y', 'Saved', variantY],
+  ['Z', 'Kitchen + menu drawer', variantZ],
   ['E', 'Everything', variantE],
 ];
 
 const screen = document.getElementById('screen');
+
+/* Prototype navigation: anything carrying data-goto jumps to that variant,
+   so the bookmark actually reaches Saved instead of only looking like it. */
+screen.addEventListener('click', (event) => {
+  const hit = event.target.closest('[data-goto]');
+  if (!hit) return;
+  const url = new URL(location.href);
+  url.searchParams.set('variant', hit.dataset.goto);
+  history.replaceState({}, '', url);
+  render();
+});
 
 /** Only the clip you are looking at plays — ten at once stalls the page. */
 function wirePlayback() {

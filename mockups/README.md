@@ -71,33 +71,34 @@ carries a mute button, the ours/theirs badge, a caption and _View menu_ — so
 the only thing you can do with a dish you just watched is go and look for it
 in a list.
 
-| key | name                 | what it argues                                                       |
-| --- | -------------------- | -------------------------------------------------------------------- |
-| A   | The pairing          | one dish per page, their clip above the customer's below             |
-| B   | Shoppable            | the dish named, priced and added where you are standing              |
-| C   | The rail             | like, save, share — the convention, minus Follow                     |
-| D   | Steered              | filters over the feed, and closed said on the clip                   |
-| F   | Steered + rail + act | D and C together, plus a way to get the dish — **rejected on looks** |
-| G   | Edge                 | F's features as type on the edges: no boxes anywhere                 |
-| H   | Sheet                | the video is a card; controls stand on solid ground below            |
-| I   | Quiet                | one button, and it carries the dish name and price                   |
-| J   | F, without the bar   | **F's language, order in the rail, B's info block**                  |
-| K   | The bag              | TikTok Shop — one clip, several dishes, a drawer                     |
-| L   | Peek                 | Instagram Reels — a price chip, then a product sheet                 |
-| M   | Moods                | Netflix Clips — browse by occasion, three actions                    |
-| N   | Yours                | Spotify — your own shortcuts pinned above the feed                   |
-| O   | Deck                 | Feed Me / Crave — swipe a deck, not a feed                           |
-| P   | Table                | Chicken Tinder — everyone votes, the tally decides                   |
-| Q   | Live                 | Whatnot — a stream, a chat, order while it is hot                    |
-| R   | Shelf                | EasyEat — nine dishes at once, not one                               |
-| S   | Chapters             | stories — one kitchen, several dishes                                |
-| T   | Tray                 | live commerce — a basket that fills as you scroll                    |
-| U   | Kitchen              | the synthesis — chapters, header, M's text, a lip                    |
-| V   | Lip                  | the drawer never closes; the shelf is the bottom                     |
-| W   | Menu                 | the drawer and the chapters are one object                           |
-| X   | Two axes             | M's type with no rectangle anywhere                                  |
-| Y   | Saved                | R, on the screen it was always for                                   |
-| E   | Everything           | all four at once, so the cost is arguable not imagined               |
+| key | name                  | what it argues                                                       |
+| --- | --------------------- | -------------------------------------------------------------------- |
+| A   | The pairing           | one dish per page, their clip above the customer's below             |
+| B   | Shoppable             | the dish named, priced and added where you are standing              |
+| C   | The rail              | like, save, share — the convention, minus Follow                     |
+| D   | Steered               | filters over the feed, and closed said on the clip                   |
+| F   | Steered + rail + act  | D and C together, plus a way to get the dish — **rejected on looks** |
+| G   | Edge                  | F's features as type on the edges: no boxes anywhere                 |
+| H   | Sheet                 | the video is a card; controls stand on solid ground below            |
+| I   | Quiet                 | one button, and it carries the dish name and price                   |
+| J   | F, without the bar    | **F's language, order in the rail, B's info block**                  |
+| K   | The bag               | TikTok Shop — one clip, several dishes, a drawer                     |
+| L   | Peek                  | Instagram Reels — a price chip, then a product sheet                 |
+| M   | Moods                 | Netflix Clips — browse by occasion, three actions                    |
+| N   | Yours                 | Spotify — your own shortcuts pinned above the feed                   |
+| O   | Deck                  | Feed Me / Crave — swipe a deck, not a feed                           |
+| P   | Table                 | Chicken Tinder — everyone votes, the tally decides                   |
+| Q   | Live                  | Whatnot — a stream, a chat, order while it is hot                    |
+| R   | Shelf                 | EasyEat — nine dishes at once, not one                               |
+| S   | Chapters              | stories — one kitchen, several dishes                                |
+| T   | Tray                  | live commerce — a basket that fills as you scroll                    |
+| U   | Kitchen               | the synthesis — chapters, header, M's text, a lip                    |
+| V   | Lip                   | the drawer never closes; the shelf is the bottom                     |
+| W   | Menu                  | the drawer and the chapters are one object                           |
+| X   | Two axes              | M's type with no rectangle anywhere                                  |
+| Y   | Saved                 | R, on the screen it was always for                                   |
+| Z   | Kitchen + menu drawer | **the chosen one: U's screen, W's drawer**                           |
+| E   | Everything            | all four at once, so the cost is arguable not imagined               |
 
 Each variant prints its own argument and its own costs under the phone. **E
 exists to be rejected** — if everything at once looks wrong, that is the
@@ -195,6 +196,34 @@ documented, and the sources are listed below so the lineage is checkable.
 | **M — Moods**   | Netflix _Clips_                  | Browse by mood and occasion rather than by filter — "late night", "feeding four" — with exactly three actions: open, list, share.                                                  |
 | **N — Yours**   | Spotify's 2023 home              | A video feed with your own shortcuts pinned above it. A food app has what a music app does not: you ate this before.                                                               |
 | **O — Deck**    | Feed Me · Crave · Chicken Tinder | A card deck instead of a feed: left discards, right saves, up is "want it". Crave swiped dishes rather than restaurants, which is the right unit here.                             |
+
+### Z — the one to build
+
+Chosen from U–Y: **U's screen with W's drawer.**
+
+Resting it is U — the kitchen header, the dish in M's type, three actions, and
+a lip naming the rest of what is in the clip. Pulled up, that same lip is W's
+menu by category with the filmed dishes badged. One object at two heights, so
+the drawer is never behind a bag and the menu is never a separate screen. Cells
+alternate between the two heights so both are visible without interaction.
+
+#### Where Saved is reached from
+
+A bookmark on the Clips feed, beside the Menu pill and set off from it by a
+hairline — the pill is the kitchen's, the bookmark is yours. Chosen over a row
+in the account sheet, a strip on Home, and a fifth tab.
+
+Two consequences, both now built:
+
+- **Saved is a pushed screen, not a tab.** The tab bar still shows Clips as
+  active, so Y carries a back chevron. A tab would not need one.
+- **It costs frame on the one screen built to have none.** The Clips feed was
+  deliberately chrome-free; this is the second thing in its top-right corner
+  after the Menu pill, and the mute icon was removed from U partly to make
+  room.
+
+The bookmark and the chevron are both live in the prototype — tap through
+`Z → Y → Z`.
 
 ### U to Y — built from the four things that survived
 

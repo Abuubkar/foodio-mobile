@@ -3359,3 +3359,60 @@ body {
   font-size: 10.5px;
   color: rgba(255, 255, 255, 0.74);
 }
+
+/* Yours, not the kitchen's — so it sits past a hairline, outside the
+   avatar/name/Menu cluster that belongs to the restaurant. */
+.v-u .u-saved {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-left: 11px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.42);
+}
+
+.v-u .u-saved::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 7px;
+  bottom: 7px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+/* Z raised: the sheet is the menu, so it is taller than W's and the video
+   keeps only a header's worth of room. */
+.v-z.up .w-sheet-head b {
+  font-size: 13.5px;
+}
+
+.v-z .u-lip {
+  cursor: pointer;
+}
+
+/* Saved is pushed from the Clips feed, not a tab, so it owes the user a
+   way back. */
+.v-y .y-back {
+  align-self: center;
+  margin: -2px 1px 0 -2px;
+  font-size: 26px;
+  line-height: 1;
+  color: #c3c8d1;
+  cursor: pointer;
+}
+
+/* Raised, the stage is 300dp, so a 22% top scrim stops above the kitchen
+   header and leaves it on bare video. Pale food is the worst case — the
+   pasta frame washes the name out completely. */
+.v-z.up .w-stage .scrim-top {
+  height: 52%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.18) 70%, transparent);
+}
+
+.v-z.up .u-who span {
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 1px 7px rgba(0, 0, 0, 0.75);
+}
