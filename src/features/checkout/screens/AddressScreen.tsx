@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
 
 import { useRouter } from 'expo-router';
@@ -12,6 +12,7 @@ import {
   EmptyState,
   ErrorState,
   LoadingState,
+  PinMap,
   ScreenHeader,
   SignInRequired,
 } from '@/components/shared';
@@ -30,6 +31,7 @@ import {
 } from '../hooks/useAddresses';
 import { useCurrentCoordinates } from '../hooks/useCurrentCoordinates';
 import { resolveActiveAddress } from '../lib/activeAddress';
+import { prefillable } from '../lib/placeGuess';
 import type { AddressFormValues, SavedAddress } from '../types/address.types';
 import { addressFormSchema } from '../types/address.types';
 
@@ -242,9 +244,9 @@ function AddressForm({ target, isSaving, saveError, onCancel, onSubmit }: Addres
   const { t } = useTranslation();
 
   const editing = target.mode === 'edit' ? target.address : null;
-  const { coordinates, isLocating, errorKey, locate } = useCurrentCoordinates();
+  const { coordinates, isLocating, errorKey, guess, locate } = useCurrentCoordinates();
 
-  const { control, handleSubmit, formState } = useForm<AddressFormValues>({
+  const { control, handleSubmit, formState, getValues, setValue } = useForm<AddressFormValues>({
     resolver: zodResolver(addressFormSchema),
     defaultValues: {
       label: editing?.label ?? '',
@@ -256,8 +258,46 @@ function AddressForm({ target, isSaving, saveError, onCancel, onSubmit }: Addres
     },
   });
 
+  /*
+    Asked for the moment the form opens, rather than waiting for a button.
+    Location permission was granted during onboarding and the checkout spec is
+    blunt about it: a permission requested and never used is a dark pattern and
+    grounds for App Store rejection. An address being edited already has a
+    point, so it is left alone.
+  */
+  useEffect(() => {
+    if (editing) return;
+    void locate();
+  }, [editing, locate]);
+
+  /*
+    Dragged, once there is something to drag. Held separately from the GPS fix
+    so a drag is not undone the moment the fix lands.
+  */
+  const [dragged, setDragged] = useState<Coordinates | null>(null);
+
   const position: Coordinates | null =
-    coordinates ?? (editing ? { latitude: editing.latitude, longitude: editing.longitude } : null);
+    dragged ??
+    coordinates ??
+    (editing ? { latitude: editing.latitude, longitude: editing.longitude } : null);
+
+  /*
+    Only ever into an empty field, and only once. A guess is a starting point,
+    not a correction — and it is a guess: in Lahore a reverse lookup often
+    knows the city and nothing else.
+  */
+  const prefilled = useRef(false);
+
+  useEffect(() => {
+    if (prefilled.current || editing) return;
+
+    const fill = prefillable(guess, getValues());
+    const entries = Object.entries(fill) as [keyof AddressFormValues, string][];
+    if (entries.length === 0) return;
+
+    prefilled.current = true;
+    for (const [field, value] of entries) setValue(field, value);
+  }, [guess, editing, getValues, setValue]);
 
   const submit = (values: AddressFormValues) => {
     if (!position) return;
@@ -292,13 +332,18 @@ function AddressForm({ target, isSaving, saveError, onCancel, onSubmit }: Addres
           <Text variant="label" className="text-gray-900">
             {t('address.locationTitle')}
           </Text>
+
+          {/* The pin stays centred and the world moves under it — the same
+              gesture as the delivery-area screens, which is why it is the
+              shared PinMap and not a second map. */}
+          {position ? (
+            <View className="h-48 overflow-hidden rounded-xl">
+              <PinMap camera={{ center: position, zoom: 16 }} onMove={setDragged} />
+            </View>
+          ) : null}
+
           <Text variant="caption" className="text-gray-500">
-            {position
-              ? t('address.locationSet', {
-                  latitude: position.latitude.toFixed(4),
-                  longitude: position.longitude.toFixed(4),
-                })
-              : t('address.locationWhy')}
+            {position ? t('address.locationDrag') : t('address.locationWhy')}
           </Text>
           {errorKey ? (
             <Text variant="caption" className="text-error-500">
