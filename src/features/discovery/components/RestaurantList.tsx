@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { View } from 'react-native';
 
 import { FlashList } from '@shopify/flash-list';
 import type { ReactElement } from 'react';
@@ -75,9 +76,17 @@ export function RestaurantList({ header, refreshing, onRefresh }: RestaurantList
           case 'tabs':
             return <HomeViewTabs view={view} onChange={setView} />;
           case 'restaurant':
-            return <RestaurantPreviewCard restaurant={item.restaurant} wide />;
+            return (
+              <View className="px-3">
+                <RestaurantPreviewCard restaurant={item.restaurant} wide />
+              </View>
+            );
           case 'empty':
-            return <EmptyState message={t(`home.viewEmpty.${view}`)} />;
+            return (
+              <View className="px-3">
+                <EmptyState message={t(`home.viewEmpty.${view}`)} />
+              </View>
+            );
         }
       }}
       ListHeaderComponent={header}

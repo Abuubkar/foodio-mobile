@@ -35,6 +35,7 @@ export function RecentClips() {
         keyExtractor={(clip) => clip.id}
         horizontal
         showsHorizontalScrollIndicator={false}
+        contentContainerClassName="px-3"
         renderItem={({ item }) => <ClipCard clip={item} />}
       />
     </View>

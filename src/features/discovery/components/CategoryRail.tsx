@@ -35,7 +35,7 @@ export function CategoryRail() {
       horizontal
       showsHorizontalScrollIndicator={false}
       className="mb-5 flex-grow-0"
-      contentContainerClassName="pr-3"
+      contentContainerClassName="px-3"
     >
       {categories.map((category) => (
         <Pressable

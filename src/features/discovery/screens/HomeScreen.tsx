@@ -25,13 +25,13 @@ export function HomeScreen() {
   const { refreshing, onRefresh } = usePullToRefresh(HOME_KEYS);
 
   return (
-    <SafeAreaView edges={['top']} className="flex-1 bg-white px-3">
+    <SafeAreaView edges={['top']} className="flex-1 bg-white">
       <RestaurantList
         refreshing={refreshing}
         onRefresh={onRefresh}
         header={
           <>
-            <View className="flex-row items-center gap-2">
+            <View className="flex-row items-center gap-2 px-3">
               <SearchTrigger onPress={() => guard(() => router.push('/search'))} />
               <IdentityChip />
             </View>
