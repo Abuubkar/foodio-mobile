@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
-import type { AddableMenuItem, CartLine, CartRestaurant } from '@/features/cart';
+import type { AddableMenuItem, CartLine, CartRestaurant, ChosenOption } from '@/features/cart';
 // Deep import: the cart barrel pulls components that import this store back.
-import { sameLine } from '@/features/cart/types/cart.types';
+import { optionsTotalMinor, sameLine } from '@/features/cart/types/cart.types';
 import { clearStoredCart, getStoredCart, setStoredCart } from '@/services/storage';
 
 type CartState = {
@@ -23,7 +23,12 @@ type CartState = {
   addItem: (
     restaurant: CartRestaurant,
     item: AddableMenuItem,
-    options?: { instruction?: string | undefined; quantity?: number | undefined },
+    options?: {
+      instruction?: string | undefined;
+      quantity?: number | undefined;
+      /** The choices made, already priced from the menu the customer saw. */
+      chosen?: readonly ChosenOption[] | undefined;
+    },
   ) => void;
   incrementLine: (lineId: string) => void;
   decrementLine: (lineId: string) => void;
@@ -57,11 +62,12 @@ export const useCartStore = create<CartState>((set) => ({
     set((state) => {
       const instruction = (options?.instruction ?? '').trim();
       const quantity = options?.quantity ?? 1;
+      const chosen = [...(options?.chosen ?? [])];
 
       const isSameRestaurant = state.restaurant?.id === restaurant.id;
       const lines = isSameRestaurant ? state.lines : [];
 
-      const existing = lines.find((line) => sameLine(line, item.id, instruction));
+      const existing = lines.find((line) => sameLine(line, item.id, instruction, chosen));
       if (existing) {
         return {
           restaurant,
@@ -76,9 +82,11 @@ export const useCartStore = create<CartState>((set) => ({
         menuItemId: item.id,
         name: item.name,
         image: item.image,
-        unitPriceMinor: item.priceMinor,
+        // The price the options produced, which is what the customer was shown.
+        unitPriceMinor: item.priceMinor + optionsTotalMinor(chosen),
         quantity,
         instruction,
+        options: chosen,
       };
 
       return { restaurant, lines: [...lines, line], nextLineId: state.nextLineId + 1 };
@@ -120,7 +128,7 @@ export const useCartStore = create<CartState>((set) => ({
       if (next === edited.instruction) return {};
 
       const collision = state.lines.find(
-        (line) => line.id !== lineId && sameLine(line, edited.menuItemId, next),
+        (line) => line.id !== lineId && sameLine(line, edited.menuItemId, next, edited.options),
       );
 
       if (!collision) {
@@ -200,8 +208,9 @@ export const selectQuantityOf =
       .reduce((count, line) => count + line.quantity, 0);
 
 /**
- * The line with no instruction. The menu row is a plain-line-only control —
- * it cannot say which noted line its stepper would mean.
+ * The plain line: no instruction and no choices. The menu row is a
+ * plain-line-only control — it cannot say which noted or differently-sized
+ * line its stepper would mean.
  */
 export const selectPlainLineOf =
   (menuItemId: string) =>

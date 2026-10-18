@@ -109,7 +109,15 @@
     "instructionLabel": "Special instructions",
     "instructionPlaceholder": "No onions, extra hot…",
     "addWithTotal_one": "Add {{count}} · {{total}}",
-    "addWithTotal_other": "Add {{count}} · {{total}}"
+    "addWithTotal_other": "Add {{count}} · {{total}}",
+    "options": {
+      "required": "Required",
+      "optional": "Optional",
+      "upTo": "Choose up to {{count}}",
+      "choose": "Choose {{group}}",
+      "chooseShort": "Choose",
+      "chooseFor": "Choose options for {{dish}}"
+    }
   },
   "cart": {
     "title": "Your Cart",

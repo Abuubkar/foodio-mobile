@@ -38,6 +38,14 @@ export function CartLineRow({ line, currency, onEditNote }: CartLineRowProps) {
           {formatMoney(line.unitPriceMinor, currency, i18n.language)}
         </Text>
 
+        {/* What was chosen, not what was asked for in words — the note below
+            is the free text, and the two must not read as one thing. */}
+        {line.options.length > 0 ? (
+          <Text variant="caption" className="mt-0.5 text-gray-500" numberOfLines={2}>
+            {line.options.map((option) => option.choiceName).join(' · ')}
+          </Text>
+        ) : null}
+
         <Pressable
           onPress={onEditNote}
           accessibilityRole="button"

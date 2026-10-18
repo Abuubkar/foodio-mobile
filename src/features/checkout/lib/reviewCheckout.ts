@@ -1,4 +1,6 @@
 import type { CartLine, CartRestaurant } from '@/features/cart';
+// Deep import: the cart barrel pulls components, and this is pure rules.
+import { basePriceMinor } from '@/features/cart/types/cart.types';
 import type { MenuItem } from '@/features/menu';
 import type { Restaurant } from '@/features/restaurants';
 import type { Coordinates } from '@/utils/distance';
@@ -60,9 +62,21 @@ function repricedLines(
 
   return lines.flatMap((line) => {
     const nowMinor = priceById.get(line.menuItemId);
-    if (nowMinor === undefined || nowMinor === line.unitPriceMinor) return [];
+    if (nowMinor === undefined) return [];
 
-    return [{ lineId: line.id, name: line.name, wasMinor: line.unitPriceMinor, nowMinor }];
+    /*
+      Base against base. The line's price includes whatever its options added,
+      and the Menu Item's does not — comparing the two directly would report a
+      change on every dish that had any option chosen.
+
+      The deltas themselves are a snapshot and are not re-checked here: the
+      server recomputes them at placement and refuses the Order if one moved,
+      so a stale delta is caught there rather than silently charged. See #148.
+    */
+    const wasMinor = basePriceMinor(line);
+    if (nowMinor === wasMinor) return [];
+
+    return [{ lineId: line.id, name: line.name, wasMinor, nowMinor }];
   });
 }
 

@@ -162,6 +162,8 @@ export function CheckoutScreen() {
         quantity: line.quantity,
         // Absent and empty should not be two ways of saying nothing.
         ...(line.instruction ? { instruction: line.instruction } : {}),
+        // Absent rather than empty, the same rule the instruction follows.
+        ...(line.options.length === 0 ? {} : { options: line.options }),
       })),
       subtotalMinor: review.subtotalMinor,
       deliveryFeeMinor: review.deliveryFeeMinor,
@@ -254,6 +256,11 @@ export function CheckoutScreen() {
                 <Text variant="caption" className="text-gray-600">
                   {line.quantity} × {line.name}
                 </Text>
+                {line.options.length > 0 ? (
+                  <Text variant="caption" className="text-gray-500">
+                    {line.options.map((option) => option.choiceName).join(' · ')}
+                  </Text>
+                ) : null}
                 {line.instruction ? (
                   <Text variant="caption" className="text-gray-400">
                     {line.instruction}

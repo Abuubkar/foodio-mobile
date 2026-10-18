@@ -22,6 +22,7 @@ const aCart = (): StoredCart => ({
       unitPriceMinor: 1499,
       quantity: 2,
       instruction: 'no onions',
+      options: [],
     },
   ],
   nextLineId: 2,

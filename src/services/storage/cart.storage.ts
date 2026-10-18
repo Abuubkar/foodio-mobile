@@ -27,6 +27,14 @@ const restaurantSchema = z.object({
   deliveryEstimate: z.object({ minMinutes: z.number(), maxMinutes: z.number() }),
 });
 
+const chosenOptionSchema = z.object({
+  groupId: z.string(),
+  groupName: z.string(),
+  choiceId: z.string(),
+  choiceName: z.string(),
+  priceDeltaMinor: z.number().int(),
+});
+
 const lineSchema = z.object({
   id: z.string(),
   menuItemId: z.string(),
@@ -36,6 +44,8 @@ const lineSchema = z.object({
   unitPriceMinor: z.number(),
   quantity: z.number().int().positive(),
   instruction: z.string(),
+  /** Defaulted, so a Cart stored before options existed still restores. */
+  options: z.array(chosenOptionSchema).default([]),
 });
 
 const storedCartSchema = z.object({

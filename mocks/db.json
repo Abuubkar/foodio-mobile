@@ -830,7 +830,61 @@
       "priceMinor": 1499,
       "image": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80",
       "rating": 4.9,
-      "isPopular": true
+      "isPopular": true,
+      "optionGroups": [
+        {
+          "id": "r1-pop-1-size",
+          "name": "Size",
+          "minChoices": 1,
+          "maxChoices": 1,
+          "choices": [
+            {
+              "id": "r1-pop-1-size-two",
+              "name": "Two tacos",
+              "priceDeltaMinor": -400
+            },
+            {
+              "id": "r1-pop-1-size-three",
+              "name": "Three tacos",
+              "priceDeltaMinor": 0
+            },
+            {
+              "id": "r1-pop-1-size-five",
+              "name": "Five tacos",
+              "priceDeltaMinor": 700
+            }
+          ]
+        },
+        {
+          "id": "r1-pop-1-extras",
+          "name": "Extras",
+          "minChoices": 0,
+          "maxChoices": 3,
+          "choices": [
+            {
+              "id": "r1-pop-1-extras-cheese",
+              "name": "Extra cheese",
+              "priceDeltaMinor": 150
+            },
+            {
+              "id": "r1-pop-1-extras-consome",
+              "name": "Extra consomé",
+              "priceDeltaMinor": 100
+            },
+            {
+              "id": "r1-pop-1-extras-jalapeno",
+              "name": "Jalapeños",
+              "priceDeltaMinor": 0
+            },
+            {
+              "id": "r1-pop-1-extras-guac",
+              "name": "Guacamole",
+              "priceDeltaMinor": 250,
+              "isAvailable": false
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "r1-pop-2",
@@ -851,7 +905,27 @@
       "description": "Sweet rice and cinnamon beverage, blended fresh throughout the day.",
       "priceMinor": 425,
       "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80",
-      "rating": 4.8
+      "rating": 4.8,
+      "optionGroups": [
+        {
+          "id": "r1-pop-3-size",
+          "name": "Size",
+          "minChoices": 1,
+          "maxChoices": 1,
+          "choices": [
+            {
+              "id": "r1-pop-3-size-regular",
+              "name": "Regular",
+              "priceDeltaMinor": 0
+            },
+            {
+              "id": "r1-pop-3-size-large",
+              "name": "Large",
+              "priceDeltaMinor": 125
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "r1-taco-1",
@@ -937,7 +1011,27 @@
       "priceMinor": 1850,
       "image": "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=600&q=80",
       "rating": 4.8,
-      "isPopular": true
+      "isPopular": true,
+      "optionGroups": [
+        {
+          "id": "r2-pop-2-extras",
+          "name": "Extras",
+          "minChoices": 0,
+          "maxChoices": 2,
+          "choices": [
+            {
+              "id": "r2-pop-2-extras-basil",
+              "name": "Fresh basil",
+              "priceDeltaMinor": 0
+            },
+            {
+              "id": "r2-pop-2-extras-burrata",
+              "name": "Burrata",
+              "priceDeltaMinor": 350
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "r2-pasta-1",

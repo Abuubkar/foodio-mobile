@@ -48,6 +48,7 @@ const line = (overrides: Partial<CartLine> = {}): CartLine => ({
   image: '',
   unitPriceMinor: 1499,
   quantity: 1,
+  options: [],
   instruction: '',
   ...overrides,
 });
@@ -242,5 +243,49 @@ describe('multiple blockers', () => {
       expect.arrayContaining(['empty-cart', 'restaurant-closed', 'no-address']),
     );
     expect(result.canPlaceOrder).toBe(false);
+  });
+});
+
+/**
+ * A line's price includes whatever its options added; a Menu Item's does not.
+ * Comparing the two directly would report a change on every dish that had any
+ * option chosen — see #148.
+ */
+describe('repricing a line that chose options', () => {
+  const large = {
+    groupId: 'size',
+    groupName: 'Size',
+    choiceId: 'large',
+    choiceName: 'Large',
+    priceDeltaMinor: 300,
+  };
+
+  const chosen = () =>
+    review({
+      lines: [line({ unitPriceMinor: 1799, options: [large] })],
+      currentPrices: [{ id: 'item-1', priceMinor: 1499 }],
+    });
+
+  it('says nothing when only the options made the prices differ', () => {
+    expect(kinds(chosen().blockers)).not.toContain('price-changed');
+  });
+
+  it('still catches a base price that really did move', () => {
+    const result = review({
+      lines: [line({ unitPriceMinor: 1799, options: [large] })],
+      currentPrices: [{ id: 'item-1', priceMinor: 1699 }],
+    });
+
+    const blocker = result.blockers.find((b) => b.kind === 'price-changed');
+    if (blocker?.kind !== 'price-changed') throw new Error('expected price-changed');
+
+    // Reported as base against base, so the number means the dish, not the line.
+    expect(blocker.lines).toEqual([
+      { lineId: 'line-1', name: 'Birria Tacos', wasMinor: 1499, nowMinor: 1699 },
+    ]);
+  });
+
+  it('totals on what the options produced', () => {
+    expect(chosen().subtotalMinor).toBe(1799);
   });
 });

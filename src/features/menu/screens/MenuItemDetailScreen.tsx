@@ -17,7 +17,15 @@ import { selectIsFromOtherRestaurant, useCartStore } from '@/stores/cart.store';
 import { colors } from '@/theme';
 import { formatMoney } from '@/utils/currency';
 
+import { OptionGroupPicker } from '../components/OptionGroupPicker';
 import { useMenuItem } from '../hooks/useMenuItem';
+import type { Selection } from '../lib/chooseOptions';
+import {
+  chosenOptionsFrom,
+  firstUnanswered,
+  toggleChoice,
+  unitPriceWith,
+} from '../lib/chooseOptions';
 import type { MenuItem } from '../types/menu.types';
 
 const INSTRUCTION_MAX = 140;
@@ -71,6 +79,13 @@ function Loaded({ item, restaurant }: LoadedProps) {
   const [quantity, setQuantity] = useState(1);
   const [instruction, setInstruction] = useState('');
 
+  const groups = item.optionGroups ?? [];
+  const [selection, setSelection] = useState<Selection>({});
+
+  const chosen = chosenOptionsFrom(groups, selection);
+  const unitPriceMinor = unitPriceWith(item.priceMinor, chosen);
+  const missing = firstUnanswered(groups, selection);
+
   const soldOut = item.isAvailable === false;
 
   const addItem = useCartStore((state) => state.addItem);
@@ -85,7 +100,7 @@ function Loaded({ item, restaurant }: LoadedProps) {
   };
 
   const commit = () => {
-    addItem(restaurant, addable, { instruction, quantity });
+    addItem(restaurant, addable, { instruction, quantity, chosen });
     router.back();
   };
 
@@ -155,6 +170,18 @@ function Loaded({ item, restaurant }: LoadedProps) {
             {item.description}
           </Text>
 
+          {groups.map((group) => (
+            <OptionGroupPicker
+              key={group.id}
+              group={group}
+              selection={selection}
+              currency={currency}
+              onToggle={(choiceId) =>
+                setSelection((current) => toggleChoice(current, group, choiceId))
+              }
+            />
+          ))}
+
           <View className="mt-6 flex-row items-center justify-between">
             <Text variant="label" className="text-gray-700">
               {t('menu.quantity')}
@@ -177,13 +204,17 @@ function Loaded({ item, restaurant }: LoadedProps) {
       </ScrollView>
 
       <View className="border-t border-gray-100 px-4 pb-5 pt-3">
-        <Button onPress={handleAdd} disabled={soldOut}>
+        {/* Names the question rather than just greying the button: "Choose a
+            size" is actionable, a dead button is not. */}
+        <Button onPress={handleAdd} disabled={soldOut || missing !== null}>
           {soldOut
             ? t('menu.soldOut')
-            : t('menu.addWithTotal', {
-                count: quantity,
-                total: formatMoney(item.priceMinor * quantity, currency, i18n.language),
-              })}
+            : missing
+              ? t('menu.options.choose', { group: missing.name.toLowerCase() })
+              : t('menu.addWithTotal', {
+                  count: quantity,
+                  total: formatMoney(unitPriceMinor * quantity, currency, i18n.language),
+                })}
         </Button>
       </View>
     </Shell>
