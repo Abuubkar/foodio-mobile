@@ -62,6 +62,13 @@
           }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4fd4b07c-510a-4321-be93-f2d430e7fe50"
+      }
+    },
+    "owner": "abuubkar"
   }
 }

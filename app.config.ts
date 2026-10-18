@@ -19,6 +19,17 @@ export default ({ config }: ConfigContext): ExpoConfig => {
    */
   const iosUrlScheme = process.env.GOOGLE_IOS_URL_SCHEME ?? '';
 
+  /**
+   * Firebase's Android config, which is what turns an Expo push token into a
+   * notification that actually arrives. Without it the Android build registers
+   * no token at all and every notification is delivered to nobody — silently,
+   * which is how it went unnoticed.
+   *
+   * Not a secret either: it ships inside the APK. It is still environment-
+   * specific and uncommitted, for the same reason as the Maps key.
+   */
+  const googleServicesFile = process.env.GOOGLE_SERVICES_JSON;
+
   // A missing key is a grey rectangle where the delivery-area map should be,
   // with nothing in the logs. Fail the build instead of shipping that.
   if (!apiKey && process.env.EAS_BUILD_PLATFORM === 'android') {
@@ -27,6 +38,12 @@ export default ({ config }: ConfigContext): ExpoConfig => {
 
   if (iosUrlScheme === '' && process.env.EAS_BUILD === 'true') {
     throw new Error('GOOGLE_IOS_URL_SCHEME is unset. Set it in EAS environment variables.');
+  }
+
+  // Same bargain as the Maps key: fail the build rather than ship an app whose
+  // notifications quietly go nowhere.
+  if (!googleServicesFile && process.env.EAS_BUILD_PLATFORM === 'android') {
+    throw new Error('GOOGLE_SERVICES_JSON is unset. Set it in EAS environment variables.');
   }
 
   return {
@@ -45,6 +62,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     ],
     android: {
       ...config.android,
+      ...(googleServicesFile ? { googleServicesFile } : {}),
       config: {
         ...config.android?.config,
         googleMaps: { apiKey },
