@@ -2377,3 +2377,992 @@ body {
 .v-q .q-chat {
   bottom: 214px;
 }
+
+/* ==================================================================
+   BATCH 3 — U to Y. The surviving four, recombined.
+   Shared idea: a kitchen header (name / delivery / Menu), chapters for
+   the dishes it filmed, a drawer that is never behind a bag, and R's
+   shelf moved onto Saved.
+   ================================================================== */
+
+/* The Menu affordance from S, now used by U, V and Y. */
+.k-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.13);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.k-menu i {
+  font-style: normal;
+  font-size: 10.5px;
+  opacity: 0.62;
+}
+
+/* U's foot is tall, so the gradient has to climb further than 62%. */
+.scrim.tall {
+  height: 80%;
+}
+
+/* ---------------- U — Kitchen ------------------------------------- */
+
+.v-u .u-segs {
+  position: absolute;
+  top: 38px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  gap: 4px;
+  z-index: 6;
+}
+
+.v-u .u-segs i {
+  flex: 1;
+  height: 2.5px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.v-u .u-segs b {
+  display: block;
+  height: 100%;
+  background: #fff;
+}
+
+.v-u .u-head {
+  position: absolute;
+  top: 52px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 6;
+}
+
+.v-u .u-head > img {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+/* Mute belongs in the header row, not floating over the Menu pill. */
+.v-u .u-mute {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+}
+
+.v-u .u-who {
+  flex: 1;
+  min-width: 0;
+}
+
+.v-u .u-who b {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+}
+
+.v-u .u-who span {
+  display: block;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.v-u .u-foot {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 62px;
+  z-index: 6;
+}
+
+.v-u .u-kicker {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.v-u .u-dish {
+  margin: 3px 0 2px;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+}
+
+.v-u .u-line {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.v-u .u-acts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 13px;
+}
+
+.v-u .u-acts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.v-u .u-acts .primary {
+  padding: 10px 20px;
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #11131a;
+  font-size: 13.5px;
+}
+
+/* The drawer announces itself. No bag, no hunting. */
+.v-u .u-lip {
+  margin-top: 13px;
+  padding: 8px 12px 10px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(16, 18, 24, 0.82);
+  backdrop-filter: blur(8px);
+}
+
+.v-u .u-grab {
+  width: 34px;
+  height: 3px;
+  margin: 0 auto 9px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.v-u .u-lip-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.v-u .u-thumbs {
+  display: flex;
+}
+
+.v-u .u-thumbs img {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  object-fit: cover;
+  margin-left: -8px;
+  border: 1.5px solid #14161c;
+}
+
+.v-u .u-thumbs img:first-child {
+  margin-left: 0;
+}
+
+.v-u .u-lip-row b {
+  flex: 1;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.v-u .u-lip-row span {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* ---------------- V — Lip ----------------------------------------- */
+
+.v-v .v-video {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 582px;
+}
+
+/* The shelf owns the bottom, so the video needs its own gradient. */
+.v-v::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 238px;
+  height: 150px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+  pointer-events: none;
+  z-index: 5;
+}
+
+.v-v .v-mute,
+.v-w .w-mute {
+  position: absolute;
+  top: 46px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 15px;
+  z-index: 8;
+}
+
+.v-v .v-head {
+  position: absolute;
+  top: 34px;
+  left: 14px;
+  right: 62px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 10px;
+  z-index: 6;
+}
+
+.v-v .v-head b {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: 15px;
+  font-weight: 700;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+}
+
+.v-v .v-head span {
+  grid-column: 1;
+  grid-row: 2;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.v-v .v-head .k-menu {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+/* Chapters move to the edge: the bottom is spoken for. */
+.v-v .v-dots {
+  position: absolute;
+  right: 17px;
+  top: 291px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  z-index: 6;
+}
+
+.v-v .v-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.65);
+}
+
+.v-v .v-dots i.on {
+  height: 18px;
+  border-radius: 3px;
+  background: #fff;
+}
+
+.v-v .v-say {
+  position: absolute;
+  left: 14px;
+  right: 56px;
+  bottom: 252px;
+  z-index: 6;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
+}
+
+.v-v .v-say b {
+  display: block;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.v-v .v-say span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.v-v .v-shelf {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 56px;
+  height: 182px;
+  padding-top: 10px;
+  background: #0f1116;
+  border-top: 1px solid #1f2229;
+  z-index: 10;
+}
+
+.v-v .v-shelf-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 14px 9px;
+}
+
+.v-v .v-shelf-head b {
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.v-v .v-shelf-head span {
+  font-size: 11px;
+  color: #8b93a1;
+}
+
+.v-v .v-cards {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 0 14px 12px;
+  scrollbar-width: none;
+}
+
+.v-v .v-cards::-webkit-scrollbar,
+.v-w .w-strip::-webkit-scrollbar,
+.v-w .w-sheet::-webkit-scrollbar,
+.v-y .y-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.v-v .v-card {
+  flex: 0 0 114px;
+  padding: 8px;
+  border-radius: 13px;
+  border: 1px solid #22252d;
+  background: #15171d;
+}
+
+.v-v .v-card.on {
+  border-color: var(--primary);
+}
+
+.v-v .v-card img {
+  width: 100%;
+  height: 64px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+}
+
+.v-v .v-card b {
+  display: block;
+  margin-top: 7px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.v-v .v-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 7px;
+}
+
+.v-v .v-price span {
+  font-size: 11.5px;
+  color: #d1d5db;
+}
+
+.v-v .v-price i {
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #11131a;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* ---------------- W — Menu ---------------------------------------- */
+
+.v-w .w-stage {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 561px;
+}
+
+.v-w.up .w-stage {
+  height: 300px;
+}
+
+.v-w .w-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 561px;
+  bottom: 56px;
+  overflow-y: auto;
+  background: #0f1116;
+  border-top: 1px solid #1f2229;
+  scrollbar-width: none;
+  z-index: 10;
+}
+
+.v-w.up .w-sheet {
+  top: 300px;
+}
+
+.v-w .w-over {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  z-index: 6;
+}
+
+.v-w .w-dish {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.16;
+}
+
+.v-w .w-line {
+  margin-top: 3px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.v-w .w-acts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 11px;
+}
+
+.v-w .w-acts span {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.v-w .w-acts .primary {
+  width: auto;
+  padding: 0 20px;
+  height: 38px;
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #11131a;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.v-w .w-grab {
+  width: 34px;
+  height: 3px;
+  margin: 9px auto 10px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.v-w .w-sheet-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 14px 10px;
+}
+
+.v-w .w-sheet-head b {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.v-w .w-sheet-head span {
+  font-size: 11px;
+  color: #8b93a1;
+}
+
+/* Collapsed: the strip is the chapter nav. */
+.v-w .w-strip {
+  display: flex;
+  gap: 9px;
+  overflow-x: auto;
+  padding: 0 14px 8px;
+  scrollbar-width: none;
+}
+
+.v-w .w-tile {
+  position: relative;
+  flex: 0 0 84px;
+  opacity: 0.5;
+}
+
+.v-w .w-tile.filmed {
+  opacity: 1;
+}
+
+.v-w .w-tile img {
+  width: 84px;
+  height: 84px;
+  border-radius: 11px;
+  object-fit: cover;
+  display: block;
+}
+
+.v-w .w-tile.filmed img {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+.v-w .w-tile b {
+  display: block;
+  margin-top: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.v-w .w-tile span {
+  display: block;
+  font-size: 10.5px;
+  color: #9aa0a8;
+}
+
+.v-w .w-tplay {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 19px;
+  height: 19px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.62);
+}
+
+.v-w .w-hint {
+  padding: 6px 14px 14px;
+  font-size: 11px;
+  color: #8b93a1;
+}
+
+/* Raised: the same object is the menu. */
+.v-w .w-cat {
+  padding: 13px 14px 6px;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #8b93a1;
+}
+
+.v-w .w-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+}
+
+.v-w .w-row.filmed {
+  box-shadow: inset 2px 0 0 var(--primary);
+}
+
+.v-w .w-row img {
+  width: 46px;
+  height: 46px;
+  border-radius: 9px;
+  object-fit: cover;
+}
+
+.v-w .w-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.v-w .w-meta b {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.v-w .w-meta span {
+  font-size: 11px;
+  color: #9aa0a8;
+}
+
+.v-w .w-play {
+  width: 21px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 152, 0, 0.2);
+  color: var(--primary);
+}
+
+.v-w .w-add {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #11131a;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* ---------------- X — Two axes ------------------------------------ */
+/* Not one rectangle. Hairlines are allowed; boxes are not. */
+
+.v-x .x-mute {
+  position: absolute;
+  top: 44px;
+  right: 16px;
+  font-size: 18px;
+  opacity: 0.85;
+  z-index: 6;
+}
+
+.v-x .x-top {
+  position: absolute;
+  top: 34px;
+  left: 16px;
+  right: 60px;
+  z-index: 6;
+}
+
+.v-x .x-kitchen {
+  font-size: 15px;
+  font-weight: 700;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.75);
+}
+
+.v-x .x-sub {
+  margin-top: 3px;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.v-x .x-nums {
+  position: absolute;
+  top: 80px;
+  left: 16px;
+  display: flex;
+  gap: 11px;
+  z-index: 6;
+}
+
+.v-x .x-nums span {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.v-x .x-nums span.on {
+  color: #fff;
+  font-weight: 700;
+  border-bottom: 1.5px solid #fff;
+  padding-bottom: 2px;
+}
+
+.v-x .x-foot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 66px;
+  z-index: 6;
+}
+
+.v-x .x-dish {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+}
+
+.v-x .x-line {
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.v-x .x-also {
+  margin-top: 13px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.v-x .x-also u {
+  text-decoration-color: rgba(255, 255, 255, 0.5);
+  text-underline-offset: 3px;
+}
+
+.v-x .x-list {
+  margin-top: 14px;
+}
+
+.v-x .x-list-head {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.62);
+  margin-bottom: 4px;
+}
+
+.v-x .x-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.v-x .x-item span {
+  flex: 1;
+  font-size: 13px;
+}
+
+.v-x .x-item b {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.v-x .x-item u {
+  font-size: 12px;
+  color: var(--primary);
+  text-underline-offset: 3px;
+}
+
+.v-x .x-acts {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.v-x .x-acts span {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.v-x .x-acts span.on {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ---------------- Y — Saved --------------------------------------- */
+
+.v-y {
+  background: #0b0d12;
+}
+
+.v-y .y-head {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 42px 14px 11px;
+  background: #0b0d12;
+  border-bottom: 1px solid #1a1d24;
+  z-index: 12;
+}
+
+.v-y .y-title {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
+.v-y .y-title b {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.v-y .y-title span {
+  font-size: 11.5px;
+  color: #8b93a1;
+}
+
+.v-y .y-tabs {
+  display: flex;
+  gap: 8px;
+  margin-top: 11px;
+}
+
+.v-y .y-tabs span {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #22252d;
+  background: #15171d;
+  font-size: 11.5px;
+  color: #c3c8d1;
+}
+
+.v-y .y-tabs span.on {
+  background: #fff;
+  border-color: #fff;
+  color: #11131a;
+  font-weight: 600;
+}
+
+.v-y .y-scroll {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 122px;
+  bottom: 56px;
+  overflow-y: auto;
+  padding: 0 12px;
+  scrollbar-width: none;
+}
+
+.v-y .y-group {
+  margin-bottom: 16px;
+}
+
+.v-y .y-kitchen {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 2px 10px;
+}
+
+.v-y .y-kitchen > img {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.v-y .y-who {
+  flex: 1;
+  min-width: 0;
+}
+
+.v-y .y-who b {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.v-y .y-who span {
+  display: block;
+  font-size: 10.5px;
+  color: #8b93a1;
+}
+
+.v-y .k-menu {
+  background: #15171d;
+  border-color: #22252d;
+  color: #c3c8d1;
+}
+
+.v-y .y-grid {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.v-y .y-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.v-y .y-tile {
+  position: relative;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #15171d;
+}
+
+.v-y .y-tile img {
+  display: block;
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.v-y .y-tile.tall img {
+  height: 198px;
+}
+
+.v-y .y-play {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.58);
+}
+
+.v-y .y-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--ok);
+  color: #062a20;
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+.v-y .y-meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 22px 9px 8px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
+}
+
+.v-y .y-meta b {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.v-y .y-meta span {
+  display: block;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.74);
+}

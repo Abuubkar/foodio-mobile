@@ -1,7 +1,7 @@
 /* THROWAWAY PROTOTYPE — what lives on a Clip. ?variant=A|B|C|D|E.
    Letters stay stable so feedback keeps its meaning. */
 
-const { clips, pairs } = window.FOODIO_CLIPS;
+const { clips, pairs, kitchens } = window.FOODIO_CLIPS;
 
 /* Inline outline icons. Unicode has no bookmark worth looking at, and a
    coloured emoji inside a monochrome rail reads as a mistake. */
@@ -1028,6 +1028,418 @@ function variantT() {
   };
 }
 
+/* ================================================================== */
+/* BATCH 3 — U to Y. Built from the four things that survived review:  */
+/*   K's drawer, but never behind a bag button                         */
+/*   M's typography and its three actions                              */
+/*   S's chapters, and its name / delivery / Menu header               */
+/*   R's shelf, moved to the screen it belongs on — Saved              */
+/* The navigation idea underneath all five: two axes. Down is the next  */
+/* kitchen, across is the next dish from this one.                     */
+/* ================================================================== */
+
+/** What a clip shows. A clip of a table is several dishes and the seed does
+    not say which, so this takes the filmed dish plus the kitchen's own
+    popular items. Invented, but never other restaurants' food — which is
+    what K did, and it was wrong. */
+const inClip = (k, clip, n = 3) => {
+  const all = k.menu.flatMap((c) => c.items);
+  const first = clip.dish ? all.find((i) => i.id === clip.dish.id) : null;
+  const rest = all.filter((i) => i.id !== first?.id);
+  /* Popular first, then the rest of the menu. Popular alone is exactly two
+     dishes per kitchen in this seed, which left V's shelf holding two cards
+     and looking broken rather than full. */
+  const ranked = [...rest.filter((i) => i.popular), ...rest.filter((i) => !i.popular)];
+  return [first, ...ranked].filter(Boolean).slice(0, n);
+};
+
+/** A kitchen's chapters are its clips, whoever shot them. Counting only the
+    restaurant's own footage gives "1 of 1" on all six kitchens — the seed has
+    exactly one marketing clip each — so the chapter bar would be furniture.
+    Mixed authorship is also the truer sequence: the kitchen's shot of a dish
+    and a customer's shot of the same dish are two chapters worth having. */
+const chaptersOf = (k) => k.clips;
+
+const whose = (c) => (c.kind === 'customer' ? 'from a customer' : 'from the kitchen');
+
+/** Dishes with footage, as opposed to clips: W needs the real ratio. */
+const filmedCount = (k) => k.menu.flatMap((c) => c.items).filter((d) => d.clipId).length;
+
+const menuPill = (k) =>
+  `<span class="k-menu">Menu <i>${k.menu.flatMap((c) => c.items).length}</i></span>`;
+
+/* ============ U — Kitchen ========================================= */
+/* The straight synthesis, and the one I would build. Down is the next
+   kitchen; the segments across the top are the dishes this kitchen filmed.
+   The foot is M's text and M's three actions. The drawer is not behind a
+   bag — its lip sits under the actions, already showing what it holds. */
+
+function variantU() {
+  const page = (k, i) => {
+    const chapters = chaptersOf(k);
+    const at = Math.min(i, chapters.length - 1);
+    const clip = chapters[at] ?? k.clips[0];
+    const also = inClip(k, clip);
+    const r = k.restaurant;
+
+    return `
+    <div class="cell v-u">
+      ${media(clip)}
+      <div class="scrim-top"></div>
+      <div class="scrim tall"></div>
+
+      <div class="u-segs">
+        ${chapters
+          .map((_, n) => `<i><b style="width:${n < at ? 100 : n === at ? 52 : 0}%"></b></i>`)
+          .join('')}
+      </div>
+
+      <div class="u-head">
+        <img src="${r.image}" alt="" />
+        <div class="u-who">
+          <b>${k.name}</b>
+          <span>${eta(r)} &middot; ${fee(r)}</span>
+        </div>
+        <span class="u-mute">&#128263;</span>
+        ${menuPill(k)}
+      </div>
+
+      <div class="u-foot">
+        <div class="u-kicker">
+          ${chapters.length === 1 ? 'The only clip' : `Clip ${at + 1} of ${chapters.length}`}
+          &middot; ${whose(clip)}
+        </div>
+        <div class="u-dish">${clip.dish ? clip.dish.name : k.name}</div>
+        <div class="u-line">
+          ${k.name} &middot; ${eta(r)}${clip.dish ? ' &middot; ' + money(clip.dish.priceMinor, r.currency) : ''}
+        </div>
+
+        <div class="u-acts">
+          <span class="primary">${clip.dish && !clip.dish.optionGroups.length ? 'Add' : 'Choose'}</span>
+          <span>${icon('bookmark', 17)} List</span>
+          <span>${icon('share', 17)} Share</span>
+        </div>
+
+        <div class="u-lip">
+          <div class="u-grab"></div>
+          <div class="u-lip-row">
+            <div class="u-thumbs">
+              ${also.map((d) => `<img src="${d.image}" alt="" />`).join('')}
+            </div>
+            <b>Also in this clip</b>
+            <span>${also.length} dishes &#8963;</span>
+          </div>
+        </div>
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${kitchens.map(page).join('')}</div>`,
+    note: 'The four things that survived, in one screen. Down is the next kitchen, the segments are the dishes this one filmed, the foot is M’s text and M’s three actions, and K’s drawer is not hidden behind a bag — its lip sits under the actions already showing three thumbnails, so a browser sees there is more without hunting an icon. Scroll to Green Leaf Bowls to see the honest case: one clip, one segment, and the kicker says \u201cThe only clip\u201d rather than pretending to a series. Costs: the foot measures 182dp and with the tab bar takes 244dp off the bottom of an 820dp screen, so the video is partly a backdrop; and the lip and the Add button sit close enough that a thumb will hit the wrong one.',
+  };
+}
+
+/* ============ V — Lip ============================================= */
+/* The drawer taken to its conclusion: never opened, because it is never
+   closed. The bottom of the screen is the kitchen's dishes, priced, and
+   the video keeps what is left. Chapters move to the right edge. */
+
+function variantV() {
+  const page = (k, i) => {
+    const chapters = chaptersOf(k);
+    const at = Math.min(i, chapters.length - 1);
+    const clip = chapters[at] ?? k.clips[0];
+    const shelf = inClip(k, clip, 4);
+    const r = k.restaurant;
+
+    return `
+    <div class="cell v-v">
+      ${media(clip, 'v-video')}
+      <div class="scrim-top"></div>
+      <div class="v-mute">&#128263;</div>
+
+      <div class="v-head">
+        <b>${k.name}</b>
+        <span>${eta(r)} &middot; ${fee(r)}</span>
+        ${menuPill(k)}
+      </div>
+
+      <div class="v-dots">
+        ${chapters.map((_, n) => `<i class="${n === at ? 'on' : ''}"></i>`).join('')}
+      </div>
+
+      <div class="v-say">
+        <b>${clip.dish ? clip.dish.name : k.name}</b>
+        <span>${clip.dish ? money(clip.dish.priceMinor, r.currency) + ' · ' : ''}${eta(r)}</span>
+      </div>
+
+      <div class="v-shelf">
+        <div class="v-shelf-head">
+          <b>In this clip</b>
+          <span>Pull up for the menu &#8963;</span>
+        </div>
+        <div class="v-cards">
+          ${shelf
+            .map(
+              (d, n) => `
+            <div class="v-card ${n === 0 ? 'on' : ''}">
+              <img src="${d.image}" alt="" />
+              <b>${d.name}</b>
+              <div class="v-price">
+                <span>${money(d.priceMinor, r.currency)}</span>
+                <i>${d.optionGroups.length ? '&#8250;' : '+'}</i>
+              </div>
+            </div>`,
+            )
+            .join('')}
+        </div>
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${kitchens.map(page).join('')}</div>`,
+    note: 'K’s drawer with the lid taken off: it is never opened because it is never closed. The bottom 190dp is the kitchen’s dishes, priced, scrolling sideways; the video keeps the rest and the chapters move to the right edge as dots. This is the version that makes the feed genuinely shoppable — every clip has a price visible without a tap. Costs: it is the least like a clips feed of the five, the video is now a header, and a shelf that is always selling is a shelf people learn to ignore.',
+  };
+}
+
+/* ============ W — Menu ============================================ */
+/* The economical idea: the drawer and the chapters are the same object at
+   two heights. A strip of the kitchen's menu under the video — the filmed
+   dishes carry a play badge and are the chapter nav; the rest are just
+   dishes. Pull the strip up and it is the full menu. */
+
+function variantW() {
+  const page = (k, i) => {
+    const chapters = chaptersOf(k);
+    const at = Math.min(i, chapters.length - 1);
+    const clip = chapters[at] ?? k.clips[0];
+    const all = k.menu.flatMap((c) => c.items);
+    const r = k.restaurant;
+    const open = i === 1; /* one cell shown at full height */
+
+    return `
+    <div class="cell v-w ${open ? 'up' : ''}">
+      <div class="w-stage">
+        ${media(clip, 'w-video')}
+        <div class="scrim"></div>
+        <div class="w-mute">&#128263;</div>
+
+        <div class="w-over">
+          <div class="w-dish">${clip.dish ? clip.dish.name : k.name}</div>
+          <div class="w-line">
+            ${k.name} &middot; ${eta(r)}${clip.dish ? ' &middot; ' + money(clip.dish.priceMinor, r.currency) : ''}
+          </div>
+          <div class="w-acts">
+            <span class="primary">${clip.dish && !clip.dish.optionGroups.length ? 'Add' : 'Choose'}</span>
+            <span>${icon('bookmark', 16)}</span>
+            <span>${icon('share', 16)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-sheet">
+        <div class="w-grab"></div>
+        <div class="w-sheet-head">
+          <b>${k.name}</b>
+          <span>${eta(r)} &middot; ${fee(r)}</span>
+        </div>
+
+        ${
+          open
+            ? k.menu
+                .map(
+                  (cat) => `
+          <div class="w-cat">${cat.name}</div>
+          ${cat.items
+            .map(
+              (d) => `
+            <div class="w-row ${d.clipId ? 'filmed' : ''}">
+              <img src="${d.image}" alt="" />
+              <div class="w-meta">
+                <b>${d.name}</b>
+                <span>${money(d.priceMinor, r.currency)}${d.clipId ? ' &middot; has a clip' : ''}</span>
+              </div>
+              ${d.clipId ? `<span class="w-play">${icon('play', 12)}</span>` : ''}
+              <span class="w-add">${d.optionGroups.length ? '&#8250;' : '+'}</span>
+            </div>`,
+            )
+            .join('')}`,
+                )
+                .join('')
+            : `<div class="w-strip">
+                 ${all
+                   .map(
+                     (d) => `
+                   <div class="w-tile ${d.clipId ? 'filmed' : ''}">
+                     <img src="${d.image}" alt="" />
+                     ${d.clipId ? `<span class="w-tplay">${icon('play', 11)}</span>` : ''}
+                     <b>${d.name}</b>
+                     <span>${money(d.priceMinor, r.currency)}</span>
+                   </div>`,
+                   )
+                   .join('')}
+               </div>
+               <div class="w-hint">
+                 ${filmedCount(k)} of ${all.length} dishes filmed &middot; pull up for the menu
+               </div>`
+        }
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${kitchens.map(page).join('')}</div>`,
+    note: 'One surface doing both jobs: the strip under the video is the kitchen’s menu, and the dishes that were filmed carry a play badge — so the same row is the chapter nav and the drawer, at two different heights. Pull it up and it is the full menu by category. The second cell is drawn at full height so both states are visible at once. This is the only one of the five that admits the real ratio: two dishes filmed, ten on the menu. Costs: the strip is a lot of tiny pictures, and “filmed” is a distinction customers did not ask for.',
+  };
+}
+
+/* ============ X — Two axes ======================================== */
+/* M's typography with nothing else allowed: no pills, no cards, no bars.
+   The drawer handle is a sentence. Chapters are numerals. If the screen
+   works with no rectangles on it, every rectangle elsewhere is a choice. */
+
+function variantX() {
+  const page = (k, i) => {
+    const chapters = chaptersOf(k);
+    const at = Math.min(i, chapters.length - 1);
+    const clip = chapters[at] ?? k.clips[0];
+    const also = inClip(k, clip, 3).slice(1);
+    const r = k.restaurant;
+    const open = i === 0;
+
+    return `
+    <div class="cell v-x">
+      ${media(clip)}
+      <div class="scrim-top"></div>
+      <div class="scrim tall"></div>
+      <div class="x-mute">&#128263;</div>
+
+      <div class="x-top">
+        <div class="x-kitchen">${k.name}</div>
+        <div class="x-sub">${eta(r)} &nbsp;/&nbsp; ${fee(r)} &nbsp;/&nbsp; <u>Menu</u></div>
+      </div>
+
+      <div class="x-nums">
+        ${chapters.map((_, n) => `<span class="${n === at ? 'on' : ''}">${n + 1}</span>`).join('')}
+      </div>
+
+      <div class="x-foot">
+        <div class="x-dish">${clip.dish ? clip.dish.name : k.name}</div>
+        <div class="x-line">
+          ${k.name} &nbsp;/&nbsp; ${eta(r)}${clip.dish ? ' &nbsp;/&nbsp; ' + money(clip.dish.priceMinor, r.currency) : ''}
+        </div>
+
+        ${
+          open
+            ? `<div class="x-list">
+                 <div class="x-list-head">Also in this clip</div>
+                 ${also
+                   .map(
+                     (d) => `
+                   <div class="x-item">
+                     <span>${d.name}</span>
+                     <b>${money(d.priceMinor, r.currency)}</b>
+                     <u>${d.optionGroups.length ? 'Choose' : 'Add'}</u>
+                   </div>`,
+                   )
+                   .join('')}
+               </div>`
+            : `<div class="x-also"><u>Also in this clip</u> &mdash; ${also.map((d) => d.name).join(', ')}</div>`
+        }
+
+        <div class="x-acts">
+          <span class="on">${clip.dish && !clip.dish.optionGroups.length ? 'Add' : 'Choose'}${clip.dish ? ' ' + money(clip.dish.priceMinor, r.currency) : ''}</span>
+          <span>List</span>
+          <span>Share</span>
+        </div>
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${kitchens.map(page).join('')}</div>`,
+    note: 'M’s text with nothing else permitted — no pills, no cards, no bars, not one rectangle. The drawer handle is a sentence that names what it holds ("Also in this clip — Loaded Nachos, Horchata") and opens into a priced list in place; the first cell is shown open. Chapters are numerals. If the screen reads with no boxes, then every box in U and V is a decision somebody has to defend. Costs: underlined text as the only affordance is weak on a busy frame, and type over moving video needs the scrim to do all the work.',
+  };
+}
+
+/* ============ Y — Saved =========================================== */
+/* R, on the screen it was always for. A shelf is wrong as a feed and right
+   as a collection: everything here is already chosen, so comparison is the
+   whole job. Grouped by kitchen, because that is the unit the other four
+   settled on. */
+
+function variantY() {
+  const saved = kitchens
+    .map((k) => ({ k, tiles: k.clips.filter((c) => c.poster) }))
+    .filter((g) => g.tiles.length);
+  const count = saved.reduce((n, g) => n + g.tiles.length, 0);
+
+  return {
+    html: `<div class="cell v-y" style="height:820px">
+      <div class="y-head">
+        <div class="y-title">
+          <b>Saved</b>
+          <span>${count} clips &middot; ${saved.length} kitchens</span>
+        </div>
+        <div class="y-tabs">
+          <span>All</span><span class="on">Kitchens</span><span>Dishes</span>
+        </div>
+      </div>
+
+      <div class="y-scroll">
+        ${saved
+          .map(
+            ({ k, tiles }) => `
+          <div class="y-group">
+            <div class="y-kitchen">
+              <img src="${k.restaurant.image}" alt="" />
+              <div class="y-who">
+                <b>${k.name}</b>
+                <span>${eta(k.restaurant)} &middot; ${fee(k.restaurant)}</span>
+              </div>
+              ${menuPill(k)}
+            </div>
+
+            <div class="y-grid">
+              ${[0, 1]
+                .map(
+                  (col) => `
+                <div class="y-col">
+                  ${tiles
+                    .filter((_, n) => n % 2 === col)
+                    .map(
+                      (c, n) => `
+                    <div class="y-tile ${(n + col) % 3 === 0 ? 'tall' : ''}">
+                      <img src="${c.poster}" alt="" />
+                      <div class="y-play">${icon('play', 12)}</div>
+                      ${c.kind === 'customer' ? '<span class="y-badge">Yours</span>' : ''}
+                      <div class="y-meta">
+                        <b>${c.dish ? c.dish.name : k.name}</b>
+                        <span>${c.dish ? money(c.dish.priceMinor, k.restaurant.currency) : eta(k.restaurant)}</span>
+                      </div>
+                    </div>`,
+                    )
+                    .join('')}
+                </div>`,
+                )
+                .join('')}
+            </div>
+          </div>`,
+          )
+          .join('')}
+      </div>
+      ${tabbar(2)}
+    </div>`,
+    note: 'R moved to the screen it was always for. A shelf is the wrong shape for a feed — nine autoplaying tiles is the decoder problem the clips-feed spec fought — and the right shape for a collection, where everything is already chosen and comparison is the whole job. Posters, not video, so it costs nothing to render. Shown on the Kitchens tab, grouped under the same header the other four use, so a save is a way back into a kitchen rather than a loose clip; All would be one ungrouped shelf, which is R exactly. Costs: saves have no order here — no recency, no "ordered twice" — and a tile is a poster, so a saved clip you remember by its motion is hard to find.',
+  };
+}
+
 /* ============ E — Everything ====================================== */
 /* All four at once, on purpose: the honest way to see what it costs. */
 
@@ -1107,6 +1519,11 @@ const VARIANTS = [
   ['R', 'Shelf', variantR],
   ['S', 'Chapters', variantS],
   ['T', 'Tray', variantT],
+  ['U', 'Kitchen', variantU],
+  ['V', 'Lip', variantV],
+  ['W', 'Menu', variantW],
+  ['X', 'Two axes', variantX],
+  ['Y', 'Saved', variantY],
   ['E', 'Everything', variantE],
 ];
 

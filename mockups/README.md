@@ -92,6 +92,11 @@ in a list.
 | R   | Shelf                | EasyEat — nine dishes at once, not one                               |
 | S   | Chapters             | stories — one kitchen, several dishes                                |
 | T   | Tray                 | live commerce — a basket that fills as you scroll                    |
+| U   | Kitchen              | the synthesis — chapters, header, M's text, a lip                    |
+| V   | Lip                  | the drawer never closes; the shelf is the bottom                     |
+| W   | Menu                 | the drawer and the chapters are one object                           |
+| X   | Two axes             | M's type with no rectangle anywhere                                  |
+| Y   | Saved                | R, on the screen it was always for                                   |
 | E   | Everything           | all four at once, so the cost is arguable not imagined               |
 
 Each variant prints its own argument and its own costs under the phone. **E
@@ -190,6 +195,57 @@ documented, and the sources are listed below so the lineage is checkable.
 | **M — Moods**   | Netflix _Clips_                  | Browse by mood and occasion rather than by filter — "late night", "feeding four" — with exactly three actions: open, list, share.                                                  |
 | **N — Yours**   | Spotify's 2023 home              | A video feed with your own shortcuts pinned above it. A food app has what a music app does not: you ate this before.                                                               |
 | **O — Deck**    | Feed Me · Crave · Chicken Tinder | A card deck instead of a feed: left discards, right saves, up is "want it". Crave swiped dishes rather than restaurants, which is the right unit here.                             |
+
+### U to Y — built from the four things that survived
+
+Feedback on K–T kept four pieces and discarded the rest:
+
+- **K's drawer**, for a clip that shows several dishes — but not hidden behind a bag button
+- **M's text and its three actions**
+- **S's chapters**, and its name / delivery / Menu header
+- **R's shelf**, moved to the Saved screen
+
+They turn out to be one idea. The navigation under all five is two axes:
+**down is the next kitchen, across is the next dish from this one.**
+
+| key              | the question it answers                                                                                                                                                                                                                          |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **U — Kitchen**  | What does all four at once look like? Chapters on top, kitchen header under them, M's text and actions at the foot, and the drawer's lip below that already showing three thumbnails. The one I would build.                                     |
+| **V — Lip**      | What if the drawer never closes? The bottom fifth is the kitchen's dishes, priced, scrolling sideways; chapters move to the right edge. Every clip has a price without a tap.                                                                    |
+| **W — Menu**     | What if the drawer and the chapters are the same object? The strip under the video is the kitchen's menu; the dishes that were filmed carry a play badge, so one row is both the chapter nav and the drawer. Pull it up and it is the full menu. |
+| **X — Two axes** | Can it work with no rectangle at all? M's type and nothing else. The drawer handle is a sentence that names what it holds and opens into a priced list in place.                                                                                 |
+| **Y — Saved**    | Where does R belong? Not on a feed. On Saved, where everything is already chosen and comparison is the whole job — grouped under the same kitchen header.                                                                                        |
+
+#### What the data forced
+
+Three of these were designed against the seed and the seed argued back.
+
+- **Chapters cannot be "dishes this kitchen filmed."** Every restaurant in
+  `db.json` has exactly one marketing clip, so that bar reads "1 of 1" on all
+  six kitchens. Chapters are now the kitchen's clips whoever shot them — which
+  is also the better sequence, since the kitchen's shot of a dish and a
+  customer's shot of the same dish are two chapters worth having.
+- **"Popular" is exactly two dishes per kitchen**, so V's shelf held two cards
+  and looked broken. It now ranks popular first and fills from the rest of the
+  menu.
+- **The real ratio is one filmed dish in six to ten.** Only W says so out
+  loud, and that honesty is most of its argument.
+
+`data.gen.cjs` now emits a `kitchens` array — restaurant, its clips, and its
+whole menu with a `clipId` on the dishes that were filmed — because every one
+of these needs the menu, and four unrelated restaurants pretending to be one
+kitchen's chapters hid the case that breaks.
+
+#### Measured, not eyeballed
+
+- U's segments ran under the notch (it occupies y 8–30, dead centre) and its
+  mute circle fought the Menu pill for the top-right corner. Mute moved into
+  the header row, which is what stories do.
+- V wasted 25dp under its cards and W wasted 81dp under its strip. Both sheets
+  were sized by measuring content against box, and the difference handed back
+  to the video.
+- X's priced list sat on the brightest part of the frame. Its scrim is now the
+  tall one — the only fix available to a design that has banned boxes.
 
 ### P to T — five shapes, not five buttons
 
