@@ -24,6 +24,19 @@ export const ORDER_STATUSES = [
 export const orderStatusSchema = z.enum(ORDER_STATUSES);
 export type OrderStatus = z.infer<typeof orderStatusSchema>;
 
+/**
+ * A choice as it was made, frozen. Names and the delta are copies, exactly as
+ * the line copies the dish's name and price: an Order is a receipt, and a
+ * receipt does not change when the menu does. See the backend's ADR-0020.
+ */
+export const chosenOptionSchema = z.object({
+  groupId: z.string(),
+  groupName: z.string(),
+  choiceId: z.string(),
+  choiceName: z.string(),
+  priceDeltaMinor: z.number().int(),
+});
+
 /** The amount charged at the time, never the menu item's current price. */
 export const orderLineSchema = z.object({
   menuItemId: z.string(),
@@ -33,6 +46,11 @@ export const orderLineSchema = z.object({
   quantity: z.number().int().positive(),
   /** Optional: orders placed before instructions existed carry none. */
   instruction: z.string().optional(),
+  /**
+   * What the customer chose. Absent for a dish that asks nothing, which is
+   * every line placed before options existed.
+   */
+  options: z.array(chosenOptionSchema).optional(),
 });
 
 /**
@@ -100,6 +118,7 @@ export const orderListSchema = z.array(orderSchema);
 export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
 export type OrderPaymentState = z.infer<typeof orderPaymentStateSchema>;
 export type OrderPayment = z.infer<typeof orderPaymentSchema>;
+export type ChosenOption = z.infer<typeof chosenOptionSchema>;
 export type OrderLine = z.infer<typeof orderLineSchema>;
 export type Order = z.infer<typeof orderSchema>;
 

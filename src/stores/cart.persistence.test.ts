@@ -143,6 +143,7 @@ describe('a Cart that survives closing the app', () => {
           unitPriceMinor: 1499,
           quantity: 1,
           instruction: '',
+          options: [],
         },
       ],
       nextLineId: 2,

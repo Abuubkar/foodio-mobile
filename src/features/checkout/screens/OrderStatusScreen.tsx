@@ -120,6 +120,11 @@ export function OrderStatusScreen() {
                 <Text variant="caption" className="text-gray-600">
                   {line.quantity} × {line.name}
                 </Text>
+                {line.options && line.options.length > 0 ? (
+                  <Text variant="caption" className="text-gray-500">
+                    {line.options.map((option) => option.choiceName).join(' · ')}
+                  </Text>
+                ) : null}
                 {line.instruction ? (
                   <Text variant="caption" className="text-gray-400">
                     {line.instruction}

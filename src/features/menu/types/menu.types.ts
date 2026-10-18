@@ -1,5 +1,31 @@
 import { z } from 'zod';
 
+/**
+ * One thing a customer picks, and what picking it does to the price.
+ *
+ * The delta is signed: "small" takes money off as readily as "extra cheese"
+ * puts it on. Minor units, like every other amount.
+ */
+export const menuOptionChoiceSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  priceDeltaMinor: z.number().int(),
+  /** Additive: absent means available — only `false` means sold out. */
+  isAvailable: z.boolean().optional(),
+});
+
+/**
+ * A question the dish asks. "Size" with one answer required, "Extras" with any
+ * number. `minChoices` of 1 is what makes a group required.
+ */
+export const menuOptionGroupSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  minChoices: z.number().int().nonnegative(),
+  maxChoices: z.number().int().positive(),
+  choices: z.array(menuOptionChoiceSchema),
+});
+
 export const menuItemSchema = z.object({
   id: z.string(),
   restaurantId: z.string(),
@@ -13,6 +39,8 @@ export const menuItemSchema = z.object({
   isPopular: z.boolean().optional(),
   /** Additive: absent means available — only `false` means sold out. */
   isAvailable: z.boolean().optional(),
+  /** Absent for a dish that is simply one thing, which is most of them. */
+  optionGroups: z.array(menuOptionGroupSchema).optional(),
 });
 
 export const menuCategorySchema = z.object({
@@ -26,6 +54,8 @@ export const menuCategorySchema = z.object({
 /** `GET /restaurants/:id/menu` */
 export const restaurantMenuSchema = z.array(menuCategorySchema);
 
+export type MenuOptionChoice = z.infer<typeof menuOptionChoiceSchema>;
+export type MenuOptionGroup = z.infer<typeof menuOptionGroupSchema>;
 export type MenuItem = z.infer<typeof menuItemSchema>;
 export type MenuCategory = z.infer<typeof menuCategorySchema>;
 export type RestaurantMenu = z.infer<typeof restaurantMenuSchema>;

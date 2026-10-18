@@ -177,9 +177,32 @@ function OrderDetail({
           <Text variant="caption" className="text-gray-700">
             {line.quantity} × {line.name}
           </Text>
+
+          {/*
+            Choices and the free-text note are different things to a cook and
+            must not read as one line. "Large" is what was paid for; "no
+            onions" changes how it is cooked. Group names are kept here, unlike
+            the customer-facing summaries: a kitchen reading "Large · Regular"
+            off two groups cannot tell which is which.
+          */}
+          {line.options && line.options.length > 0 ? (
+            <View className="mt-0.5 flex-row flex-wrap">
+              {line.options.map((option) => (
+                <View
+                  key={option.choiceId}
+                  className="mr-1 mt-0.5 rounded bg-gray-100 px-1.5 py-0.5"
+                >
+                  <Text variant="caption" className="text-gray-700">
+                    {option.groupName}: {option.choiceName}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
+
           {line.instruction ? (
-            <Text variant="caption" className="text-gray-400">
-              {line.instruction}
+            <Text variant="caption" className="mt-0.5 italic text-gray-500">
+              “{line.instruction}”
             </Text>
           ) : null}
         </View>

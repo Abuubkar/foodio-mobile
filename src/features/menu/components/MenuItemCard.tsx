@@ -10,6 +10,7 @@ import { AddToCartControl, type CartRestaurant } from '@/features/cart';
 import { useNavigationGuard } from '@/hooks/useNavigationGuard';
 import { colors } from '@/theme';
 
+import { needsChoosing } from '../lib/chooseOptions';
 import type { MenuItem } from '../types/menu.types';
 
 import { MenuPrice } from './MenuPrice';
@@ -86,17 +87,42 @@ export function MenuItemCard({ item, restaurant, closedNotice }: MenuItemCardPro
         </View>
         <View className="flex-row items-center justify-between">
           <MenuPrice priceMinor={item.priceMinor} currency={restaurant.currency} />
-          <AddToCartControl
-            restaurant={restaurant}
-            item={{
-              id: item.id,
-              name: item.name,
-              image: item.image,
-              priceMinor: item.priceMinor,
-            }}
-            disabled={soldOut}
-            {...(closedNotice === undefined ? {} : { closedNotice })}
-          />
+
+          {/*
+            A dish with a question that must be answered cannot be added from
+            here: the row has no way to ask it, and adding silently would pick
+            for the customer. It opens the dish page instead, and says so.
+          */}
+          {needsChoosing(item.optionGroups) ? (
+            <Pressable
+              onPress={() => guard(() => router.push(`/menu-item/${item.id}`))}
+              disabled={soldOut}
+              accessibilityRole="button"
+              accessibilityLabel={t('menu.options.chooseFor', { dish: item.name })}
+              className={
+                soldOut
+                  ? 'rounded-full bg-gray-100 px-3 py-1.5 opacity-50'
+                  : 'flex-row items-center rounded-full bg-primary-50 px-3 py-1.5 active:opacity-70'
+              }
+            >
+              <Text variant="caption" className="font-semibold text-primary-700">
+                {t('menu.options.chooseShort')}
+              </Text>
+              <Ionicons name="chevron-forward" size={13} color={colors.primary[600]} />
+            </Pressable>
+          ) : (
+            <AddToCartControl
+              restaurant={restaurant}
+              item={{
+                id: item.id,
+                name: item.name,
+                image: item.image,
+                priceMinor: item.priceMinor,
+              }}
+              disabled={soldOut}
+              {...(closedNotice === undefined ? {} : { closedNotice })}
+            />
+          )}
         </View>
       </View>
     </Pressable>

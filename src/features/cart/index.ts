@@ -4,5 +4,5 @@ export { CartLineRow } from './components/CartLineRow';
 export { CartSummary } from './components/CartSummary';
 export { InstructionSheet } from './components/InstructionSheet';
 export { CartScreen } from './screens/CartScreen';
-export type { AddableMenuItem, CartLine, CartRestaurant } from './types/cart.types';
-export { sameLine } from './types/cart.types';
+export type { AddableMenuItem, CartLine, CartRestaurant, ChosenOption } from './types/cart.types';
+export { basePriceMinor, optionsTotalMinor, sameLine } from './types/cart.types';

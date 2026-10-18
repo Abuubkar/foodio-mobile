@@ -346,3 +346,82 @@ describe('selectPlainLineOf', () => {
     expect(selectPlainLineOf('r1-pop-1')(state())).toBeUndefined();
   });
 });
+
+describe("options as part of a line's identity", () => {
+  const large = {
+    groupId: 'size',
+    groupName: 'Size',
+    choiceId: 'large',
+    choiceName: 'Large',
+    priceDeltaMinor: 30000,
+  };
+  const small = { ...large, choiceId: 'small', choiceName: 'Small', priceDeltaMinor: -20000 };
+  const cheese = {
+    groupId: 'extras',
+    groupName: 'Extras',
+    choiceId: 'cheese',
+    choiceName: 'Extra cheese',
+    priceDeltaMinor: 15000,
+  };
+
+  it('charges the base price plus the deltas', () => {
+    state().addItem(tacos, birria, { chosen: [large, cheese] });
+
+    expect(state().lines[0]?.unitPriceMinor).toBe(birria.priceMinor + 45000);
+  });
+
+  it('takes money off for a choice that costs less', () => {
+    state().addItem(tacos, birria, { chosen: [small] });
+
+    expect(state().lines[0]?.unitPriceMinor).toBe(birria.priceMinor - 20000);
+  });
+
+  it('folds two of the same choices into one line', () => {
+    state().addItem(tacos, birria, { chosen: [large] });
+    state().addItem(tacos, birria, { chosen: [large] });
+
+    expect(state().lines).toHaveLength(1);
+    expect(state().lines[0]?.quantity).toBe(2);
+  });
+
+  /** A large and a small are different things at different prices. */
+  it('keeps differently chosen dishes as separate lines', () => {
+    state().addItem(tacos, birria, { chosen: [large] });
+    state().addItem(tacos, birria, { chosen: [small] });
+
+    expect(state().lines).toHaveLength(2);
+  });
+
+  /** Tapping the same things in a different order is the same order. */
+  it('folds regardless of the order the choices were made in', () => {
+    state().addItem(tacos, birria, { chosen: [large, cheese] });
+    state().addItem(tacos, birria, { chosen: [cheese, large] });
+
+    expect(state().lines).toHaveLength(1);
+  });
+
+  it('keeps a chosen dish apart from the plain one', () => {
+    state().addItem(tacos, birria);
+    state().addItem(tacos, birria, { chosen: [large] });
+
+    expect(state().lines).toHaveLength(2);
+  });
+
+  /** The menu row's stepper can only mean the line with nothing chosen. */
+  it('leaves the plain-line selector pointing at the plain line', () => {
+    state().addItem(tacos, birria, { chosen: [large] });
+    state().addItem(tacos, birria);
+
+    const plain = selectPlainLineOf(birria.id)(state());
+
+    expect(plain?.options).toEqual([]);
+    expect(plain?.unitPriceMinor).toBe(birria.priceMinor);
+  });
+
+  it('counts every line of the dish, however it was chosen', () => {
+    state().addItem(tacos, birria, { chosen: [large] });
+    state().addItem(tacos, birria, { chosen: [small] });
+
+    expect(selectQuantityOf(birria.id)(state())).toBe(2);
+  });
+});
