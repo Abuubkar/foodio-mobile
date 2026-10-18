@@ -71,13 +71,14 @@ carries a mute button, the ours/theirs badge, a caption and _View menu_ — so
 the only thing you can do with a dish you just watched is go and look for it
 in a list.
 
-| key | name        | what it argues                                           |
-| --- | ----------- | -------------------------------------------------------- |
-| A   | The pairing | one dish per page, their clip above the customer's below |
-| B   | Shoppable   | the dish named, priced and added where you are standing  |
-| C   | The rail    | like, save, share — the convention, minus Follow         |
-| D   | Steered     | filters over the feed, and closed said on the clip       |
-| E   | Everything  | all four at once, so the cost is arguable not imagined   |
+| key | name                 | what it argues                                           |
+| --- | -------------------- | -------------------------------------------------------- |
+| A   | The pairing          | one dish per page, their clip above the customer's below |
+| B   | Shoppable            | the dish named, priced and added where you are standing  |
+| C   | The rail             | like, save, share — the convention, minus Follow         |
+| D   | Steered              | filters over the feed, and closed said on the clip       |
+| F   | Steered + rail + act | **D and C together, plus a way to get the dish**         |
+| E   | Everything           | all four at once, so the cost is arguable not imagined   |
 
 Each variant prints its own argument and its own costs under the phone. **E
 exists to be rejected** — if everything at once looks wrong, that is the
@@ -85,6 +86,21 @@ finding, and it is cheaper to see it here than after it ships.
 
 No Follow in C on purpose: there is no feed-by-restaurant to follow into, and
 a button that only changes its own label is a lie.
+
+**F is the one to look at.** D and C were the two picked, and what neither of
+them does is let you get the dish. The button is decided by the dish rather
+than by the layout, because issue #148 already made that rule real on the
+menu row:
+
+| the dish               | the button                        |
+| ---------------------- | --------------------------------- |
+| asks nothing           | **Add +**                         |
+| has a required group   | **Choose ›**, opens the dish page |
+| the clip names no dish | **View menu ›**                   |
+
+A clip that added Birria Tacos silently would pick a size on the customer's
+behalf, and contradict the menu row two taps away. All three states are in F's
+scroll — four of six clips carry a dish, and one of those has options.
 
 ### Two things the data makes awkward
 
