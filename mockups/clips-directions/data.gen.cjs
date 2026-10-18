@@ -43,6 +43,10 @@ const shape = (c) => {
           rating: item.rating ?? null,
           image: item.image,
           optionGroups: (item.optionGroups ?? []).map((g) => g.name),
+          /* The app's rule, from needsChoosing() in chooseOptions.ts: a dish
+             needs a detour only if some group REQUIRES an answer. Optional
+             extras still add in one tap. */
+          needsChoosing: (item.optionGroups ?? []).some((g) => g.minChoices > 0),
         }
       : null,
     restaurant: r
@@ -108,6 +112,7 @@ for (const r of db.restaurants) {
           image: m.image,
           popular: m.isPopular ?? false,
           optionGroups: (m.optionGroups ?? []).map((g) => g.name),
+          needsChoosing: (m.optionGroups ?? []).some((g) => g.minChoices > 0),
           clipId: clipFor(m.id)?.id ?? null,
         })),
     })),

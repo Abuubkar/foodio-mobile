@@ -2455,17 +2455,6 @@ body {
   object-fit: cover;
 }
 
-/* Mute belongs in the header row, not floating over the Menu pill. */
-.v-u .u-mute {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.45);
-  font-size: 14px;
-}
-
 .v-u .u-who {
   flex: 1;
   min-width: 0;
@@ -2492,23 +2481,27 @@ body {
   z-index: 6;
 }
 
-.v-u .u-kicker {
-  font-size: 10.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: rgba(255, 255, 255, 0.72);
-}
-
 .v-u .u-dish {
-  margin: 3px 0 2px;
+  margin: 0 0 3px;
   font-size: 25px;
   font-weight: 700;
   line-height: 1.14;
   letter-spacing: -0.01em;
 }
 
-.v-u .u-line {
+/* A flag, not a list: the lip underneath names the dishes. */
+.v-u .u-more {
+  margin-left: 9px;
   font-size: 12.5px;
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.66);
+  vertical-align: middle;
+}
+
+.v-u .u-line {
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.82);
 }
 

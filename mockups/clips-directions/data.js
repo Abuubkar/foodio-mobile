@@ -24,7 +24,8 @@ window.FOODIO_CLIPS = {
         "optionGroups": [
           "Size",
           "Extras"
-        ]
+        ],
+        "needsChoosing": true
       },
       "restaurant": {
         "cuisines": [
@@ -60,7 +61,8 @@ window.FOODIO_CLIPS = {
         "priceMinor": 2400,
         "rating": 4.9,
         "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",
-        "optionGroups": []
+        "optionGroups": [],
+        "needsChoosing": false
       },
       "restaurant": {
         "cuisines": [
@@ -96,7 +98,8 @@ window.FOODIO_CLIPS = {
         "priceMinor": 1800,
         "rating": 4.9,
         "image": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80",
-        "optionGroups": []
+        "optionGroups": [],
+        "needsChoosing": false
       },
       "restaurant": {
         "cuisines": [
@@ -132,7 +135,8 @@ window.FOODIO_CLIPS = {
         "priceMinor": 1350,
         "rating": 4.9,
         "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
-        "optionGroups": []
+        "optionGroups": [],
+        "needsChoosing": false
       },
       "restaurant": {
         "cuisines": [
@@ -229,7 +233,8 @@ window.FOODIO_CLIPS = {
         "optionGroups": [
           "Size",
           "Extras"
-        ]
+        ],
+        "needsChoosing": true
       },
       "restaurant": {
         "cuisines": [
@@ -265,7 +270,8 @@ window.FOODIO_CLIPS = {
         "priceMinor": 2400,
         "rating": 4.9,
         "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",
-        "optionGroups": []
+        "optionGroups": [],
+        "needsChoosing": false
       },
       "restaurant": {
         "cuisines": [
@@ -301,7 +307,8 @@ window.FOODIO_CLIPS = {
         "priceMinor": 1800,
         "rating": 4.9,
         "image": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80",
-        "optionGroups": []
+        "optionGroups": [],
+        "needsChoosing": false
       },
       "restaurant": {
         "cuisines": [
@@ -337,7 +344,8 @@ window.FOODIO_CLIPS = {
         "priceMinor": 1350,
         "rating": 4.9,
         "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
-        "optionGroups": []
+        "optionGroups": [],
+        "needsChoosing": false
       },
       "restaurant": {
         "cuisines": [
@@ -367,7 +375,8 @@ window.FOODIO_CLIPS = {
         "optionGroups": [
           "Size",
           "Extras"
-        ]
+        ],
+        "needsChoosing": true
       },
       "ours": {
         "id": "clip-c1",
@@ -391,7 +400,8 @@ window.FOODIO_CLIPS = {
           "optionGroups": [
             "Size",
             "Extras"
-          ]
+          ],
+          "needsChoosing": true
         },
         "restaurant": {
           "cuisines": [
@@ -430,7 +440,8 @@ window.FOODIO_CLIPS = {
           "optionGroups": [
             "Size",
             "Extras"
-          ]
+          ],
+          "needsChoosing": true
         },
         "restaurant": {
           "cuisines": [
@@ -456,7 +467,8 @@ window.FOODIO_CLIPS = {
         "priceMinor": 2400,
         "rating": 4.9,
         "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",
-        "optionGroups": []
+        "optionGroups": [],
+        "needsChoosing": false
       },
       "ours": {
         "id": "clip-c2",
@@ -477,7 +489,8 @@ window.FOODIO_CLIPS = {
           "priceMinor": 2400,
           "rating": 4.9,
           "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",
-          "optionGroups": []
+          "optionGroups": [],
+          "needsChoosing": false
         },
         "restaurant": {
           "cuisines": [
@@ -513,7 +526,8 @@ window.FOODIO_CLIPS = {
           "priceMinor": 2400,
           "rating": 4.9,
           "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",
-          "optionGroups": []
+          "optionGroups": [],
+          "needsChoosing": false
         },
         "restaurant": {
           "cuisines": [
@@ -539,7 +553,8 @@ window.FOODIO_CLIPS = {
         "priceMinor": 1800,
         "rating": 4.9,
         "image": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80",
-        "optionGroups": []
+        "optionGroups": [],
+        "needsChoosing": false
       },
       "ours": {
         "id": "clip-c3",
@@ -560,7 +575,8 @@ window.FOODIO_CLIPS = {
           "priceMinor": 1800,
           "rating": 4.9,
           "image": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80",
-          "optionGroups": []
+          "optionGroups": [],
+          "needsChoosing": false
         },
         "restaurant": {
           "cuisines": [
@@ -596,7 +612,8 @@ window.FOODIO_CLIPS = {
           "priceMinor": 1800,
           "rating": 4.9,
           "image": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80",
-          "optionGroups": []
+          "optionGroups": [],
+          "needsChoosing": false
         },
         "restaurant": {
           "cuisines": [
@@ -622,7 +639,8 @@ window.FOODIO_CLIPS = {
         "priceMinor": 1350,
         "rating": 4.9,
         "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
-        "optionGroups": []
+        "optionGroups": [],
+        "needsChoosing": false
       },
       "ours": {
         "id": "clip-c4",
@@ -643,7 +661,8 @@ window.FOODIO_CLIPS = {
           "priceMinor": 1350,
           "rating": 4.9,
           "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
-          "optionGroups": []
+          "optionGroups": [],
+          "needsChoosing": false
         },
         "restaurant": {
           "cuisines": [
@@ -679,7 +698,8 @@ window.FOODIO_CLIPS = {
           "priceMinor": 1350,
           "rating": 4.9,
           "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
-          "optionGroups": []
+          "optionGroups": [],
+          "needsChoosing": false
         },
         "restaurant": {
           "cuisines": [
@@ -739,7 +759,8 @@ window.FOODIO_CLIPS = {
             "optionGroups": [
               "Size",
               "Extras"
-            ]
+            ],
+            "needsChoosing": true
           },
           "restaurant": {
             "cuisines": [
@@ -778,7 +799,8 @@ window.FOODIO_CLIPS = {
             "optionGroups": [
               "Size",
               "Extras"
-            ]
+            ],
+            "needsChoosing": true
           },
           "restaurant": {
             "cuisines": [
@@ -810,6 +832,7 @@ window.FOODIO_CLIPS = {
                 "Size",
                 "Extras"
               ],
+              "needsChoosing": true,
               "clipId": "clip-r1"
             },
             {
@@ -819,6 +842,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=600&q=80",
               "popular": true,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -830,6 +854,7 @@ window.FOODIO_CLIPS = {
               "optionGroups": [
                 "Size"
               ],
+              "needsChoosing": true,
               "clipId": null
             }
           ]
@@ -844,6 +869,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -853,6 +879,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -862,6 +889,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -876,6 +904,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -885,6 +914,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1604467715878-83e57e8bc129?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -899,6 +929,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -908,6 +939,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -951,7 +983,8 @@ window.FOODIO_CLIPS = {
             "priceMinor": 2400,
             "rating": 4.9,
             "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",
-            "optionGroups": []
+            "optionGroups": [],
+            "needsChoosing": false
           },
           "restaurant": {
             "cuisines": [
@@ -987,7 +1020,8 @@ window.FOODIO_CLIPS = {
             "priceMinor": 2400,
             "rating": 4.9,
             "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",
-            "optionGroups": []
+            "optionGroups": [],
+            "needsChoosing": false
           },
           "restaurant": {
             "cuisines": [
@@ -1016,6 +1050,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",
               "popular": true,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": "clip-r2"
             },
             {
@@ -1027,6 +1062,7 @@ window.FOODIO_CLIPS = {
               "optionGroups": [
                 "Extras"
               ],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1041,6 +1077,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1050,6 +1087,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1059,6 +1097,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1073,6 +1112,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1082,6 +1122,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1096,6 +1137,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1105,6 +1147,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1148,7 +1191,8 @@ window.FOODIO_CLIPS = {
             "priceMinor": 1800,
             "rating": 4.9,
             "image": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80",
-            "optionGroups": []
+            "optionGroups": [],
+            "needsChoosing": false
           },
           "restaurant": {
             "cuisines": [
@@ -1184,7 +1228,8 @@ window.FOODIO_CLIPS = {
             "priceMinor": 1800,
             "rating": 4.9,
             "image": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80",
-            "optionGroups": []
+            "optionGroups": [],
+            "needsChoosing": false
           },
           "restaurant": {
             "cuisines": [
@@ -1213,6 +1258,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80",
               "popular": true,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": "clip-r3"
             },
             {
@@ -1222,6 +1268,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1623341214825-9f4f963727da?auto=format&fit=crop&w=600&q=80",
               "popular": true,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1236,6 +1283,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1562158074-d49fbeffcc91?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1245,6 +1293,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1259,6 +1308,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1268,6 +1318,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1591814468924-caf88d1232e1?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1311,7 +1362,8 @@ window.FOODIO_CLIPS = {
             "priceMinor": 1350,
             "rating": 4.9,
             "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
-            "optionGroups": []
+            "optionGroups": [],
+            "needsChoosing": false
           },
           "restaurant": {
             "cuisines": [
@@ -1347,7 +1399,8 @@ window.FOODIO_CLIPS = {
             "priceMinor": 1350,
             "rating": 4.9,
             "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
-            "optionGroups": []
+            "optionGroups": [],
+            "needsChoosing": false
           },
           "restaurant": {
             "cuisines": [
@@ -1376,6 +1429,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
               "popular": true,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": "clip-r4"
             },
             {
@@ -1385,6 +1439,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80",
               "popular": true,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1399,6 +1454,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1408,6 +1464,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1417,6 +1474,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1431,6 +1489,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1440,6 +1499,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1505,6 +1565,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=600&q=80",
               "popular": true,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1514,6 +1575,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80",
               "popular": true,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1528,6 +1590,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1537,6 +1600,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1551,6 +1615,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1622597467836-f3285f2131b8?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1560,6 +1625,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1625,6 +1691,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=600&q=80",
               "popular": true,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1634,6 +1701,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80",
               "popular": true,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1648,6 +1716,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1657,6 +1726,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]
@@ -1671,6 +1741,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             },
             {
@@ -1680,6 +1751,7 @@ window.FOODIO_CLIPS = {
               "image": "https://images.unsplash.com/photo-1494314671902-399b18174975?auto=format&fit=crop&w=600&q=80",
               "popular": false,
               "optionGroups": [],
+              "needsChoosing": false,
               "clipId": null
             }
           ]

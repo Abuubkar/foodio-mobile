@@ -122,10 +122,10 @@ function variantB() {
                  </div>
                  <div class="price">${money(dish.priceMinor, r.currency)}</div>
                </div>
-               ${dish.optionGroups.length ? `<div class="opts">Choose ${dish.optionGroups.join(' and ').toLowerCase()} on the next screen</div>` : ''}
+               ${dish.needsChoosing ? `<div class="opts">Choose ${dish.optionGroups.join(' and ').toLowerCase()} on the next screen</div>` : ''}
                <div class="cta">
-                 <div class="buy">${dish.optionGroups.length ? 'Choose and add' : 'Add to cart'}</div>
-                 ${dish.optionGroups.length ? '' : '<div class="step">&minus;<b>1</b>&plus;</div>'}
+                 <div class="buy">${dish.needsChoosing ? 'Choose and add' : 'Add to cart'}</div>
+                 ${dish.needsChoosing ? '' : '<div class="step">&minus;<b>1</b>&plus;</div>'}
                </div>
                <span class="menu">View full menu &rsaquo;</span>
              </div>`
@@ -247,7 +247,7 @@ function variantF() {
 
     const action = !dish
       ? `<a class="act-btn ghost">View menu &rsaquo;</a>`
-      : dish.optionGroups.length
+      : dish.needsChoosing
         ? `<a class="act-btn ghost">Choose &rsaquo;</a>`
         : `<a class="act-btn">Add &#43;</a>`;
 
@@ -289,7 +289,7 @@ function variantF() {
       <div class="dishbar">
         <div class="d">
           <b>${dish ? dish.name : c.restaurantName}</b>
-          <span>${dish ? money(dish.priceMinor, c.restaurant.currency) + (dish.optionGroups.length ? ' · ' + dish.optionGroups.join(', ').toLowerCase() : '') : c.restaurant.cuisines.join(' · ')}</span>
+          <span>${dish ? money(dish.priceMinor, c.restaurant.currency) + (dish.needsChoosing ? ' · ' + dish.optionGroups.join(', ').toLowerCase() : '') : c.restaurant.cuisines.join(' · ')}</span>
         </div>
         ${action}
       </div>
@@ -316,7 +316,7 @@ function variantG() {
 
     const action = !dish
       ? `<span class="g-link">View menu &rsaquo;</span>`
-      : dish.optionGroups.length
+      : dish.needsChoosing
         ? `<span class="g-link">Choose &rsaquo;</span>`
         : `<span class="g-plus">&#43;</span>`;
 
@@ -376,7 +376,7 @@ function variantH() {
 
     const action = !dish
       ? `<a class="h-btn ghost">View menu &rsaquo;</a>`
-      : dish.optionGroups.length
+      : dish.needsChoosing
         ? `<a class="h-btn ghost">Choose size &rsaquo;</a>`
         : `<a class="h-btn">Add to cart &#43;</a>`;
 
@@ -413,7 +413,7 @@ function variantH() {
           ${dish ? `<img src="${dish.image}" alt="" />` : ''}
           <div class="h-meta">
             <b>${dish ? dish.name : c.restaurantName}</b>
-            <span>${dish ? money(dish.priceMinor, c.restaurant.currency) + (dish.optionGroups.length ? ' · choose ' + dish.optionGroups.join(' and ').toLowerCase() : '') : c.restaurant.cuisines.join(' · ')}</span>
+            <span>${dish ? money(dish.priceMinor, c.restaurant.currency) + (dish.needsChoosing ? ' · choose ' + dish.optionGroups.join(' and ').toLowerCase() : '') : c.restaurant.cuisines.join(' · ')}</span>
           </div>
         </div>
         ${action}
@@ -443,7 +443,7 @@ function variantI() {
       ? 'See the menu'
       : closed
         ? `Order ${dish.name} for later`
-        : dish.optionGroups.length
+        : dish.needsChoosing
           ? `Choose ${dish.name} &middot; ${money(dish.priceMinor, c.restaurant.currency)}`
           : `Add ${dish.name} &middot; ${money(dish.priceMinor, c.restaurant.currency)}`;
 
@@ -497,7 +497,7 @@ function variantJ() {
        dish page, it is not added behind the customer's back. */
     const order = !dish
       ? { glyph: '&#9776;', label: 'Menu', ghost: true }
-      : dish.optionGroups.length
+      : dish.needsChoosing
         ? { glyph: '&rsaquo;', label: 'Choose', ghost: true }
         : { glyph: '&#43;', label: 'Add', ghost: false };
 
@@ -593,7 +593,7 @@ function variantK() {
                  <div class="k-row">
                    <img src="${d.image}" alt="" />
                    <div class="k-meta"><b>${d.name}</b><span>${money(d.priceMinor, c.restaurant.currency)}</span></div>
-                   <span class="k-add ${d.optionGroups.length ? 'ghost' : ''}">${d.optionGroups.length ? 'Choose' : 'Add'}</span>
+                   <span class="k-add ${d.needsChoosing ? 'ghost' : ''}">${d.needsChoosing ? 'Choose' : 'Add'}</span>
                  </div>`,
                  )
                  .join('')}
@@ -647,11 +647,11 @@ function variantL() {
                <div class="l-title"><b>${dish.name}</b><span>${money(dish.priceMinor, c.restaurant.currency)}</span></div>
                <div class="l-sub">${c.restaurantName} &middot; ${eta(c.restaurant)} &middot; ${fee(c.restaurant)}</div>
                ${
-                 dish.optionGroups.length
+                 dish.needsChoosing
                    ? `<div class="l-opts">${dish.optionGroups.map((g) => `<span>${g}</span>`).join('')}</div>`
                    : ''
                }
-               <div class="l-cta">${dish.optionGroups.length ? 'Choose and add' : 'Add to cart'}</div>
+               <div class="l-cta">${dish.needsChoosing ? 'Choose and add' : 'Add to cart'}</div>
              </div>`
           : ''
       }
@@ -691,7 +691,7 @@ function variantM() {
           ${c.restaurantName} &middot; ${eta(c.restaurant)}${c.dish ? ' &middot; ' + money(c.dish.priceMinor, c.restaurant.currency) : ''}
         </div>
         <div class="m-acts">
-          <span class="primary">${c.dish && !c.dish.optionGroups.length ? 'Add' : 'Open'}</span>
+          <span class="primary">${c.dish && !c.dish.needsChoosing ? 'Add' : 'Open'}</span>
           <span>${icon('bookmark', 17)} List</span>
           <span>${icon('share', 17)} Share</span>
         </div>
@@ -730,7 +730,7 @@ function variantN() {
         <div class="n-line">
           ${c.restaurantName} &middot; ${eta(c.restaurant)}${c.dish ? ' &middot; ' + money(c.dish.priceMinor, c.restaurant.currency) : ''}
         </div>
-        <div class="n-btn">${c.dish && !c.dish.optionGroups.length ? 'Add to cart' : 'Open the dish'}</div>
+        <div class="n-btn">${c.dish && !c.dish.needsChoosing ? 'Add to cart' : 'Open the dish'}</div>
       </div>
       ${tabbar(2)}
     </div>`;
@@ -1000,7 +1000,7 @@ function variantT() {
           <b>${c.dish ? c.dish.name : c.restaurantName}</b>
           <span>${c.restaurantName} &middot; ${eta(c.restaurant)}${c.dish ? ' &middot; ' + money(c.dish.priceMinor, c.restaurant.currency) : ''}</span>
         </div>
-        <div class="t-add">${c.dish && !c.dish.optionGroups.length ? '&#43; Add' : 'Choose &rsaquo;'}</div>
+        <div class="t-add">${c.dish && !c.dish.needsChoosing ? '&#43; Add' : 'Choose &rsaquo;'}</div>
       </div>
 
       <div class="t-tray">
@@ -1060,7 +1060,13 @@ const inClip = (k, clip, n = 3) => {
     and a customer's shot of the same dish are two chapters worth having. */
 const chaptersOf = (k) => k.clips;
 
-const whose = (c) => (c.kind === 'customer' ? 'from a customer' : 'from the kitchen');
+/** The dish-level action, and the one place the Add/Choose rule lives.
+    `needsChoosing` is the app's own test (chooseOptions.ts): a group that
+    REQUIRES an answer means a detour to pick it, while optional extras still
+    add in one tap. A clip tagged to no dish can be ordered from at all, so it
+    sends you to the menu rather than offering a choice that does not exist. */
+const primaryFor = (clip) =>
+  !clip.dish ? 'See the menu' : clip.dish.needsChoosing ? 'Choose' : 'Add';
 
 /** Dishes with footage, as opposed to clips: W needs the real ratio. */
 const filmedCount = (k) => k.menu.flatMap((c) => c.items).filter((d) => d.clipId).length;
@@ -1100,22 +1106,24 @@ function variantU() {
           <b>${k.name}</b>
           <span>${eta(r)} &middot; ${fee(r)}</span>
         </div>
-        <span class="u-mute">&#128263;</span>
         ${menuPill(k)}
       </div>
 
       <div class="u-foot">
-        <div class="u-kicker">
-          ${chapters.length === 1 ? 'The only clip' : `Clip ${at + 1} of ${chapters.length}`}
-          &middot; ${whose(clip)}
+        <div class="u-dish">
+          ${clip.dish ? clip.dish.name : clip.caption}
+          ${clip.dish && also.length > 1 ? '<i class="u-more">and more</i>' : ''}
         </div>
-        <div class="u-dish">${clip.dish ? clip.dish.name : k.name}</div>
         <div class="u-line">
-          ${k.name} &middot; ${eta(r)}${clip.dish ? ' &middot; ' + money(clip.dish.priceMinor, r.currency) : ''}
+          ${
+            clip.dish
+              ? `${money(clip.dish.priceMinor, r.currency)}${clip.dish.rating ? ' &middot; &#9733; ' + clip.dish.rating : ''}${clip.dish.needsChoosing ? ' &middot; pick a ' + clip.dish.optionGroups[0].toLowerCase() : ''}`
+              : 'No dish tagged &mdash; the Menu is the only way in'
+          }
         </div>
 
         <div class="u-acts">
-          <span class="primary">${clip.dish && !clip.dish.optionGroups.length ? 'Add' : 'Choose'}</span>
+          <span class="primary">${primaryFor(clip)}</span>
           <span>${icon('bookmark', 17)} List</span>
           <span>${icon('share', 17)} Share</span>
         </div>
@@ -1126,8 +1134,11 @@ function variantU() {
             <div class="u-thumbs">
               ${also.map((d) => `<img src="${d.image}" alt="" />`).join('')}
             </div>
-            <b>Also in this clip</b>
-            <span>${also.length} dishes &#8963;</span>
+            <b>${also
+              .slice(1)
+              .map((d) => d.name)
+              .join(', ')}</b>
+            <span>&#8963;</span>
           </div>
         </div>
       </div>
@@ -1137,7 +1148,7 @@ function variantU() {
 
   return {
     html: `<div class="feed">${kitchens.map(page).join('')}</div>`,
-    note: 'The four things that survived, in one screen. Down is the next kitchen, the segments are the dishes this one filmed, the foot is M’s text and M’s three actions, and K’s drawer is not hidden behind a bag — its lip sits under the actions already showing three thumbnails, so a browser sees there is more without hunting an icon. Scroll to Green Leaf Bowls to see the honest case: one clip, one segment, and the kicker says \u201cThe only clip\u201d rather than pretending to a series. Costs: the foot measures 182dp and with the tab bar takes 244dp off the bottom of an 820dp screen, so the video is partly a backdrop; and the lip and the Add button sit close enough that a thumb will hit the wrong one.',
+    note: 'The four things that survived, in one screen. Down is the next kitchen, the segments across the top are this kitchen’s other clips, and the foot is M’s text and M’s three actions. K’s drawer is not behind a bag: its lip sits under the actions naming the dishes it holds. The top line is the kitchen — name, delivery, Menu — and the bottom line is the dish — price, rating, and whether it needs a choice — so neither repeats the other. “And more” appears beside the dish only when the clip really holds several. Scroll to Green Leaf Bowls for the awkward case: a clip tagged to no dish at all, where the title falls back to the caption and the Menu is the only way to order. Costs: the foot takes roughly 240dp off an 820dp screen once the tab bar is counted, so the video is partly a backdrop; and the lip sits close enough to the Add button that a thumb will hit the wrong one.',
   };
 }
 
@@ -1189,7 +1200,7 @@ function variantV() {
               <b>${d.name}</b>
               <div class="v-price">
                 <span>${money(d.priceMinor, r.currency)}</span>
-                <i>${d.optionGroups.length ? '&#8250;' : '+'}</i>
+                <i>${d.needsChoosing ? '&#8250;' : '+'}</i>
               </div>
             </div>`,
             )
@@ -1219,7 +1230,7 @@ function variantW() {
     const clip = chapters[at] ?? k.clips[0];
     const all = k.menu.flatMap((c) => c.items);
     const r = k.restaurant;
-    const open = i === 1; /* one cell shown at full height */
+    const open = true; /* asked for: the drawer at full height on every cell */
 
     return `
     <div class="cell v-w ${open ? 'up' : ''}">
@@ -1229,12 +1240,16 @@ function variantW() {
         <div class="w-mute">&#128263;</div>
 
         <div class="w-over">
-          <div class="w-dish">${clip.dish ? clip.dish.name : k.name}</div>
+          <div class="w-dish">${clip.dish ? clip.dish.name : clip.caption}</div>
           <div class="w-line">
-            ${k.name} &middot; ${eta(r)}${clip.dish ? ' &middot; ' + money(clip.dish.priceMinor, r.currency) : ''}
+            ${
+              clip.dish
+                ? `${money(clip.dish.priceMinor, r.currency)}${clip.dish.rating ? ' &middot; &#9733; ' + clip.dish.rating : ''}${clip.dish.needsChoosing ? ' &middot; pick a ' + clip.dish.optionGroups[0].toLowerCase() : ''}`
+                : 'No dish tagged &mdash; the menu is below'
+            }
           </div>
           <div class="w-acts">
-            <span class="primary">${clip.dish && !clip.dish.optionGroups.length ? 'Add' : 'Choose'}</span>
+            <span class="primary">${primaryFor(clip)}</span>
             <span>${icon('bookmark', 16)}</span>
             <span>${icon('share', 16)}</span>
           </div>
@@ -1264,7 +1279,7 @@ function variantW() {
                 <span>${money(d.priceMinor, r.currency)}${d.clipId ? ' &middot; has a clip' : ''}</span>
               </div>
               ${d.clipId ? `<span class="w-play">${icon('play', 12)}</span>` : ''}
-              <span class="w-add">${d.optionGroups.length ? '&#8250;' : '+'}</span>
+              <span class="w-add">${d.needsChoosing ? '&#8250;' : '+'}</span>
             </div>`,
             )
             .join('')}`,
@@ -1294,7 +1309,7 @@ function variantW() {
 
   return {
     html: `<div class="feed">${kitchens.map(page).join('')}</div>`,
-    note: 'One surface doing both jobs: the strip under the video is the kitchen’s menu, and the dishes that were filmed carry a play badge — so the same row is the chapter nav and the drawer, at two different heights. Pull it up and it is the full menu by category. The second cell is drawn at full height so both states are visible at once. This is the only one of the five that admits the real ratio: two dishes filmed, ten on the menu. Costs: the strip is a lot of tiny pictures, and “filmed” is a distinction customers did not ask for.',
+    note: 'One surface doing both jobs: the strip under the video is the kitchen’s menu, and the dishes that were filmed carry a play badge — so the same row is the chapter nav and the drawer, at two different heights. Drawn fully raised on every cell, so this is the menu state; the collapsed strip is the same markup with the raised class off. The overlay says the dish and the sheet header says the kitchen, so neither repeats the other. This is the only one of the five that admits the real ratio: one dish filmed, ten on the menu. Costs: raised, the video is a 300dp header and the clip stops being the point; and “filmed” is a distinction customers did not ask for.',
   };
 }
 
@@ -1344,7 +1359,7 @@ function variantX() {
                    <div class="x-item">
                      <span>${d.name}</span>
                      <b>${money(d.priceMinor, r.currency)}</b>
-                     <u>${d.optionGroups.length ? 'Choose' : 'Add'}</u>
+                     <u>${d.needsChoosing ? 'Choose' : 'Add'}</u>
                    </div>`,
                    )
                    .join('')}
@@ -1353,7 +1368,7 @@ function variantX() {
         }
 
         <div class="x-acts">
-          <span class="on">${clip.dish && !clip.dish.optionGroups.length ? 'Add' : 'Choose'}${clip.dish ? ' ' + money(clip.dish.priceMinor, r.currency) : ''}</span>
+          <span class="on">${primaryFor(clip)}${clip.dish ? ' ' + money(clip.dish.priceMinor, r.currency) : ''}</span>
           <span>List</span>
           <span>Share</span>
         </div>
@@ -1483,8 +1498,8 @@ function variantE() {
           <div class="price">${money(p.dish.priceMinor, r.currency)}</div>
         </div>
         <div class="cta">
-          <div class="buy">${p.dish.optionGroups.length ? 'Choose and add' : 'Add to cart'}</div>
-          ${p.dish.optionGroups.length ? '' : '<div class="step">&minus;<b>1</b>&plus;</div>'}
+          <div class="buy">${p.dish.needsChoosing ? 'Choose and add' : 'Add to cart'}</div>
+          ${p.dish.needsChoosing ? '' : '<div class="step">&minus;<b>1</b>&plus;</div>'}
         </div>
       </div>
       ${tabbar(2)}

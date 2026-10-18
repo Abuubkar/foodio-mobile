@@ -216,6 +216,24 @@ They turn out to be one idea. The navigation under all five is two axes:
 | **X — Two axes** | Can it work with no rectangle at all? M's type and nothing else. The drawer handle is a sentence that names what it holds and opens into a priced list in place.                                                                                 |
 | **Y — Saved**    | Where does R belong? Not on a feed. On Saved, where everything is already chosen and comparison is the whole job — grouped under the same kitchen header.                                                                                        |
 
+#### Add vs Choose
+
+Both are the primary button; they differ by whether the dish can go in the
+cart in one tap.
+
+- **Add** — straight into the cart. Nothing has to be answered first.
+- **Choose** — opens the dish so a required option can be answered, then adds.
+- **See the menu** — the clip is tagged to no dish, so there is nothing to add.
+
+The test is the app's own `needsChoosing()` in
+`src/features/menu/lib/chooseOptions.ts`: `groups.some((g) => g.minChoices > 0)`
+— a group that _requires_ an answer. Having options is not enough. In the seed,
+Birria Tacos has Size (min 1) and Extras (min 0) so it is **Choose**; Margherita
+Pizza has only Extras (min 0) so it is **Add**. Every mockup had been testing
+`optionGroups.length`, which labelled Margherita Pizza "Choose" and sent people
+to a screen with nothing on it they had to answer. `data.gen.cjs` now emits
+`needsChoosing` per dish and all twenty-five decision points use it.
+
 #### What the data forced
 
 Three of these were designed against the seed and the seed argued back.
