@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { useRouter } from 'expo-router';
@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import type { TextInput } from 'react-native';
 
 import { EmptyState, ErrorState, ScreenHeader } from '@/components/shared';
 import { Button, Text } from '@/components/ui';
@@ -23,6 +24,7 @@ import { CheckoutBlockers } from '../components/CheckoutBlockers';
 import { PaymentMethods } from '../components/PaymentMethods';
 import { useActiveAddress } from '../hooks/useActiveAddress';
 import { usePlaceOrder } from '../hooks/useOrders';
+import type { CheckoutBlocker } from '../lib/reviewCheckout';
 import { reviewCheckout } from '../lib/reviewCheckout';
 import type { NewOrder, PaymentMethod } from '../types/order.types';
 
@@ -72,6 +74,33 @@ export function CheckoutScreen() {
    * Not hardcoded to cash: the list is served (standing constraint 2), so a
    * second method arriving needs no app release.
    */
+  /*
+    A blocker names what is wrong; these let it be the way to fix it too. The
+    box sits under the Order summary, a screen away from the field it is
+    talking about, so without this the customer reads the message and then has
+    to go and find the thing — see #159.
+  */
+  const scroller = useRef<ScrollView>(null);
+  const phoneInput = useRef<TextInput>(null);
+  const phoneTop = useRef(0);
+
+  const fix = (kind: CheckoutBlocker['kind']) => {
+    if (kind === 'not-signed-in') {
+      guard(() => router.push('/sign-in'));
+      return;
+    }
+
+    if (kind === 'no-address') {
+      guard(() => router.push('/address'));
+      return;
+    }
+
+    // Scroll first, then focus: focusing alone moves the keyboard over a field
+    // that may still be off screen.
+    scroller.current?.scrollTo({ y: Math.max(phoneTop.current - 16, 0), animated: true });
+    phoneInput.current?.focus();
+  };
+
   const [chosenMethod, setChosenMethod] = useState<PaymentMethod | null>(null);
   const offered = restaurant?.paymentMethods ?? ['cash_on_delivery'];
   const paymentMethod = chosenMethod ?? offered[0] ?? 'cash_on_delivery';
@@ -160,7 +189,11 @@ export function CheckoutScreen() {
           spends the first tap dismissing it — including the tap on Place
           order, and on the country picker's chevron (#211). `handled` keeps
           that behaviour for taps on nothing, and lets buttons through. */}
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerClassName="px-4 pb-8">
+      <ScrollView
+        ref={scroller}
+        keyboardShouldPersistTaps="handled"
+        contentContainerClassName="px-4 pb-8"
+      >
         <Text variant="caption" className="text-gray-400">
           {t('cart.fromRestaurant', { restaurant: cartRestaurant.name })}
         </Text>
@@ -193,15 +226,17 @@ export function CheckoutScreen() {
         </Section>
 
         {needsPhone ? (
-          <Section title={t('checkout.contactNumber')}>
-            <Text variant="caption" className="mb-2 text-gray-500">
-              {t('checkout.contactHint')}
-            </Text>
+          <View onLayout={(event) => (phoneTop.current = event.nativeEvent.layout.y)}>
+            <Section title={t('checkout.contactNumber')}>
+              <Text variant="caption" className="mb-2 text-gray-500">
+                {t('checkout.contactHint')}
+              </Text>
 
-            <PhoneField value={phoneDraft} onChange={setPhoneDraft} />
+              <PhoneField value={phoneDraft} onChange={setPhoneDraft} inputRef={phoneInput} />
 
-            {savePhone.isError ? <ErrorState error={savePhone.error} className="mt-2" /> : null}
-          </Section>
+              {savePhone.isError ? <ErrorState error={savePhone.error} className="mt-2" /> : null}
+            </Section>
+          </View>
         ) : null}
 
         <Section title={t('checkout.payment')}>
@@ -243,7 +278,7 @@ export function CheckoutScreen() {
           </View>
         </Section>
 
-        <CheckoutBlockers blockers={review.blockers} currency={currency} />
+        <CheckoutBlockers blockers={review.blockers} currency={currency} onFix={fix} />
 
         {placeOrder.isError ? (
           <ErrorState error={placeOrder.error} onRetry={submit} className="mt-4 px-2" />
