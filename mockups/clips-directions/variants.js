@@ -12,6 +12,7 @@ const icon = (name, size = 23) => {
     bookmark: '<path d="M7 4h10v16l-5-4-5 4V4z"/>',
     share: '<path d="M7 17 17 7M9 7h8v8"/>',
     mute: '<path d="M4 9h3l4-3v12l-4-3H4V9z"/><path d="m15 9 5 6M20 9l-5 6"/>',
+    bag: '<path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
   };
   return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none"
     stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
@@ -516,7 +517,6 @@ function variantJ() {
         <span class="pill">Open now</span>
         <span class="pill">${c.restaurant.cuisines[0]}</span>
       </div>
-      <div class="count">${theirs.length} clips near Gulberg</div>
       <div class="mute">&#128263;</div>
 
       <div class="j-rail">
@@ -544,6 +544,240 @@ function variantJ() {
   return {
     html: `<div class="feed">${theirs.map(page).join('')}</div>`,
     note: "F with the slab above the tab bar removed and the order moved into the rail, directly above Share. The info is B's shape — the dish, then its restaurant, delivery time and price on one line. Closed takes the slot the delivery time was in rather than arriving as a banner. The video gets back the third of the frame F had taken from it.",
+  };
+}
+
+/* ================================================================== *
+ * BATCH 1 — K to O. Five ways to act, each taken from a shipped app. *
+ * Sources are listed in the mockups README.                          *
+ * ================================================================== */
+
+/* ============ K — The bag ========================================= */
+/* TikTok Shop puts a shopping-bag icon on the video during playback and
+   lets one video carry several product tags. A clip of a table is rarely
+   one dish, so the bag opens everything the clip is showing. */
+
+function variantK() {
+  const page = (c, i) => {
+    const open = i === 0;
+    /* A clip shows a table, not a dish: the bag holds what is in frame. */
+    const tagged = [c.dish, ...clips.filter((x) => x.dish && x.id !== c.id).map((x) => x.dish)]
+      .filter(Boolean)
+      .slice(0, 3);
+
+    return `
+    <div class="cell v-k">
+      ${media(c)}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+      <div class="mute">&#128263;</div>
+
+      <div class="k-bag ${open ? 'lit' : ''}">
+        ${icon('bag', 22)}<i>${tagged.length}</i>
+      </div>
+
+      <div class="k-foot">
+        ${authorBadge(c)}
+        <div class="k-name">${c.restaurantName} &middot; <span>${eta(c.restaurant)}</span></div>
+      </div>
+
+      ${
+        open
+          ? `<div class="k-drawer">
+               <div class="k-grab"></div>
+               <div class="k-head">In this clip <span>${tagged.length} dishes</span></div>
+               ${tagged
+                 .map(
+                   (d) => `
+                 <div class="k-row">
+                   <img src="${d.image}" alt="" />
+                   <div class="k-meta"><b>${d.name}</b><span>${money(d.priceMinor, c.restaurant.currency)}</span></div>
+                   <span class="k-add ${d.optionGroups.length ? 'ghost' : ''}">${d.optionGroups.length ? 'Choose' : 'Add'}</span>
+                 </div>`,
+                 )
+                 .join('')}
+             </div>`
+          : ''
+      }
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'From TikTok Shop: a bag on the video during playback, and one clip tagging several dishes. A clip of a table is rarely one dish, so the bag counts what is in frame and opens a drawer of all of it. The first clip is shown with the drawer open. Costs: nothing is priced until you open it, so a browser never sees a number.',
+  };
+}
+
+/* ============ L — Peek ============================================ */
+/* Instagram Reels shows a product name and price preview on the video;
+   tapping raises a detail sheet. The preview is one small chip, so the
+   footage keeps the frame until somebody is interested. */
+
+function variantL() {
+  const page = (c, i) => {
+    const raised = i === 0;
+    const dish = c.dish;
+
+    return `
+    <div class="cell v-l">
+      ${media(c)}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+      <div class="mute">&#128263;</div>
+
+      ${
+        dish
+          ? `<div class="l-chip">${icon('bag', 14)} ${dish.name} &middot; <b>${money(dish.priceMinor, c.restaurant.currency)}</b></div>`
+          : ''
+      }
+
+      <div class="l-foot">
+        ${authorBadge(c)}
+        <div class="l-name">${c.restaurantName}</div>
+        <div class="l-cap">${c.caption}</div>
+      </div>
+
+      ${
+        raised && dish
+          ? `<div class="l-sheet">
+               <div class="k-grab"></div>
+               <img class="l-hero" src="${dish.image}" alt="" />
+               <div class="l-title"><b>${dish.name}</b><span>${money(dish.priceMinor, c.restaurant.currency)}</span></div>
+               <div class="l-sub">${c.restaurantName} &middot; ${eta(c.restaurant)} &middot; ${fee(c.restaurant)}</div>
+               ${
+                 dish.optionGroups.length
+                   ? `<div class="l-opts">${dish.optionGroups.map((g) => `<span>${g}</span>`).join('')}</div>`
+                   : ''
+               }
+               <div class="l-cta">${dish.optionGroups.length ? 'Choose and add' : 'Add to cart'}</div>
+             </div>`
+          : ''
+      }
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'From Instagram Reels shopping: a name-and-price chip on the video, and a detail sheet when somebody taps it. The clip keeps its frame until there is interest, and the sheet can be as long as it needs to be. The first clip is shown with the sheet raised. Costs: two taps to order, and a chip is easy to never notice.',
+  };
+}
+
+/* ============ M — Moods =========================================== */
+/* Netflix's Clips feed browses by mood, genre and occasion rather than by
+   filter, and offers three actions: add to a list, share, open. Hunger is
+   an occasion before it is a cuisine. */
+
+function variantM() {
+  const MOODS = ['Late night', 'Cheap and fast', 'Feeding four', 'Something sweet', 'Comfort'];
+
+  const page = (c, i) => `
+    <div class="cell v-m">
+      ${media(c)}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+      <div class="mute">&#128263;</div>
+
+      <div class="m-moods">
+        ${MOODS.map((m, n) => `<span class="${n === i % MOODS.length ? 'on' : ''}">${m}</span>`).join('')}
+      </div>
+
+      <div class="m-foot">
+        <div class="m-mood">${MOODS[i % MOODS.length]}</div>
+        <div class="m-dish">${c.dish ? c.dish.name : c.restaurantName}</div>
+        <div class="m-line">
+          ${c.restaurantName} &middot; ${eta(c.restaurant)}${c.dish ? ' &middot; ' + money(c.dish.priceMinor, c.restaurant.currency) : ''}
+        </div>
+        <div class="m-acts">
+          <span class="primary">${c.dish && !c.dish.optionGroups.length ? 'Add' : 'Open'}</span>
+          <span>${icon('bookmark', 17)} List</span>
+          <span>${icon('share', 17)} Share</span>
+        </div>
+      </div>
+      ${tabbar(2)}
+    </div>`;
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'From Netflix Clips, which browses by mood, genre and occasion rather than by filter, and carries exactly three actions. Hunger is an occasion before it is a cuisine — "late night" and "feeding four" are things a person actually is. Costs: somebody has to decide which mood a dish belongs to, and that is editorial work nobody has budgeted.',
+  };
+}
+
+/* ============ N — Yours =========================================== */
+/* Spotify's 2023 home turned into a video feed but kept the shortcuts to
+   your own playlists pinned above it. The equivalent here is the thing a
+   food app has that a music app does not: you ordered this before. */
+
+function variantN() {
+  const page = (c, i) => `
+    <div class="cell v-n">
+      ${media(c)}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+      <div class="mute">&#128263;</div>
+
+      <div class="n-shortcuts">
+        <div class="sc"><img src="${theirs[0].dish.image}" alt="" /><span>Order again</span></div>
+        <div class="sc"><img src="${theirs[2].dish.image}" alt="" /><span>Saved</span></div>
+        <div class="sc"><img src="${theirs[3].dish.image}" alt="" /><span>Last order</span></div>
+      </div>
+
+      <div class="n-foot">
+        ${i === 2 ? '<div class="n-again">You ordered this in August</div>' : ''}
+        <div class="n-dish">${c.dish ? c.dish.name : c.restaurantName}</div>
+        <div class="n-line">
+          ${c.restaurantName} &middot; ${eta(c.restaurant)}${c.dish ? ' &middot; ' + money(c.dish.priceMinor, c.restaurant.currency) : ''}
+        </div>
+        <div class="n-btn">${c.dish && !c.dish.optionGroups.length ? 'Add to cart' : 'Open the dish'}</div>
+      </div>
+      ${tabbar(2)}
+    </div>`;
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'From Spotify, which turned its home into a video feed but kept shortcuts to your own playlists pinned above it. A food app has something a music app does not: you ate this before, and you would eat it again. The shortcuts are reorder, saved and last order, and a clip you have ordered says so. Costs: three rows of thumbnails is a lot of chrome for a feed that is meant to be watched.',
+  };
+}
+
+/* ============ O — Deck ============================================ */
+/* Feed Me and Crave swipe a deck rather than scroll a feed: right saves,
+   left discards. Chicken Tinder added a third gesture for "love it".
+   Crave swiped dishes rather than restaurants, which is the right unit. */
+
+function variantO() {
+  const deck = theirs.filter((c) => c.dish).slice(0, 3);
+
+  return {
+    html: `<div class="cell v-o" style="height:820px">
+      <div class="o-head">Tonight &middot; <span>Gulberg</span></div>
+
+      <div class="o-deck">
+        ${deck
+          .map(
+            (c, i) => `
+          <div class="o-card" style="--n:${i}">
+            ${media(c, 'o-video')}
+            <div class="scrim"></div>
+            <div class="o-meta">
+              <b>${c.dish.name}</b>
+              <span>${c.restaurantName} &middot; ${eta(c.restaurant)} &middot; ${money(c.dish.priceMinor, c.restaurant.currency)}</span>
+            </div>
+            ${i === 0 ? '<div class="o-stamp want">Want it</div>' : ''}
+          </div>`,
+          )
+          .reverse()
+          .join('')}
+      </div>
+
+      <div class="o-acts">
+        <div class="o-act skip">&#10005;<small>Not tonight</small></div>
+        <div class="o-act want">&#9650;<small>Want it</small></div>
+        <div class="o-act save">${icon('bookmark', 22)}<small>Save</small></div>
+      </div>
+      ${tabbar(2)}
+    </div>`,
+    note: 'From Feed Me and Crave, which swipe a deck instead of scrolling a feed — right saves, left discards — and Chicken Tinder, which added a third gesture for "want it". Crave swiped dishes rather than restaurants, which is the right unit for an app whose clips are of dishes. A decision per card, and the deck ends. Costs: it is a different app from a feed, and a rejection mechanic applied to a small restaurant is crueller than it looks.',
   };
 }
 
@@ -616,6 +850,11 @@ const VARIANTS = [
   ['H', 'Sheet', variantH],
   ['I', 'Quiet', variantI],
   ['J', 'F, without the bar', variantJ],
+  ['K', 'The bag', variantK],
+  ['L', 'Peek', variantL],
+  ['M', 'Moods', variantM],
+  ['N', 'Yours', variantN],
+  ['O', 'Deck', variantO],
   ['E', 'Everything', variantE],
 ];
 

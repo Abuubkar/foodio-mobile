@@ -168,6 +168,61 @@ The rail icons are inline SVG rather than unicode: there is no bookmark glyph
 worth looking at, and a coloured emoji inside a monochrome rail reads as a
 mistake.
 
+### K to O — five ways to act, each taken from a shipped app
+
+Not invented. Each of these starts from something that exists and is
+documented, and the sources are listed below so the lineage is checkable.
+
+| key             | from                             | the idea                                                                                                                                                                           |
+| --------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **K — The bag** | TikTok Shop                      | A bag on the video during playback, and one clip tagging several dishes. A clip of a table is rarely one dish, so the bag counts what is in frame and opens a drawer of all of it. |
+| **L — Peek**    | Instagram Reels shopping         | A name-and-price chip on the video; tapping raises a product sheet. The footage keeps the frame until somebody is interested.                                                      |
+| **M — Moods**   | Netflix _Clips_                  | Browse by mood and occasion rather than by filter — "late night", "feeding four" — with exactly three actions: open, list, share.                                                  |
+| **N — Yours**   | Spotify's 2023 home              | A video feed with your own shortcuts pinned above it. A food app has what a music app does not: you ate this before.                                                               |
+| **O — Deck**    | Feed Me · Crave · Chicken Tinder | A card deck instead of a feed: left discards, right saves, up is "want it". Crave swiped dishes rather than restaurants, which is the right unit here.                             |
+
+#### Sources
+
+- **Netflix Clips** — a vertical, swipeable feed of clips, built around three
+  actions (add to a list, share, open) and collections by mood, genre or
+  occasion. Tested May 2025, launched April 2026, Pakistan included in the
+  first wave.
+  [TechCrunch](https://techcrunch.com/2025/05/07/netflix-is-getting-into-short-videos-with-a-new-vertical-feed-for-mobile) ·
+  [Pulse 2.0](https://pulse2.com/netflix-launches-vertical-video-feed-and-redesigned-mobile-experience-for-members/) ·
+  [Communicate Online](https://communicateonline.me/news/netflix-launches-clips-feed-in-mobile-app-overhaul/)
+- **Spotify** — a 2021 test put a vertical feed of Canvas clips in a Discover
+  tab with a heart to like; the 2023 home turned into a video feed while
+  keeping playlist shortcuts pinned at the top.
+  [TechCrunch](https://techcrunch.com/2023/03/08/spotify-revamps-its-app-with-tiktok-style-discovery-feeds-smart-shuffle-for-playlists-and-more) ·
+  [GSMArena](https://www.gsmarena.com/spotify_is_testing_a_tiktokinspired_feed_of_vertical_videos_with_a_new_discover_tab-news-52026.php)
+- **TikTok Shop** — a shopping-bag icon appears during playback for products
+  from a synced catalogue, and a single video can carry several product tags.
+  [Printify](https://printify.com/blog/tiktok-shoppable-videos/) ·
+  [ReelPlus](https://apps.shopify.com/reelplus)
+- **Instagram Reels shopping** — a product name and price preview on the
+  video; tapping opens a detail sheet with images, variants and price.
+  Secondary source, so treat the detail as indicative.
+  [Racklify glossary](https://racklify.com/encyclopedia/what-is-an-instagram-shopping-reel/)
+- **Swipe decks for food** — Feed Me gathered restaurants within four blocks
+  and swiped right to save, left to discard; Crave swiped _dishes_ rather than
+  restaurants; Chicken Tinder added a swipe-up for "love it" and a group mode;
+  EasyEat used a Pinterest-style card layout because people judge food
+  visually.
+  [MobileSyrup on Feed Me](https://mobilesyrup.com/2017/08/22/montreal-based-app-feed-me-like-tinder-but-restaurants/) ·
+  [Newcastle Herald on Crave](https://www.newcastleherald.com.au/story/4929991/new-app-is-tinder-for-food/) ·
+  [Chicken Tinder](https://blogs.oregonstate.edu/projectchickentinder/?p=1) ·
+  [EasyEat](https://desirabilitylab.com/posts/easyeats-choosing-where-to-eat-in-less-than-5-minutes) ·
+  [Ognjen Regoje on the swipe for restaurants](https://ognjen.io/concept-tinder-interface-for-restaurants/)
+- **Live commerce** — Whatnot's model is a live stream with chat, emoji
+  reactions and bid-or-buy during the stream.
+  [Apptunix](https://www.apptunix.com/blog/develop-live-shopping-app-like-whatnot/) ·
+  [Wowza on shoppable video](https://www.wowza.com/blog/shoppable-video)
+- **Where to look next** — the libraries designers actually use for real app
+  screens: [Mobbin](https://mobbin.com), Refero, CollectUI, Scrnshts, UX
+  Archive and Pttrns, collected in
+  [toools.design's list](https://www.toools.design/blog-posts/ultimate-list-100-best-inspiration-sites-to-inspire-designers)
+  and [DesignerUp's pattern roundup](https://designerup.co/blog/the-best-collections-of-real-ux-design-patterns/).
+
 Regenerate `data.js` from the mock after a seed change:
 
 ```bash

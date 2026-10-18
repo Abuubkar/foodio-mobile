@@ -1198,3 +1198,572 @@ body {
 .v-j .j-rail .act.on .glyph svg {
   fill: currentColor;
 }
+
+/* ================================================================== *
+ * BATCH 1 — K to O                                                    *
+ * ================================================================== */
+
+/* ---- K — the bag (TikTok Shop) ---- */
+
+.v-k .k-bag {
+  position: absolute;
+  right: 16px;
+  bottom: 190px;
+  z-index: 7;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.v-k .k-bag.lit {
+  background: var(--primary);
+  color: #111;
+}
+
+.v-k .k-bag i {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  min-width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+  border: 2px solid #000;
+}
+
+.v-k .k-foot {
+  position: absolute;
+  left: 16px;
+  right: 80px;
+  bottom: 70px;
+  z-index: 6;
+}
+
+.v-k .k-name {
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.v-k .k-name span {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.v-k .k-drawer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 56px;
+  z-index: 9;
+  padding: 8px 14px 16px;
+  border-radius: 20px 20px 0 0;
+  background: #11141a;
+  border-top: 1px solid #222733;
+}
+
+.k-grab {
+  width: 36px;
+  height: 4px;
+  margin: 0 auto 10px;
+  border-radius: 999px;
+  background: #363c48;
+}
+
+.v-k .k-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.v-k .k-head span {
+  font-weight: 400;
+  color: #8b93a1;
+}
+
+.v-k .k-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid #1b1f27;
+}
+
+.v-k .k-row:last-child {
+  border-bottom: 0;
+}
+
+.v-k .k-row img {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  object-fit: cover;
+}
+
+.v-k .k-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.v-k .k-meta b {
+  display: block;
+  font-size: 13.5px;
+}
+
+.v-k .k-meta span {
+  font-size: 12px;
+  color: #8b93a1;
+}
+
+.v-k .k-add {
+  padding: 7px 14px;
+  border-radius: 11px;
+  background: var(--primary);
+  color: #111;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.v-k .k-add.ghost {
+  background: transparent;
+  border: 1px solid #333a45;
+  color: #e5e7eb;
+}
+
+/* ---- L — peek (Instagram Reels) ---- */
+
+.v-l .l-chip {
+  position: absolute;
+  left: 16px;
+  bottom: 196px;
+  z-index: 7;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: rgba(10, 12, 16, 0.82);
+  backdrop-filter: blur(6px);
+  font-size: 12.5px;
+}
+
+.v-l .l-foot {
+  position: absolute;
+  left: 16px;
+  right: 60px;
+  bottom: 70px;
+  z-index: 6;
+}
+
+.v-l .l-name {
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.v-l .l-cap {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.v-l .l-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 56px;
+  z-index: 9;
+  padding: 8px 14px 16px;
+  border-radius: 20px 20px 0 0;
+  background: #11141a;
+  border-top: 1px solid #222733;
+}
+
+.v-l .l-hero {
+  width: 100%;
+  height: 112px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.v-l .l-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.v-l .l-title b {
+  font-weight: 700;
+}
+
+.v-l .l-sub {
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: #8b93a1;
+}
+
+.v-l .l-opts {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.v-l .l-opts span {
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid #2a2f39;
+  font-size: 11.5px;
+  color: #c7ccd4;
+}
+
+.v-l .l-cta {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: #111;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---- M — moods (Netflix Clips) ---- */
+
+.v-m .m-moods {
+  position: absolute;
+  top: 44px;
+  left: 0;
+  right: 0;
+  z-index: 7;
+  display: flex;
+  gap: 8px;
+  padding: 0 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.v-m .m-moods::-webkit-scrollbar {
+  display: none;
+}
+
+.v-m .m-moods span {
+  flex: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 12.5px;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.v-m .m-moods .on {
+  background: #fff;
+  color: #111;
+  border-color: #fff;
+  font-weight: 600;
+}
+
+.v-m .m-foot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 70px;
+  z-index: 6;
+}
+
+.v-m .m-mood {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 152, 0, 0.9);
+  color: #111;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.v-m .m-dish {
+  margin-top: 8px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.v-m .m-line {
+  margin-top: 2px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.v-m .m-acts {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.v-m .m-acts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.v-m .m-acts .primary {
+  padding: 10px 22px;
+  border-radius: 13px;
+  background: var(--primary);
+  color: #111;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ---- N — yours (Spotify) ---- */
+
+.v-n .n-shortcuts {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  right: 0;
+  z-index: 7;
+  display: flex;
+  gap: 8px;
+  padding: 0 14px;
+}
+
+.v-n .sc {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 10px;
+  background: rgba(10, 12, 16, 0.72);
+  backdrop-filter: blur(6px);
+  font-size: 11px;
+  min-width: 0;
+}
+
+.v-n .sc img {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  object-fit: cover;
+  flex: none;
+}
+
+.v-n .sc span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.v-n .n-foot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 70px;
+  z-index: 6;
+}
+
+.v-n .n-again {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.92);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.v-n .n-dish {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.v-n .n-line {
+  margin-top: 2px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.v-n .n-btn {
+  margin-top: 14px;
+  padding: 13px;
+  border-radius: 15px;
+  background: var(--primary);
+  color: #111;
+  font-size: 14.5px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---- O — deck (Feed Me / Crave / Chicken Tinder) ---- */
+
+.v-o {
+  background: #0b0d12;
+}
+
+.v-o .o-head {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  z-index: 3;
+}
+
+.v-o .o-head span {
+  font-weight: 400;
+  color: #8b93a1;
+}
+
+.v-o .o-deck {
+  position: absolute;
+  top: 92px;
+  left: 20px;
+  right: 20px;
+  bottom: 190px;
+}
+
+/* Stacked, each card a little smaller and lower — the deck says how much
+   is left without a counter. */
+.v-o .o-card {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #000;
+  transform: translateY(calc(var(--n) * 10px)) scale(calc(1 - var(--n) * 0.04));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+}
+
+.v-o .o-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.v-o .o-meta {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+}
+
+.v-o .o-meta b {
+  display: block;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.v-o .o-meta span {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* The stamp is the gesture made visible, the way a swipe deck always does. */
+.v-o .o-stamp {
+  position: absolute;
+  top: 20px;
+  left: 18px;
+  padding: 6px 14px;
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  color: var(--primary);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  transform: rotate(-11deg);
+}
+
+.v-o .o-acts {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 86px;
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+}
+
+.v-o .o-act {
+  width: 62px;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  font-size: 20px;
+  color: #c7ccd4;
+  text-align: center;
+}
+
+.v-o .o-act small {
+  font-size: 10.5px;
+  color: #7b8291;
+}
+
+.v-o .o-act.want {
+  color: var(--primary);
+  font-size: 24px;
+}
+
+.v-o .o-act.skip {
+  color: #ef4444;
+}
+
+/* The mood row owns the top edge, as the filter rows do elsewhere. */
+.v-m .mute,
+.v-k .mute,
+.v-l .mute {
+  top: 46px;
+}
+
+.v-m .mute {
+  top: 88px;
+}
+
+/* A deck has to look like one: the cards behind peek and dim, so how much is
+   left is visible without a counter. */
+.v-o .o-card {
+  transform: translateY(calc(var(--n) * 16px)) scale(calc(1 - var(--n) * 0.055));
+}
+
+.v-o .o-card:not(:last-child) {
+  filter: brightness(0.55);
+}
+
+/* Scaling from the centre moved the lower edge up by as much as the offset
+   moved it down, so the deck hid exactly behind itself. Shrink from the top. */
+.v-o .o-card {
+  transform-origin: top center;
+}
+
+/* The shortcut row owns the top edge. */
+.v-n .mute {
+  top: 90px;
+}
+
+/* Scale the width only. Scaling height moved each card's lower edge up by
+   more than the offset pushed it down, so the deck stayed hidden whichever
+   origin it shrank from — measured, not guessed. */
+.v-o .o-card {
+  transform-origin: center;
+  transform: translateY(calc(var(--n) * 18px)) scaleX(calc(1 - var(--n) * 0.055));
+}
