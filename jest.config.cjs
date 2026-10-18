@@ -3,5 +3,6 @@
 module.exports = {
   preset: 'jest-expo/ios',
   testMatch: ['<rootDir>/src/**/*.test.ts', '<rootDir>/src/**/*.test.tsx'],
+  setupFiles: ['<rootDir>/jest.setup.cjs'],
   clearMocks: true,
 };
