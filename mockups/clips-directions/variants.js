@@ -215,6 +215,77 @@ function variantD() {
   };
 }
 
+/* ============ F — Steered + rail, and a way to get the dish ======== */
+/* D and C chosen, plus the thing neither of them does: act on the dish.
+   What the button says is decided by the dish, not by the layout — a dish
+   that asks a question cannot be added without an answer (#148), and a clip
+   that added one silently would contradict the menu row two taps away. */
+
+function variantF() {
+  const page = (c, i) => {
+    const closed = i === 1;
+    const dish = c.dish;
+    const liked = i === 0;
+    const saved = i === 2;
+
+    const action = !dish
+      ? `<a class="act-btn ghost">View menu &rsaquo;</a>`
+      : dish.optionGroups.length
+        ? `<a class="act-btn ghost">Choose &rsaquo;</a>`
+        : `<a class="act-btn">Add &#43;</a>`;
+
+    return `
+    <div class="cell v-d">
+      ${media(c)}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+
+      <div class="filters">
+        <span class="pill on">All</span>
+        <span class="pill">Delivers to you</span>
+        <span class="pill">Open now</span>
+        <span class="pill">${c.restaurant.cuisines[0]}</span>
+      </div>
+      <div class="count">${theirs.length} clips near Gulberg</div>
+      <div class="mute">&#128263;</div>
+
+      <div class="rail" style="bottom:196px">
+        <div class="act ${liked ? 'on' : ''}">
+          <span class="glyph">${liked ? '&#9829;' : '&#9825;'}</span>${124 + i * 17}
+        </div>
+        <div class="act ${saved ? 'on' : ''}">
+          <span class="glyph">&#128278;</span>${saved ? 'Saved' : 'Save'}
+        </div>
+        <div class="act"><span class="glyph">&#8599;</span>Share</div>
+      </div>
+
+      ${closed ? `<div class="closedbar" style="bottom:228px;right:76px">&#9201; Closed &middot; opens 11:00 AM</div>` : ''}
+
+      <div class="overlay narrow" style="bottom:122px">
+        ${authorBadge(c)}
+        <div class="rname">${c.restaurantName} &middot; <span style="font-weight:400;color:#cbd5e1">${eta(c.restaurant)}</span></div>
+        <div class="cap">${c.caption}</div>
+      </div>
+
+      <!-- The dish bar spans the full width: the rail stops above it, so
+           nothing competes with the one thing you came here to do. -->
+      <div class="dishbar">
+        <div class="d">
+          <b>${dish ? dish.name : c.restaurantName}</b>
+          <span>${dish ? money(dish.priceMinor, c.restaurant.currency) + (dish.optionGroups.length ? ' · ' + dish.optionGroups.join(', ').toLowerCase() : '') : c.restaurant.cuisines.join(' · ')}</span>
+        </div>
+        ${action}
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'D and C together, plus the thing neither does: act on the dish. The button is decided by the dish — Add for one that asks nothing, Choose for one with a required size, View menu when the clip names no dish at all. All three are in this scroll. Costs: a third band of chrome, and the rail has to stop above the dish bar.',
+  };
+}
+
 /* ============ E — Everything ====================================== */
 /* All four at once, on purpose: the honest way to see what it costs. */
 
@@ -279,6 +350,7 @@ const VARIANTS = [
   ['B', 'Shoppable', variantB],
   ['C', 'The rail', variantC],
   ['D', 'Steered', variantD],
+  ['F', 'Steered + rail + act', variantF],
   ['E', 'Everything', variantE],
 ];
 
