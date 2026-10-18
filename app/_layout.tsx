@@ -9,6 +9,7 @@ import { setAuthTokenSource, setUnauthorizedHandler } from '@/api/client';
 import { useNotificationListener, useSyncPushToken } from '@/features/notifications';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { useActiveAddressStore } from '@/stores/activeAddress.store';
+import { useCartStore } from '@/stores/cart.store';
 import { OnboardingStep, useOnboardingStore } from '@/stores/onboarding.store';
 import { useSessionStore } from '@/stores/session.store';
 import { colors } from '@/theme';
@@ -70,6 +71,18 @@ function RootNavigator() {
     // active address for the instant before this settles.
     void hydrateActiveAddress();
   }, [activeAddressHydrated, hydrateActiveAddress]);
+
+  const cartHydrated = useCartStore((state) => state.isHydrated);
+  const hydrateCart = useCartStore((state) => state.hydrate);
+
+  useEffect(() => {
+    if (cartHydrated) return;
+
+    // Like the active address, outside the splash gate: no navigator depends
+    // on the Cart, and the badge simply counts nothing for the instant before
+    // this settles.
+    void hydrateCart();
+  }, [cartHydrated, hydrateCart]);
 
   // Neither gates the splash screen: a push isn't needed for any screen to render.
   useSyncPushToken();

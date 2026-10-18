@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import type { AddableMenuItem, CartLine, CartRestaurant } from '@/features/cart';
 // Deep import: the cart barrel pulls components that import this store back.
 import { sameLine } from '@/features/cart/types/cart.types';
+import { clearStoredCart, getStoredCart, setStoredCart } from '@/services/storage';
 
 type CartState = {
   /** Null when the Cart is empty. A Cart is always bound to one restaurant. */
@@ -10,6 +11,14 @@ type CartState = {
   lines: CartLine[];
   /** Monotonic, so line ids are unique without randomness. */
   nextLineId: number;
+
+  /**
+   * False until the Cart stored on the device has been read. Nothing is
+   * written back before it flips, or the empty Cart the store starts with
+   * would overwrite the real one on the way past.
+   */
+  isHydrated: boolean;
+  hydrate: () => Promise<void>;
 
   addItem: (
     restaurant: CartRestaurant,
@@ -30,6 +39,18 @@ const emptyCart = (): CartContents => ({ restaurant: null, lines: [], nextLineId
 
 export const useCartStore = create<CartState>((set) => ({
   ...emptyCart(),
+  isHydrated: false,
+
+  /**
+   * The cheap Android hardware this pilot targets kills a backgrounded app
+   * readily, so a Cart that lived only in memory was lost by switching to a
+   * message and back. Restored prices are the ones the customer was shown,
+   * which is what lets the `price-changed` check at checkout still fire.
+   */
+  hydrate: async () => {
+    const stored = await getStoredCart();
+    set(stored ? { ...stored, isHydrated: true } : { isHydrated: true });
+  },
 
   /** Enforces one restaurant per cart. Warn first with selectIsFromOtherRestaurant. */
   addItem: (restaurant, item, options) =>
@@ -123,6 +144,32 @@ export const useCartStore = create<CartState>((set) => ({
 
   clear: () => set(emptyCart()),
 }));
+
+/**
+ * One subscription rather than a write inside every action: a new action
+ * cannot forget to persist, and the store stays about Carts rather than about
+ * storage. Writes are skipped until hydration has run, and skipped again when
+ * the contents have not actually changed — `set` fires for `isHydrated` too.
+ */
+let lastWritten: string | null = null;
+
+useCartStore.subscribe((state) => {
+  if (!state.isHydrated) return;
+
+  const contents: CartContents = {
+    restaurant: state.restaurant,
+    lines: state.lines,
+    nextLineId: state.nextLineId,
+  };
+
+  const serialised = JSON.stringify(contents);
+  if (serialised === lastWritten) return;
+  lastWritten = serialised;
+
+  // An empty Cart is removed rather than stored as empty, so a fresh install
+  // and a cleared Cart read back the same way.
+  void (state.lines.length === 0 ? clearStoredCart() : setStoredCart(contents));
+});
 
 /** Total units, not lines. */
 export const selectItemCount = (state: CartState): number =>
