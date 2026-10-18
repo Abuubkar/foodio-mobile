@@ -97,8 +97,9 @@ Android is unaffected; it never runs Ruby.
 ## Mock API
 
 The real backend (`foodio-backend`, a separate repo) is the default target —
-it owns Postgres, implements the full contract, and, by design, listens on
-the same port 3000 as the mock, so only one of the two runs at a time.
+it owns Postgres and implements the full contract. Both default to port 3000,
+so only one of the two runs at a time — `MOCK_PORT` moves the mock and `PORT`
+moves the backend when something else already has it.
 
 `pnpm api` remains as an offline fallback: it runs
 [json-server](https://github.com/typicode/json-server) against `mocks/db.json`,
@@ -118,11 +119,19 @@ if it is missing, rather than shipping a grey rectangle. iOS uses Apple Maps and
 needs nothing. The key is not a secret — it ships inside the APK — so restrict
 it in the Cloud console to this package and to Maps SDK for Android.
 
+The mock serves identity too — `POST /auth/provider` takes any token at all
+and mints a session for a seeded Person, so Orders, the Manage hub and the
+Kitchen and Delivery surfaces are reachable with no Postgres. Send a seeded id
+as the token (`marco` for Kitchen and Delivery at rest-1) to sign in as them;
+anything else, a real Google token included, lands on the customer. Nothing is
+verified, on purpose — see the comment in `mocks/middlewares.cjs`.
+
 The mock's responses are delayed 400ms so loading states are real. To exercise
-failure paths against it:
+failure paths against it, or to move it off a taken port:
 
 ```bash
 MOCK_FAIL_RATE=0.3 pnpm api
+MOCK_PORT=3002 pnpm api
 ```
 
 ---

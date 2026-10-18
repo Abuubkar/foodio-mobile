@@ -28,6 +28,11 @@ function respondLater(res, status, body) {
   setTimeout(() => res.status(status).jsonp(body), DELAY_MS);
 }
 
+/** A 204 carries no body, and `jsonp` would give it one. */
+function endLater(res, status) {
+  setTimeout(() => res.status(status).end(), DELAY_MS);
+}
+
 const MESSAGES = {
   400: 'Bad request.',
   401: 'Not authenticated.',
@@ -73,11 +78,26 @@ function progressed(order) {
 /** `Bearer person:<id>` — deliberately readable, so nobody mistakes it for a credential. */
 const TOKEN_PREFIX = 'person:';
 
+/** Who a provider sign-in lands on when its token names nobody. A customer, deliberately. */
+const DEFAULT_PERSON_ID = 'aisha';
+
+const personIdIn = (raw) =>
+  typeof raw === 'string' && raw.startsWith(TOKEN_PREFIX) ? raw.slice(TOKEN_PREFIX.length) : null;
+
 function personIdFrom(req) {
   const header = req.get('authorization') ?? '';
-  const raw = header.startsWith('Bearer ') ? header.slice(7) : '';
-  return raw.startsWith(TOKEN_PREFIX) ? raw.slice(TOKEN_PREFIX.length) : null;
+  return personIdIn(header.startsWith('Bearer ') ? header.slice(7) : '');
 }
+
+/**
+ * Both tokens are the same name badge. Nothing here expires, so nothing needs
+ * rotating, and a refresh hands back exactly what it was given.
+ */
+const sessionFor = (person) => ({
+  accessToken: TOKEN_PREFIX + person.id,
+  refreshToken: TOKEN_PREFIX + person.id,
+  person,
+});
 
 const findPerson = (req, id) =>
   (req.app.db.get('people').value() ?? []).find((person) => person.id === id) ?? null;
@@ -86,6 +106,28 @@ const AVAILABILITY_PATH = /^\/restaurants\/([^/]+)\/menu-items\/([^/]+)\/availab
 const ORDER_REVIEW_PATH = /^\/orders\/([^/]+)\/review$/;
 const RESTAURANT_REVIEWS_PATH = /^\/restaurants\/([^/]+)\/reviews$/;
 const RESTAURANT_ITEM_PATH = /^\/restaurants\/[^/]+$/;
+const ADDRESS_ITEM_PATH = /^\/me\/addresses\/([^/]+)$/;
+
+const isAddressList = (req) => req.path === '/me/addresses';
+
+/** The owner and the save time are the mock's bookkeeping, not the contract's. */
+function withoutOwner(row) {
+  const address = { ...row };
+  delete address.personId;
+  delete address.savedAt;
+  return address;
+}
+
+/** Mirrors the contract's `deliveryAddressSchema` loosely — enough to catch a wrong shape. */
+function invalidAddress(body) {
+  if (!body || typeof body !== 'object') return true;
+  const required = ['label', 'line1', 'city', 'postcode'];
+  if (required.some((key) => typeof body[key] !== 'string' || body[key].trim() === '')) return true;
+  return typeof body.latitude !== 'number' || typeof body.longitude !== 'number';
+}
+
+/** E.164, the one form the contract stores and compares. */
+const PHONE = /^\+[1-9]\d{7,14}$/;
 
 /** Newest first — the sort the backend's reviews list and embed both use. */
 const reviewsFor = (req, restaurantId) =>
@@ -116,13 +158,43 @@ const TRANSITIONS = {
 
 module.exports = function mockApi(req, res, next) {
   // A session is issued, never verified — but it is issued by the server.
-  if (req.method === 'POST' && req.path === '/sessions') {
-    const person = findPerson(req, req.body?.personId);
+  //
+  // Nothing below checks a signature, an issuer or an audience, and that is
+  // the whole point: this file exists so the app runs with no Postgres and no
+  // Docker, not so it is secure. `POST /auth/provider` believes any idToken —
+  // Google's real one, or a word you typed — and mints `person:<id>`, the
+  // name badge every scoped read already resolves through. Real verification
+  // lives in the backend's provider-verifier service, and replaces this
+  // block rather than being weakened to match it.
+  //
+  // The token doubles as a Person picker, so the surfaces behind an
+  // entitlement stay reachable: send a seeded id as the idToken — `marco` for
+  // a Kitchen and Delivery hand at rest-1 — and the session comes back as
+  // them. A real Google token matches nobody and lands on the customer.
+  if (req.method === 'POST' && req.path === '/auth/provider') {
+    const named = typeof req.body?.idToken === 'string' ? req.body.idToken.trim() : '';
+    const person = findPerson(req, named) ?? findPerson(req, DEFAULT_PERSON_ID);
     if (!person) {
-      respondLater(res, 404, errorBody(404));
+      respondLater(res, 404, errorBody(404, 'No Person is seeded in mocks/db.json.'));
       return;
     }
-    respondLater(res, 201, { token: TOKEN_PREFIX + person.id, person });
+    respondLater(res, 200, sessionFor(person));
+    return;
+  }
+
+  if (req.method === 'POST' && req.path === '/auth/refresh') {
+    const person = findPerson(req, personIdIn(req.body?.refreshToken));
+    if (!person) {
+      respondLater(res, 401, errorBody(401));
+      return;
+    }
+    respondLater(res, 200, sessionFor(person));
+    return;
+  }
+
+  // There is no token family to revoke, so this only has to not fail.
+  if (req.method === 'POST' && req.path === '/auth/sign-out') {
+    endLater(res, 204);
     return;
   }
 
@@ -135,6 +207,107 @@ module.exports = function mockApi(req, res, next) {
   // Only reads are sampled. Randomly losing a write would corrupt db.json.
   if (FAIL_RATE > 0 && req.method === 'GET' && Math.random() < FAIL_RATE) {
     respondLater(res, 503, errorBody(503));
+    return;
+  }
+
+  // Everything behind `/me` resolves through the token and nothing else, the
+  // same way the backend's tenant scope does. An address row carries a
+  // `personId` the client never sees, so one Person's addresses cannot be
+  // listed by asking for them.
+  const item = ADDRESS_ITEM_PATH.exec(req.path);
+  if (req.path === '/me' || isAddressList(req) || item) {
+    const person = findPerson(req, personIdFrom(req));
+    if (!person) {
+      respondLater(res, 401, errorBody(401));
+      return;
+    }
+
+    if (req.method === 'GET' && req.path === '/me') {
+      respondLater(res, 200, person);
+      return;
+    }
+
+    // The phone arrives here from checkout, already normalised by the client.
+    if (req.method === 'PATCH' && req.path === '/me') {
+      const { displayName, phone } = req.body ?? {};
+      const named = typeof displayName === 'string' && displayName.trim() !== '';
+      const numbered = typeof phone === 'string';
+
+      if (numbered && !PHONE.test(phone)) {
+        respondLater(res, 400, errorBody(400));
+        return;
+      }
+
+      const people = req.app.db.get('people');
+      void people
+        .find({ id: person.id })
+        .assign({ ...(named ? { displayName } : {}), ...(numbered ? { phone } : {}) })
+        .write();
+      respondLater(res, 200, people.find({ id: person.id }).value());
+      return;
+    }
+
+    const addresses = req.app.db.get('addresses');
+
+    // Newest first, which is the order `resolveActiveAddress` assumes.
+    if (req.method === 'GET' && isAddressList(req)) {
+      const mine = (addresses.value() ?? [])
+        .filter((row) => row.personId === person.id)
+        .sort((a, b) => Date.parse(b.savedAt) - Date.parse(a.savedAt))
+        .map(withoutOwner);
+      respondLater(res, 200, mine);
+      return;
+    }
+
+    if (req.method === 'POST' && isAddressList(req)) {
+      if (invalidAddress(req.body)) {
+        respondLater(res, 400, errorBody(400));
+        return;
+      }
+      const row = {
+        ...req.body,
+        id: `addr-${Date.now().toString(36)}`,
+        personId: person.id,
+        savedAt: new Date().toISOString(),
+      };
+      void addresses.push(row).write();
+      respondLater(res, 201, withoutOwner(row));
+      return;
+    }
+
+    if (item) {
+      const addressId = item[1];
+      const stored = addresses.find({ id: addressId }).value();
+
+      // Someone else's address is a 404, never a 403 — the client has no
+      // business learning that the row exists.
+      if (!stored || stored.personId !== person.id) {
+        respondLater(res, 404, errorBody(404));
+        return;
+      }
+
+      // A full replacement, not a diff: the edit form always sends every field.
+      if (req.method === 'PATCH') {
+        if (invalidAddress(req.body)) {
+          respondLater(res, 400, errorBody(400));
+          return;
+        }
+        void addresses
+          .find({ id: addressId })
+          .assign({ ...req.body, id: addressId, personId: person.id })
+          .write();
+        respondLater(res, 200, withoutOwner(addresses.find({ id: addressId }).value()));
+        return;
+      }
+
+      if (req.method === 'DELETE') {
+        void addresses.remove({ id: addressId }).write();
+        endLater(res, 204);
+        return;
+      }
+    }
+
+    respondLater(res, 404, errorBody(404));
     return;
   }
 
