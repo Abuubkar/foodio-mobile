@@ -14,9 +14,11 @@ somewhere you work, so the switcher can read "Taco Fiesta · Kitchen" — a plac
 rather than joining a place to an activity. A fourth capability slots in without
 rewording the other three.
 
-**Signing in** is an identity picker. It pretends nothing — a password field
-would promise verification the server cannot do. It POSTs `/sessions` and
-receives a token.
+**Signing in** is Google or Apple, and no code to type. It POSTs
+`/auth/provider` and receives a session. Against the real backend that token is
+verified against Google's or Apple's own keys; against `pnpm api` it is
+believed on sight, because the mock exists so the app runs, not so it is
+secure.
 
 **The client never decides who it is.** The token attaches in a single Axios
 interceptor; no call site puts a person in a URL. `mocks/middlewares.cjs`

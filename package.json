@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "expo start",
-    "api": "json-server --watch mocks/db.json --routes mocks/routes.json --middlewares mocks/middlewares.cjs --port 3000 --host 0.0.0.0 --delay ${MOCK_DELAY_MS:-400}",
+    "api": "json-server --watch mocks/db.json --routes mocks/routes.json --middlewares mocks/middlewares.cjs --port ${MOCK_PORT:-3000} --host 0.0.0.0 --delay ${MOCK_DELAY_MS:-400}",
     "device:reverse": "adb reverse tcp:3000 tcp:3000",
     "check:urls": "node scripts/check-db-urls.mjs",
     "android": "expo run:android",

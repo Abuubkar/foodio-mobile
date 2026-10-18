@@ -1762,6 +1762,7 @@
     {
       "id": "marco",
       "displayName": "Marco R.",
+      "phone": null,
       "entitlements": [
         {
           "restaurantId": "rest-1",
@@ -1772,6 +1773,7 @@
     {
       "id": "sofia",
       "displayName": "Sofia B.",
+      "phone": null,
       "entitlements": [
         {
           "restaurantId": "rest-2",
@@ -1782,6 +1784,7 @@
     {
       "id": "tomas",
       "displayName": "Tomás L.",
+      "phone": null,
       "entitlements": [
         {
           "restaurantId": "rest-1",
@@ -1989,5 +1992,6 @@
       "restaurantId": "rest-1",
       "orderId": "order-hist-105"
     }
-  ]
+  ],
+  "addresses": []
 }
