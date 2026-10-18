@@ -81,6 +81,7 @@ in a list.
 | G   | Edge                 | F's features as type on the edges: no boxes anywhere                 |
 | H   | Sheet                | the video is a card; controls stand on solid ground below            |
 | I   | Quiet                | one button, and it carries the dish name and price                   |
+| J   | F, without the bar   | **F's language, order in the rail, B's info block**                  |
 | E   | Everything           | all four at once, so the cost is arguable not imagined               |
 
 Each variant prints its own argument and its own costs under the phone. **E
@@ -116,6 +117,33 @@ scroll — four of six clips carry a dish, and one of those has options.
   the prototype inventing it, and it does blunt A's argument. The real app has
   the same mismatch. Prices show as USD for the same reason; the backend seed
   is PKR.
+
+### J — the one to build from
+
+F's visual language kept, three things changed on direction:
+
+- **The slab above the tab bar is gone.** The video gets that third of the
+  frame back.
+- **The order moved into the rail, directly above Share** — and it is the only
+  filled disc there, because it is the one control that spends money and
+  should not look like another toggle.
+- **The info block is B's shape**: the dish, then its restaurant, delivery
+  time and price on one line.
+
+The #148 rule survives the move, said in one word under the disc:
+
+| the dish               | the disc                                    |
+| ---------------------- | ------------------------------------------- |
+| asks nothing           | filled orange **+**, _Add_                  |
+| has a required group   | white **›**, _Choose_ — opens the dish page |
+| the clip names no dish | white **☰**, _Menu_                        |
+
+Closed takes the delivery time's slot: _"Bella Italia Ristorante · **opens
+11:00** · $24.00"_, amber, no banner.
+
+The caption is dropped — "Sizzling Birria Tacos with Consomé" over a dish
+titled "Birria Tacos" is the same sentence twice. Easy to put back if the
+clip's own voice turns out to be worth the line.
 
 ### G, H, I — the same features, three ways of looking
 
