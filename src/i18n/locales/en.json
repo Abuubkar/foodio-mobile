@@ -291,7 +291,8 @@
     "restaurantClipLabel": "{{restaurant}}'s own clip. {{caption}}",
     "notFound": "This clip is gone.",
     "dishHeading": "How it looked · How it came",
-    "dishYours": "A customer"
+    "dishYours": "A customer",
+    "pause": "Pause"
   },
   "tabs": {
     "home": "Home",
