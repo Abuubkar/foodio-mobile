@@ -1,4 +1,5 @@
 export { fetchMe, signInWithProvider, updateMe } from './api/identity.api';
+export { AccountSheet } from './components/AccountSheet';
 export { IdentityChip } from './components/IdentityChip';
 export { PhoneField } from './components/PhoneField';
 export { IdentityPickerScreen } from './screens/IdentityPickerScreen';

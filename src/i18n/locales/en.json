@@ -298,7 +298,7 @@
     "customer": "Customer",
     "kitchen": "Kitchen",
     "delivery": "Delivery",
-    "chipHint": "Opens your account and role menu",
+    "chipHint": "Opens your account",
     "phoneLabel": "Phone number",
     "phonePlaceholder": "300 1234567",
     "errors": {
@@ -316,7 +316,10 @@
     "continueWithGoogle": "Continue with Google",
     "continueWithApple": "Continue with Apple",
     "signingIn": "Signing in…",
-    "phoneLater": "We ask for a phone number at checkout, so the restaurant can call about the door."
+    "phoneLater": "We ask for a phone number at checkout, so the restaurant can call about the door.",
+    "actingAs": "Acting as",
+    "yourOrders": "Your orders",
+    "deliveryAddresses": "Delivery addresses"
   },
   "work": {
     "tabs": {
