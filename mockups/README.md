@@ -181,6 +181,24 @@ documented, and the sources are listed below so the lineage is checkable.
 | **N — Yours**   | Spotify's 2023 home              | A video feed with your own shortcuts pinned above it. A food app has what a music app does not: you ate this before.                                                               |
 | **O — Deck**    | Feed Me · Crave · Chicken Tinder | A card deck instead of a feed: left discards, right saves, up is "want it". Crave swiped dishes rather than restaurants, which is the right unit here.                             |
 
+### P to T — five shapes, not five buttons
+
+K to O change what sits on the clip. These change what the screen _is_.
+
+| key              | from                             | the idea                                                                                                                                                        |
+| ---------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **P — Table**    | Chicken Tinder's group mode      | Everyone swipes privately and the tally is the interface: "3 of 4 want this". Ordering for four is the normal case here and no surface admits it exists.        |
+| **Q — Live**     | Whatnot and live commerce        | A stream, a chat, and buying without leaving it. A kitchen at 8pm is already a show nobody is broadcasting, and the Kitchen surface this app has is the camera. |
+| **R — Shelf**    | EasyEat's Pinterest-style layout | Nine dishes at once instead of one. Comparison is the thing a feed cannot do.                                                                                   |
+| **S — Chapters** | The segmented story bar          | One kitchen, several dishes, tap to advance. A restaurant is more than one dish and a feed never says so.                                                       |
+| **T — Tray**     | Live commerce's instant checkout | The basket is a shelf under the video that fills as you scroll, so an order is assembled in front of you rather than remembered.                                |
+
+Each prints its own costs under the phone. The sharp ones: Q is worse than
+nothing when no kitchen is streaming; R stops being a clips feed and becomes a
+gallery, and nine autoplaying tiles is exactly the decoder problem the
+clips-feed spec fought on the A15; T spends a fifth of the frame on a basket
+whether or not anything is in it.
+
 #### Sources
 
 - **Netflix Clips** — a vertical, swipeable feed of clips, built around three

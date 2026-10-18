@@ -13,6 +13,7 @@ const icon = (name, size = 23) => {
     share: '<path d="M7 17 17 7M9 7h8v8"/>',
     mute: '<path d="M4 9h3l4-3v12l-4-3H4V9z"/><path d="m15 9 5 6M20 9l-5 6"/>',
     bag: '<path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+    play: '<path d="M8 5v14l11-7L8 5z" fill="currentColor" stroke="none"/>',
   };
   return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none"
     stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
@@ -781,6 +782,252 @@ function variantO() {
   };
 }
 
+/* ================================================================== *
+ * BATCH 2 — P to T. Five shapes, not five buttons. Each changes what  *
+ * the screen *is*, not what sits on top of it.                        *
+ * ================================================================== */
+
+/* ============ P — Table =========================================== */
+/* Chicken Tinder's group mode: everyone swipes privately and the app
+   recommends what fits all of them. Ordering for four is the normal case
+   in this market and no surface in the app admits it exists. */
+
+function variantP() {
+  const EATERS = ['A', 'S', 'M', 'F'];
+  const page = (c, i) => {
+    const votes = [3, 4, 1, 2, 2, 3][i];
+    const dish = c.dish;
+
+    return `
+    <div class="cell v-p">
+      ${media(c)}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+      <div class="mute">&#128263;</div>
+
+      <div class="p-head">
+        <div class="p-who">${EATERS.map((e, n) => `<i class="${n < votes ? 'in' : ''}">${e}</i>`).join('')}</div>
+        <span>Friday, four of you</span>
+      </div>
+
+      <div class="p-foot">
+        <div class="p-tally ${votes === EATERS.length ? 'all' : ''}">
+          ${votes === EATERS.length ? 'Everyone wants this' : `${votes} of ${EATERS.length} want this`}
+        </div>
+        <div class="p-dish">${dish ? dish.name : c.restaurantName}</div>
+        <div class="p-line">
+          ${c.restaurantName} &middot; ${eta(c.restaurant)}${dish ? ' &middot; ' + money(dish.priceMinor, c.restaurant.currency) : ''}
+        </div>
+        <div class="p-acts">
+          <span class="no">Pass</span>
+          <span class="yes">I want this</span>
+        </div>
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'From Chicken Tinder, where each person swipes privately and the app recommends what fits everyone. Ordering for four is the normal case in this market and no surface in the app admits it exists. The tally is the whole interface: a dish everybody wants stops being a debate. Costs: it needs a shared session, which is a backend nobody has built, and a table of one is a worse version of every other variant here.',
+  };
+}
+
+/* ============ Q — Live =========================================== */
+/* Whatnot's model is a live stream with chat, reactions and buy-in-stream.
+   A kitchen at 8pm is already a show nobody is broadcasting. */
+
+function variantQ() {
+  const CHAT = [
+    ['Hira', 'is the karahi spicy?'],
+    ['Bilal', 'ordered. 20 min 🤞'],
+    ['Taco Fiesta', 'spicy on request — say so in the note'],
+    ['Zara', 'that consomé 😍'],
+  ];
+
+  const page = (c, i) => {
+    const live = i === 0;
+    const dish = c.dish;
+
+    return `
+    <div class="cell v-q">
+      ${media(c)}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+      <div class="mute">&#128263;</div>
+
+      <div class="q-head">
+        ${live ? '<span class="q-live">LIVE</span>' : '<span class="q-replay">Replay</span>'}
+        <span class="q-watch">${live ? '41 watching' : 'streamed 2h ago'}</span>
+      </div>
+
+      ${
+        live
+          ? `<div class="q-chat">
+               ${CHAT.map(
+                 ([who, text]) =>
+                   `<div class="${who === c.restaurantName ? 'kitchen' : ''}"><b>${who}</b> ${text}</div>`,
+               ).join('')}
+             </div>`
+          : ''
+      }
+
+      <div class="q-foot">
+        <div class="q-name">${c.restaurantName}</div>
+        <div class="q-bar">
+          <div class="q-dish">
+            <b>${dish ? dish.name : 'Tonight&rsquo;s menu'}</b>
+            <span>${dish ? money(dish.priceMinor, c.restaurant.currency) + ' · ' + eta(c.restaurant) : eta(c.restaurant)}</span>
+          </div>
+          <span class="q-buy">${live ? 'Order now' : 'Order'}</span>
+        </div>
+        ${live ? '<div class="q-say">Say something…</div>' : ''}
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'From Whatnot and live commerce generally: a stream, a chat, and buying without leaving it. A kitchen at 8pm is already a show nobody is broadcasting, and the Kitchen surface this app already has is the camera. The first clip is live; the rest are replays, which is what most of a live feed actually is. Costs: somebody has to be there, and an empty live tab is worse than no live tab.',
+  };
+}
+
+/* ============ R — Shelf ========================================== */
+/* EasyEat used a Pinterest-style card layout on the reasoning that people
+   judge food visually. A feed shows one dish at a time; a shelf shows
+   nine, and comparison is the thing a feed cannot do. */
+
+function variantR() {
+  const tiles = clips.filter((c) => c.poster);
+
+  return {
+    html: `<div class="cell v-r" style="height:820px">
+      <div class="r-head">
+        <b>Near you</b>
+        <div class="r-tabs"><span class="on">All</span><span>Open now</span><span>Under $20</span></div>
+      </div>
+
+      <div class="r-grid">
+        ${[0, 1]
+          .map(
+            (col) => `
+        <div class="r-col">
+        ${tiles
+          .filter((_, i) => i % 2 === col)
+          .map(
+            (c, i) => `
+          <div class="r-tile ${(i + col) % 3 === 0 ? 'tall' : ''}">
+            <img src="${c.poster}" alt="" />
+            <div class="r-play">${icon('play', 13)}</div>
+            ${c.kind === 'customer' ? '<span class="r-badge">Delivered</span>' : ''}
+            <div class="r-meta">
+              <b>${c.dish ? c.dish.name : c.restaurantName}</b>
+              <span>${c.dish ? money(c.dish.priceMinor, c.restaurant.currency) + ' · ' : ''}${eta(c.restaurant)}</span>
+            </div>
+          </div>`,
+          )
+          .join('')}
+        </div>`,
+          )
+          .join('')}
+      </div>
+      ${tabbar(2)}
+    </div>`,
+    note: 'From EasyEat, which used a Pinterest-style layout because people judge food visually. A feed shows one dish at a time and comparison is the thing it cannot do — a shelf shows nine and lets the eye choose. Tapping a tile plays it full screen. Costs: it stops being a clips feed and becomes a gallery, and autoplay across nine tiles is exactly the decoder problem the clips-feed spec fought on the A15.',
+  };
+}
+
+/* ============ S — Chapters ======================================= */
+/* The segmented progress bar from stories, applied to a restaurant rather
+   than a person: one kitchen, several clips, tap to advance. A restaurant
+   is more than one dish and the feed never says so. */
+
+function variantS() {
+  const chapters = theirs.slice(0, 4);
+  const at = 1;
+
+  return {
+    html: `<div class="cell v-s" style="height:820px">
+      ${media(chapters[at])}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+      <div class="mute">&#128263;</div>
+
+      <div class="s-segs">
+        ${chapters
+          .map((_, i) => `<i><b style="width:${i < at ? 100 : i === at ? 46 : 0}%"></b></i>`)
+          .join('')}
+      </div>
+
+      <div class="s-head">
+        <img src="${chapters[at].restaurant.image}" alt="" />
+        <div>
+          <b>${chapters[at].restaurantName}</b>
+          <span>${eta(chapters[at].restaurant)} &middot; ${fee(chapters[at].restaurant)}</span>
+        </div>
+        <span class="s-follow">Menu</span>
+      </div>
+
+      <div class="s-foot">
+        <div class="s-count">Dish ${at + 1} of ${chapters.length}</div>
+        <div class="s-dish">${chapters[at].dish ? chapters[at].dish.name : chapters[at].restaurantName}</div>
+        <div class="s-line">${chapters[at].dish ? money(chapters[at].dish.priceMinor, chapters[at].restaurant.currency) : ''}</div>
+        <div class="s-cta">Add &#43;</div>
+      </div>
+      ${tabbar(2)}
+    </div>`,
+    note: 'The segmented bar from stories, applied to a restaurant rather than a person: one kitchen, several dishes, tap to advance. A restaurant is more than one dish and a feed never says so — it shuffles four kitchens and shows you one thing from each. Here you meet a kitchen. Costs: a kitchen with one clip has no chapters, and tap-to-advance fights tap-to-pause for the same gesture.',
+  };
+}
+
+/* ============ T — Tray =========================================== */
+/* Live commerce is built on buying without leaving the stream. The basket
+   is usually a number in a corner; here it is a shelf that fills under the
+   video as you scroll, so an order is assembled rather than remembered. */
+
+function variantT() {
+  const inTray = theirs.filter((c) => c.dish).slice(0, 2);
+  const total = inTray.reduce((sum, c) => sum + c.dish.priceMinor, 0);
+
+  const page = (c, i) => `
+    <div class="cell v-t">
+      <div class="t-stage">
+        ${media(c, 't-video')}
+        <div class="scrim"></div>
+        <div class="t-mute">&#128263;</div>
+        <div class="t-meta">
+          <b>${c.dish ? c.dish.name : c.restaurantName}</b>
+          <span>${c.restaurantName} &middot; ${eta(c.restaurant)}${c.dish ? ' &middot; ' + money(c.dish.priceMinor, c.restaurant.currency) : ''}</span>
+        </div>
+        <div class="t-add">${c.dish && !c.dish.optionGroups.length ? '&#43; Add' : 'Choose &rsaquo;'}</div>
+      </div>
+
+      <div class="t-tray">
+        <div class="t-items">
+          ${inTray
+            .map(
+              (x) =>
+                `<div class="t-chip"><img src="${x.dish.image}" alt="" /><span>${x.dish.name}</span></div>`,
+            )
+            .join('')}
+          <div class="t-chip ghost">+ ${i + 1}</div>
+        </div>
+        <div class="t-sum">
+          <span>${inTray.length + 1} items</span>
+          <b>${money(total + (c.dish ? c.dish.priceMinor : 0), c.restaurant.currency)}</b>
+          <span class="t-go">Checkout &rsaquo;</span>
+        </div>
+      </div>
+      ${tabbar(3)}
+    </div>`;
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'Live commerce is built on buying without leaving the stream, and the basket is usually a number in a corner. Here it is a shelf under the video that fills as you scroll, so an order is assembled in front of you rather than remembered. Watching and ordering stop being separate screens. Costs: the tray takes a fifth of the frame whether or not anything is in it, and a cart that is always visible is a cart you are always being sold.',
+  };
+}
+
 /* ============ E — Everything ====================================== */
 /* All four at once, on purpose: the honest way to see what it costs. */
 
@@ -855,6 +1102,11 @@ const VARIANTS = [
   ['M', 'Moods', variantM],
   ['N', 'Yours', variantN],
   ['O', 'Deck', variantO],
+  ['P', 'Table', variantP],
+  ['Q', 'Live', variantQ],
+  ['R', 'Shelf', variantR],
+  ['S', 'Chapters', variantS],
+  ['T', 'Tray', variantT],
   ['E', 'Everything', variantE],
 ];
 

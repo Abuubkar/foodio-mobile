@@ -1767,3 +1767,613 @@ body {
   transform-origin: center;
   transform: translateY(calc(var(--n) * 18px)) scaleX(calc(1 - var(--n) * 0.055));
 }
+
+/* ================================================================== *
+ * BATCH 2 — P to T                                                    *
+ * ================================================================== */
+
+/* ---- P — table (Chicken Tinder group mode) ---- */
+
+.v-p .mute {
+  top: 90px;
+}
+
+.v-p .p-head {
+  position: absolute;
+  top: 44px;
+  left: 14px;
+  right: 14px;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.v-p .p-who {
+  display: flex;
+}
+
+.v-p .p-who i {
+  width: 28px;
+  height: 28px;
+  margin-right: -7px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 2px solid rgba(0, 0, 0, 0.55);
+  background: #2a2f39;
+  color: #9aa1ad;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.v-p .p-who i.in {
+  background: var(--primary);
+  color: #111;
+}
+
+.v-p .p-foot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 70px;
+  z-index: 6;
+}
+
+.v-p .p-tally {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.v-p .p-tally.all {
+  background: rgba(16, 185, 129, 0.95);
+  border-color: transparent;
+}
+
+.v-p .p-dish {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.v-p .p-line {
+  margin-top: 2px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.v-p .p-acts {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.v-p .p-acts span {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.v-p .p-acts .no {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.v-p .p-acts .yes {
+  background: var(--primary);
+  color: #111;
+}
+
+/* ---- Q — live (Whatnot) ---- */
+
+.v-q .mute {
+  top: 90px;
+}
+
+.v-q .q-head {
+  position: absolute;
+  top: 44px;
+  left: 14px;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.v-q .q-live {
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: #ef4444;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.v-q .q-replay {
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.v-q .q-watch {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 11.5px;
+}
+
+/* Chat rises from the bottom, as it does in every live surface. */
+.v-q .q-chat {
+  position: absolute;
+  left: 14px;
+  right: 90px;
+  bottom: 186px;
+  z-index: 6;
+  display: grid;
+  gap: 6px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.v-q .q-chat div {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.v-q .q-chat b {
+  color: #cbd5e1;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.v-q .q-chat .kitchen b {
+  color: var(--primary);
+}
+
+.v-q .q-foot {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 68px;
+  z-index: 6;
+}
+
+.v-q .q-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.v-q .q-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px 9px 12px;
+  border-radius: 14px;
+  background: rgba(10, 12, 16, 0.86);
+  backdrop-filter: blur(6px);
+}
+
+.v-q .q-dish {
+  flex: 1;
+  min-width: 0;
+}
+
+.v-q .q-dish b {
+  display: block;
+  font-size: 14px;
+}
+
+.v-q .q-dish span {
+  font-size: 11.5px;
+  color: #9aa1ad;
+}
+
+.v-q .q-buy {
+  padding: 9px 16px;
+  border-radius: 11px;
+  background: var(--primary);
+  color: #111;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.v-q .q-say {
+  margin-top: 8px;
+  padding: 9px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---- R — shelf (EasyEat / Pinterest) ---- */
+
+.v-r {
+  background: #0b0d12;
+}
+
+.v-r .r-head {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  padding: 0 14px 10px;
+  z-index: 3;
+}
+
+.v-r .r-head b {
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.v-r .r-tabs {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #7b8291;
+}
+
+.v-r .r-tabs .on {
+  color: #fff;
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--primary);
+  padding-bottom: 4px;
+}
+
+.v-r .r-grid {
+  position: absolute;
+  top: 112px;
+  left: 14px;
+  right: 14px;
+  bottom: 56px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  columns: 2;
+  column-gap: 10px;
+}
+
+.v-r .r-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.v-r .r-tile {
+  position: relative;
+  break-inside: avoid;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #11141a;
+}
+
+.v-r .r-tile img {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+/* Every third-ish tile is taller, which is what stops a masonry grid
+   reading as a plain grid. */
+.v-r .r-tile.tall img {
+  height: 230px;
+}
+
+.v-r .r-play {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.v-r .r-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.95);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.v-r .r-meta {
+  padding: 8px 9px 10px;
+}
+
+.v-r .r-meta b {
+  display: block;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.v-r .r-meta span {
+  font-size: 11.5px;
+  color: #8b93a1;
+}
+
+/* ---- S — chapters (stories) ---- */
+
+.v-s .mute {
+  top: 96px;
+}
+
+.v-s .s-segs {
+  position: absolute;
+  top: 44px;
+  left: 12px;
+  right: 12px;
+  z-index: 8;
+  display: flex;
+  gap: 4px;
+}
+
+.v-s .s-segs i {
+  flex: 1;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.v-s .s-segs i b {
+  display: block;
+  height: 100%;
+  background: #fff;
+}
+
+.v-s .s-head {
+  position: absolute;
+  top: 58px;
+  left: 12px;
+  right: 12px;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.v-s .s-head img {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.v-s .s-head div {
+  flex: 1;
+  min-width: 0;
+}
+
+.v-s .s-head b {
+  display: block;
+  font-size: 13.5px;
+}
+
+.v-s .s-head span {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.v-s .s-follow {
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.v-s .s-foot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 70px;
+  z-index: 6;
+}
+
+.v-s .s-count {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.v-s .s-dish {
+  margin-top: 4px;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.v-s .s-line {
+  margin-top: 2px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.v-s .s-cta {
+  margin-top: 14px;
+  padding: 13px;
+  border-radius: 15px;
+  background: var(--primary);
+  color: #111;
+  font-size: 14.5px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---- T — tray (live commerce) ---- */
+
+.v-t {
+  background: #0b0d12;
+}
+
+.v-t .t-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 190px;
+  overflow: hidden;
+}
+
+.v-t .t-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.v-t .t-mute {
+  position: absolute;
+  top: 46px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 15px;
+}
+
+.v-t .t-meta {
+  position: absolute;
+  left: 16px;
+  right: 110px;
+  bottom: 18px;
+}
+
+.v-t .t-meta b {
+  display: block;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.v-t .t-meta span {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.v-t .t-add {
+  position: absolute;
+  right: 16px;
+  bottom: 18px;
+  padding: 11px 17px;
+  border-radius: 13px;
+  background: var(--primary);
+  color: #111;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+/* The basket is a shelf, not a number in a corner: an order is assembled
+   in front of you rather than remembered. */
+.v-t .t-tray {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 56px;
+  height: 134px;
+  padding: 12px 14px;
+  background: #11141a;
+  border-top: 1px solid #222733;
+}
+
+.v-t .t-items {
+  display: flex;
+  gap: 8px;
+}
+
+.v-t .t-chip {
+  width: 64px;
+}
+
+.v-t .t-chip img {
+  width: 64px;
+  height: 46px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.v-t .t-chip span {
+  display: block;
+  margin-top: 4px;
+  font-size: 10.5px;
+  color: #9aa1ad;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.v-t .t-chip.ghost {
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  border: 1px dashed #333a45;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.v-t .t-sum {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: #8b93a1;
+}
+
+.v-t .t-sum b {
+  font-size: 15px;
+  color: #fff;
+}
+
+.v-t .t-go {
+  margin-left: auto;
+  padding: 9px 15px;
+  border-radius: 11px;
+  background: var(--primary);
+  color: #111;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* Two real columns, not CSS `columns`: inside a fixed-height vertical
+   scroller, multi-column flows the overflow sideways and hides it. */
+.v-r .r-grid {
+  columns: auto;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.v-r .r-col {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Chat needs room above the restaurant label, which names the same kitchen. */
+.v-q .q-chat {
+  bottom: 214px;
+}
