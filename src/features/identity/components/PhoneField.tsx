@@ -3,6 +3,7 @@ import { Pressable, TextInput, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
+import type { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
@@ -20,6 +21,8 @@ type PhoneFieldProps = {
   onChange: (e164: string) => void;
   onBlur?: (() => void) | undefined;
   error?: string | undefined;
+  /** So a blocker elsewhere on the screen can put the cursor in here. */
+  inputRef?: RefObject<TextInput | null> | undefined;
 };
 
 const digitsOnly = (text: string) => text.replace(/\D/g, '');
@@ -40,7 +43,7 @@ const grouped = (national: string) =>
  * one part of a phone number they most often get wrong. The field still emits
  * plain E.164, so the schema and the API see exactly what they did before.
  */
-export function PhoneField({ value, onChange, onBlur, error }: PhoneFieldProps) {
+export function PhoneField({ value, onChange, onBlur, error, inputRef }: PhoneFieldProps) {
   const { t } = useTranslation();
 
   const [iso2, setIso2] = useState(DEFAULT_COUNTRY_ISO2);
@@ -86,6 +89,7 @@ export function PhoneField({ value, onChange, onBlur, error }: PhoneFieldProps) 
         <View className="h-6 w-px bg-gray-200" />
 
         <TextInput
+          ref={inputRef}
           accessibilityLabel={t('identity.phoneLabel')}
           placeholder={t('identity.phonePlaceholder')}
           placeholderTextColor={colors.gray[400]}
