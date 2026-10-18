@@ -652,3 +652,452 @@ body {
   background: rgba(255, 255, 255, 0.95);
   color: #111827;
 }
+
+/* ================= G — Edge ======================================= */
+/* Type on the edges. No capsules, no discs, no slabs. */
+
+.v-g .g-filters {
+  position: absolute;
+  top: 48px;
+  left: 16px;
+  right: 56px;
+  z-index: 7;
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.01em;
+}
+
+.v-g .g-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.v-g .g-filters span {
+  flex: none;
+  padding-bottom: 5px;
+}
+
+.v-g .g-filters .on {
+  color: #fff;
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--primary);
+}
+
+.v-g .g-mute {
+  position: absolute;
+  top: 44px;
+  right: 16px;
+  z-index: 7;
+  font-size: 19px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.v-g .g-rail {
+  position: absolute;
+  right: 14px;
+  bottom: 190px;
+  z-index: 7;
+  display: grid;
+  gap: 20px;
+  justify-items: center;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.v-g .g-rail i {
+  display: block;
+  font-size: 23px;
+  font-style: normal;
+  line-height: 1.1;
+}
+
+.v-g .g-rail .on {
+  color: var(--primary);
+}
+
+.v-g .g-foot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 68px;
+  z-index: 6;
+}
+
+.v-g .g-who {
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.v-g .g-who em {
+  font-style: normal;
+  color: #6ee7b7;
+}
+
+.v-g .g-who .muted {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Closed takes the slot the estimate was in — same sentence, no new object. */
+.v-g .g-who .shut {
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.v-g .g-cap {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.v-g .g-rule {
+  height: 1px;
+  margin: 12px 0 10px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.v-g .g-dish {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.v-g .g-dish .nm {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.v-g .g-dish .pr {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.v-g .g-plus {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #111;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.v-g .g-link {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+/* ================= H — Sheet ====================================== */
+/* The video is a card; the controls stand on solid ground beneath it. */
+
+.v-h {
+  background: #07080b;
+}
+
+/* A column, so the sheet hugs its content and the video keeps the rest —
+   a fixed split left dead space under short captions. */
+.v-h .h-col {
+  position: absolute;
+  inset: 44px 12px 68px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.v-h .h-filters {
+  flex: none;
+  z-index: 7;
+  display: flex;
+  gap: 18px;
+  padding: 0 4px 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  font-size: 13px;
+  color: #7b8291;
+}
+
+.v-h .h-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.v-h .h-filters span {
+  flex: none;
+}
+
+.v-h .h-filters .on {
+  color: #fff;
+  font-weight: 600;
+}
+
+.v-h .h-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #000;
+}
+
+.v-h .h-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.v-h .h-mute {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+}
+
+.v-h .h-prog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.v-h .h-prog i {
+  display: block;
+  height: 100%;
+  background: #fff;
+}
+
+.v-h .h-sheet {
+  flex: none;
+  padding: 14px;
+  border-radius: 20px;
+  background: #11141a;
+  border: 1px solid #1d2129;
+}
+
+.v-h .h-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.v-h .h-who {
+  flex: 1;
+  min-width: 0;
+}
+
+.v-h .h-who b {
+  display: block;
+  font-size: 15px;
+}
+
+.v-h .h-who span {
+  font-size: 11.5px;
+  color: #8b93a1;
+}
+
+.v-h .shut {
+  font-style: normal;
+  color: #fbbf24;
+}
+
+.v-h .h-acts {
+  display: flex;
+  gap: 14px;
+  color: #c7ccd4;
+  font-size: 17px;
+  text-align: center;
+}
+
+.v-h .h-acts small {
+  display: block;
+  font-size: 9.5px;
+  color: #7b8291;
+}
+
+.v-h .h-acts .on {
+  color: var(--primary);
+}
+
+.v-h .h-cap {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: #9aa1ad;
+  line-height: 1.4;
+}
+
+.v-h .h-dish {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  padding-top: 12px;
+  border-top: 1px solid #1d2129;
+}
+
+.v-h .h-dish img {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  object-fit: cover;
+}
+
+.v-h .h-meta b {
+  display: block;
+  font-size: 14px;
+}
+
+.v-h .h-meta span {
+  font-size: 11.5px;
+  color: #8b93a1;
+}
+
+.v-h .h-btn {
+  display: block;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: #111;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.v-h .h-btn.ghost {
+  background: transparent;
+  border: 1px solid #2a2f39;
+  color: #e5e7eb;
+}
+
+/* ================= I — Quiet ====================================== */
+/* One action, carrying the dish. The filter is a title, not a toolbar. */
+
+.v-i .i-title {
+  position: absolute;
+  top: 46px;
+  left: 0;
+  right: 0;
+  z-index: 7;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.v-i .i-title b {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.v-i .i-mute {
+  position: absolute;
+  top: 44px;
+  right: 16px;
+  z-index: 7;
+  font-size: 19px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.v-i .i-rail {
+  position: absolute;
+  right: 16px;
+  bottom: 198px;
+  z-index: 7;
+  display: grid;
+  gap: 22px;
+  font-size: 23px;
+  color: rgba(255, 255, 255, 0.92);
+  text-align: center;
+}
+
+.v-i .i-rail .on {
+  color: var(--primary);
+}
+
+.v-i .i-foot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 70px;
+  z-index: 6;
+}
+
+.v-i .i-who {
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.v-i .i-who span {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.v-i .i-cap {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* The button is the dish: name and price live in the label, so there is no
+   second row restating them. */
+.v-i .i-btn {
+  display: block;
+  margin-top: 14px;
+  padding: 13px;
+  border-radius: 15px;
+  background: var(--primary);
+  color: #111;
+  font-size: 14.5px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.v-i .i-btn.later {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+/* Outline icons sit on the text baseline rather than being boxed. */
+.v-g .g-rail i svg,
+.v-i .i-rail svg,
+.v-h .h-acts svg,
+.v-g .g-mute svg,
+.v-i .i-mute svg,
+.v-h .h-mute svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.v-g .g-rail .on svg,
+.v-i .i-rail .on svg,
+.v-h .h-acts .on svg {
+  fill: currentColor;
+}
+
+/* A thin shadow so an outline survives bright footage without a disc. */
+.v-g .g-rail,
+.v-i .i-rail,
+.v-g .g-mute,
+.v-i .i-mute {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55));
+}

@@ -3,6 +3,21 @@
 
 const { clips, pairs } = window.FOODIO_CLIPS;
 
+/* Inline outline icons. Unicode has no bookmark worth looking at, and a
+   coloured emoji inside a monochrome rail reads as a mistake. */
+const icon = (name, size = 23) => {
+  const paths = {
+    heart:
+      '<path d="M12 20s-7-4.3-7-9.2A4.1 4.1 0 0 1 12 8a4.1 4.1 0 0 1 7 2.8C19 15.7 12 20 12 20z"/>',
+    bookmark: '<path d="M7 4h10v16l-5-4-5 4V4z"/>',
+    share: '<path d="M7 17 17 7M9 7h8v8"/>',
+    mute: '<path d="M4 9h3l4-3v12l-4-3H4V9z"/><path d="m15 9 5 6M20 9l-5 6"/>',
+  };
+  return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none"
+    stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+    stroke-linejoin="round">${paths[name]}</svg>`;
+};
+
 const money = (minor, currency = 'USD') =>
   new Intl.NumberFormat('en', { style: 'currency', currency }).format(minor / 100);
 
@@ -286,6 +301,183 @@ function variantF() {
   };
 }
 
+/* ============ G — Edge ============================================ */
+/* No cards. Everything is type on the edges of the frame: filters are a line
+   of words, the rail is outlines, the dish is one rule and one line. Closed
+   is not a banner — it replaces the ETA, where the eye already is. */
+
+function variantG() {
+  const page = (c, i) => {
+    const closed = i === 1;
+    const dish = c.dish;
+    const liked = i === 0;
+
+    const action = !dish
+      ? `<span class="g-link">View menu &rsaquo;</span>`
+      : dish.optionGroups.length
+        ? `<span class="g-link">Choose &rsaquo;</span>`
+        : `<span class="g-plus">&#43;</span>`;
+
+    return `
+    <div class="cell v-g">
+      ${media(c)}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+
+      <div class="g-filters">
+        <span class="on">All</span><span>Near you</span><span>Open now</span>
+        <span>${c.restaurant.cuisines[0]}</span>
+      </div>
+      <div class="g-mute">${icon('mute', 21)}</div>
+
+      <div class="g-rail">
+        <div class="${liked ? 'on' : ''}"><i>${icon('heart')}</i>${124 + i * 17}</div>
+        <div><i>${icon('bookmark')}</i>Save</div>
+        <div><i>${icon('share')}</i>Share</div>
+      </div>
+
+      <div class="g-foot">
+        <div class="g-who">
+          ${c.kind === 'customer' ? '<em>Ordered and delivered</em> &middot; ' : ''}
+          ${c.restaurantName}
+          <span class="${closed ? 'shut' : 'muted'}">
+            &middot; ${closed ? 'Closed, opens 11:00' : eta(c.restaurant)}
+          </span>
+        </div>
+        <div class="g-cap">${c.caption}</div>
+        <div class="g-rule"></div>
+        <div class="g-dish">
+          <span class="nm">${dish ? dish.name : 'See the whole menu'}</span>
+          ${dish ? `<span class="pr">${money(dish.priceMinor, c.restaurant.currency)}</span>` : ''}
+          ${action}
+        </div>
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'No boxes anywhere. Filters are words with the live one underlined, the rail is outlines with no discs behind them, and the dish is one hairline and one line of type. Closed replaces the delivery estimate instead of arriving as a banner — same place, same sentence, no new object. The video keeps almost all of the frame.',
+  };
+}
+
+/* ============ H — Sheet =========================================== */
+/* Stop fighting the footage: the video is a card, the controls live under it
+   on solid ground. Nothing floats on the picture except mute. */
+
+function variantH() {
+  const page = (c, i) => {
+    const closed = i === 1;
+    const dish = c.dish;
+    const liked = i === 0;
+
+    const action = !dish
+      ? `<a class="h-btn ghost">View menu &rsaquo;</a>`
+      : dish.optionGroups.length
+        ? `<a class="h-btn ghost">Choose size &rsaquo;</a>`
+        : `<a class="h-btn">Add to cart &#43;</a>`;
+
+    return `
+    <div class="cell v-h">
+      <div class="h-col">
+      <div class="h-filters">
+        <span class="on">All</span><span>Near you</span><span>Open now</span>
+        <span>${c.restaurant.cuisines[0]}</span>
+      </div>
+
+      <div class="h-stage">
+        ${media(c, 'h-video')}
+        <div class="h-mute">${icon('mute', 17)}</div>
+        <div class="h-prog"><i style="width:46%"></i></div>
+      </div>
+
+      <div class="h-sheet">
+        <div class="h-top">
+          <div class="h-who">
+            <b>${c.restaurantName}</b>
+            <span>${closed ? '<em class="shut">Closed · opens 11:00</em>' : eta(c.restaurant)} &middot; ${fee(c.restaurant)}</span>
+          </div>
+          <div class="h-acts">
+            <span class="${liked ? 'on' : ''}">${icon('heart', 19)}<small>${124 + i * 17}</small></span>
+            <span>${icon('bookmark', 19)}<small>Save</small></span>
+            <span>${icon('share', 19)}<small>Share</small></span>
+          </div>
+        </div>
+
+        <div class="h-cap">${c.caption}</div>
+
+        <div class="h-dish">
+          ${dish ? `<img src="${dish.image}" alt="" />` : ''}
+          <div class="h-meta">
+            <b>${dish ? dish.name : c.restaurantName}</b>
+            <span>${dish ? money(dish.priceMinor, c.restaurant.currency) + (dish.optionGroups.length ? ' · choose ' + dish.optionGroups.join(' and ').toLowerCase() : '') : c.restaurant.cuisines.join(' · ')}</span>
+          </div>
+        </div>
+        ${action}
+      </div>
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'The video stops being a backdrop for floating boxes and becomes a card, with the controls under it on solid ground. Everything is legible because nothing is competing with footage — the problem the clips-feed spec solved with a scrim, solved here by not overlapping at all. Costs: the video loses a third of its height, and it reads less like a feed and more like a post.',
+  };
+}
+
+/* ============ I — Quiet =========================================== */
+/* One action, and it carries the dish. The filter is a title, not a toolbar.
+   Nothing else is on the picture. */
+
+function variantI() {
+  const page = (c, i) => {
+    const closed = i === 1;
+    const dish = c.dish;
+    const liked = i === 0;
+
+    const label = !dish
+      ? 'See the menu'
+      : closed
+        ? `Order ${dish.name} for later`
+        : dish.optionGroups.length
+          ? `Choose ${dish.name} &middot; ${money(dish.priceMinor, c.restaurant.currency)}`
+          : `Add ${dish.name} &middot; ${money(dish.priceMinor, c.restaurant.currency)}`;
+
+    return `
+    <div class="cell v-i">
+      ${media(c)}
+      <div class="scrim-top"></div>
+      <div class="scrim"></div>
+
+      <div class="i-title">All clips <b>&#9662;</b></div>
+      <div class="i-mute">${icon('mute', 21)}</div>
+
+      <div class="i-rail">
+        <span class="${liked ? 'on' : ''}">${icon('heart', 25)}</span>
+        <span>${icon('bookmark', 25)}</span>
+        <span>${icon('share', 25)}</span>
+      </div>
+
+      <div class="i-foot">
+        <div class="i-who">
+          ${c.restaurantName}
+          <span>&middot; ${closed ? 'opens 11:00' : eta(c.restaurant)}</span>
+        </div>
+        <div class="i-cap">${c.caption}</div>
+        <a class="i-btn ${closed ? 'later' : ''}">${label}</a>
+      </div>
+      ${tabbar(2)}
+    </div>`;
+  };
+
+  return {
+    html: `<div class="feed">${theirs.map(page).join('')}</div>`,
+    note: 'One button, and it says the dish and the price itself — so the dish row and the action collapse into a single object instead of two stacked ones. The filter becomes a title you can tap rather than a toolbar sitting on the footage. Closed changes what the button offers rather than adding a warning. Costs: one filter visible at a time, and a long dish name has nowhere to go.',
+  };
+}
+
 /* ============ E — Everything ====================================== */
 /* All four at once, on purpose: the honest way to see what it costs. */
 
@@ -351,6 +543,9 @@ const VARIANTS = [
   ['C', 'The rail', variantC],
   ['D', 'Steered', variantD],
   ['F', 'Steered + rail + act', variantF],
+  ['G', 'Edge', variantG],
+  ['H', 'Sheet', variantH],
+  ['I', 'Quiet', variantI],
   ['E', 'Everything', variantE],
 ];
 
