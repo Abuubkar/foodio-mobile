@@ -184,7 +184,8 @@
       "city": "Enter the city.",
       "postcode": "Enter the postcode.",
       "notes": "That is too long."
-    }
+    },
+    "locationDrag": "Drag the map so the pin sits on your door."
   },
   "checkout": {
     "title": "Checkout",

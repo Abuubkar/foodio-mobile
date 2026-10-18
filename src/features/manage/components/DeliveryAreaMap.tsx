@@ -1,7 +1,4 @@
-import { Platform, View } from 'react-native';
-
-import { AppleMaps, GoogleMaps } from 'expo-maps';
-
+import { PinMap } from '@/components/shared';
 import { colors } from '@/theme';
 import type { Coordinates } from '@/utils/distance';
 
@@ -19,11 +16,11 @@ type DeliveryAreaMapProps = {
 };
 
 /**
- * The map, its circle, and the pin that never moves.
+ * The delivery area: a `PinMap` with the reach drawn around it.
  *
- * The pin is chrome rather than a map object: it sits dead centre, and the
- * world moves under it. That makes placing yourself a gesture instead of a
- * form field, which is the whole of t8's answer.
+ * The map and the never-moving pin live in `PinMap`, because a delivery
+ * address wants the same gesture without a circle. What is left here is the
+ * one thing that is about delivery areas.
  */
 export function DeliveryAreaMap({ point, camera, radiusMeters, onMove }: DeliveryAreaMapProps) {
   const circles = [
@@ -36,36 +33,5 @@ export function DeliveryAreaMap({ point, camera, radiusMeters, onMove }: Deliver
     },
   ];
 
-  const cameraPosition = { coordinates: camera.center, zoom: camera.zoom };
-
-  // expo-maps reports both coordinates as optional; a half-move is not a move.
-  const report = (coordinates: { latitude?: number; longitude?: number }) => {
-    const { latitude, longitude } = coordinates;
-    if (latitude === undefined || longitude === undefined) return;
-    onMove({ latitude, longitude });
-  };
-
-  return (
-    <View className="flex-1">
-      {Platform.OS === 'ios' ? (
-        <AppleMaps.View
-          style={{ flex: 1 }}
-          cameraPosition={cameraPosition}
-          circles={circles}
-          onCameraMove={(event) => report(event.coordinates)}
-        />
-      ) : (
-        <GoogleMaps.View
-          style={{ flex: 1 }}
-          cameraPosition={cameraPosition}
-          circles={circles}
-          onCameraMove={(event) => report(event.coordinates)}
-        />
-      )}
-
-      <View className="absolute inset-0 items-center justify-center" pointerEvents="none">
-        <View className="h-6 w-6 rounded-full border-4 border-white bg-primary-500 shadow" />
-      </View>
-    </View>
-  );
+  return <PinMap camera={camera} onMove={onMove} circles={circles} />;
 }
