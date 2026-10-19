@@ -24,6 +24,8 @@ export function ClipsFeedScreen() {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [pageHeight, setPageHeight] = useState(0);
+  /** The feed must hold still while a kitchen's menu is up. */
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // One threshold only — setting both throws (RN source, via #23).
   const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 80 }).current;
@@ -42,6 +44,7 @@ export function ClipsFeedScreen() {
           height={pageHeight}
           isActive={index === activeIndex}
           reduceMotion={reduceMotion}
+          onMenuOpenChange={setMenuOpen}
         />
       ),
     [pageHeight, activeIndex, reduceMotion],
@@ -87,6 +90,7 @@ export function ClipsFeedScreen() {
           keyExtractor={keyOf}
           renderItem={renderItem}
           pagingEnabled
+          scrollEnabled={!menuOpen}
           showsVerticalScrollIndicator={false}
           // 5, not 3: neighbours stay mounted through a fast fling, so a fresh
           // cell's black flash cannot outrun the scroll.

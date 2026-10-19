@@ -165,6 +165,8 @@ function RootNavigator() {
         <Stack.Screen name="clip/[id]" options={{ contentStyle: { backgroundColor: 'black' } }} />
         <Stack.Screen name="checkout" />
         <Stack.Screen name="address" />
+        {/* Dark like the Clips feed it collects from, not the white app. */}
+        <Stack.Screen name="saved" options={{ contentStyle: { backgroundColor: colors.black } }} />
         <Stack.Screen name="order/[id]" />
       </Stack.Protected>
 

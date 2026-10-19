@@ -348,7 +348,8 @@
     "phoneLater": "We ask for a phone number at checkout, so the restaurant can call about the door.",
     "actingAs": "Acting as",
     "yourOrders": "Your orders",
-    "deliveryAddresses": "Delivery addresses"
+    "deliveryAddresses": "Delivery addresses",
+    "savedClips": "Saved clips"
   },
   "work": {
     "tabs": {
@@ -634,5 +635,19 @@
       "accept": "Yes, tell me",
       "decline": "Not now"
     }
+  },
+  "saved": {
+    "title": "Saved",
+    "empty": "Clips you save from the Clips tab land here.",
+    "yours": "Yours",
+    "view": {
+      "all": "All",
+      "kitchens": "Kitchens"
+    },
+    "clipCount_one": "{{count}} clip",
+    "clipCount_other": "{{count}} clips",
+    "kitchenCount_one": "{{count}} kitchen",
+    "kitchenCount_other": "{{count}} kitchens",
+    "count": "{{clips}} · {{kitchens}}"
   }
 }

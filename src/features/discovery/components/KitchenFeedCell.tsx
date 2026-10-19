@@ -36,6 +36,12 @@ type KitchenFeedCellProps = {
   height: number;
   isActive: boolean;
   reduceMotion: boolean;
+  /**
+   * Raised while the menu is open, so the feed can stop paging. Over-scrolling
+   * the drawer otherwise chains into the list and carries you to another
+   * kitchen with the first one's menu still open behind you.
+   */
+  onMenuOpenChange: (open: boolean) => void;
 };
 
 /**
@@ -46,7 +52,13 @@ type KitchenFeedCellProps = {
  * has already said whose kitchen this is — repeating it was the first thing
  * review threw out.
  */
-export function KitchenFeedCell({ kitchen, height, isActive, reduceMotion }: KitchenFeedCellProps) {
+export function KitchenFeedCell({
+  kitchen,
+  height,
+  isActive,
+  reduceMotion,
+  onMenuOpenChange,
+}: KitchenFeedCellProps) {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const guard = useNavigationGuard();
@@ -118,10 +130,17 @@ export function KitchenFeedCell({ kitchen, height, isActive, reduceMotion }: Kit
     if (!reduceMotion) player.play();
   }, [player, isActive, reduceMotion]);
 
-  // A kitchen scrolled away and back opens on its own footage again.
+  // A kitchen scrolled away and back opens on its own footage again, with the
+  // menu shut: coming back to someone else's open drawer is disorienting.
   useEffect(() => {
-    if (!isActive) setChapter(0);
+    if (isActive) return;
+    setChapter(0);
+    setMenuOpen(false);
   }, [isActive]);
+
+  useEffect(() => {
+    onMenuOpenChange(menuOpen);
+  }, [menuOpen, onMenuOpenChange]);
 
   const togglePlayback = () => {
     if (player.playing) {
