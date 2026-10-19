@@ -18,6 +18,8 @@ import {
   setStoredRole,
 } from '@/services/storage/session.storage';
 
+import { useSavedStore } from './saved.store';
+
 type SessionState = {
   accessToken: string | null;
   refreshToken: string | null;
@@ -133,6 +135,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 
     await clearStoredSession();
     clearQueryCache();
+    // Saved clips belong to the person, not the device.
+    useSavedStore.getState().clear();
     set({ accessToken: null, refreshToken: null, person: null, role: CUSTOMER_ROLE });
   },
 

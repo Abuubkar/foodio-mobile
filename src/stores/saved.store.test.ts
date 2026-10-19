@@ -49,6 +49,23 @@ describe('saved store', () => {
     expect(mockWrite).not.toHaveBeenCalled();
   });
 
+  it('clears, so a sign-out does not leave a list belonging to nobody', () => {
+    hydrated(['a', 'b']);
+    useSavedStore.getState().clear();
+
+    expect(useSavedStore.getState().clipIds).toEqual([]);
+    // The device's copy too, or the next launch restores someone else's list.
+    expect(mockWrite).toHaveBeenCalledWith([]);
+  });
+
+  it('clears even when nothing was ever read from the device', () => {
+    useSavedStore.setState({ clipIds: ['a'], isHydrated: false });
+    useSavedStore.getState().clear();
+
+    expect(useSavedStore.getState().clipIds).toEqual([]);
+    expect(mockWrite).toHaveBeenCalledWith([]);
+  });
+
   it('selects membership and count', () => {
     hydrated(['a', 'b']);
     const state = useSavedStore.getState();

@@ -19,6 +19,7 @@ import { useNavigationGuard } from '@/hooks/useNavigationGuard';
 import { useCartStore } from '@/stores/cart.store';
 import { usePlaybackStore } from '@/stores/playback.store';
 import { selectIsSaved, useSavedStore } from '@/stores/saved.store';
+import { useSessionStore } from '@/stores/session.store';
 import { colors } from '@/theme';
 import { formatMoney } from '@/utils/currency';
 
@@ -87,6 +88,7 @@ export function KitchenFeedCell({
   const addItem = useCartStore((state) => state.addItem);
   const isSaved = useSavedStore(selectIsSaved(clip?.id ?? ''));
   const toggleSaved = useSavedStore((state) => state.toggle);
+  const isSignedIn = useSessionStore((state) => state.person !== null);
 
   const player = useVideoPlayer(clip?.mediaUrl ?? null, (instance) => {
     instance.loop = true;
@@ -174,6 +176,20 @@ export function KitchenFeedCell({
       },
       { id: item.id, name: item.name, priceMinor: item.priceMinor, image: item.image },
     );
+  };
+
+  /**
+   * Saving needs a session. The list lives behind the account sheet, so a
+   * signed-out save would land somewhere the person cannot open — and would
+   * then be wiped by the next sign-out anyway.
+   */
+  const save = () => {
+    if (!clip) return;
+    if (!isSignedIn) {
+      guard(() => router.push('/sign-in'));
+      return;
+    }
+    toggleSaved(clip.id);
   };
 
   const onPrimary = () => {
@@ -303,7 +319,7 @@ export function KitchenFeedCell({
           primary={primary}
           isSaved={isSaved}
           onPrimary={onPrimary}
-          onSave={() => toggleSaved(clip.id)}
+          onSave={save}
           onShare={openRestaurant}
         />
 

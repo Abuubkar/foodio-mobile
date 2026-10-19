@@ -15,6 +15,12 @@ type SavedState = {
   hydrate: () => Promise<void>;
 
   toggle: (clipId: string) => void;
+  /**
+   * Emptied on sign-out. Saving needs a session, so a list left behind would
+   * belong to nobody: the next person on a shared device would carry a count
+   * they cannot open, since Saved is behind the same session.
+   */
+  clear: () => void;
 };
 
 export const useSavedStore = create<SavedState>((set, get) => ({
@@ -39,6 +45,14 @@ export const useSavedStore = create<SavedState>((set, get) => ({
     set({ clipIds: next });
     // Writing before hydration would persist a list built on an empty start.
     if (isHydrated) void setStoredSavedClips(next);
+  },
+
+  clear: () => {
+    set({ clipIds: [] });
+    // Unconditional, unlike `toggle`: emptying a list that was never read is
+    // still the right end state, and leaving the device's copy behind would
+    // restore it on the next launch.
+    void setStoredSavedClips([]);
   },
 }));
 
