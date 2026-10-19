@@ -30,10 +30,10 @@ const fee = (r) =>
 /** Ours = the customer's receipt; theirs = the restaurant's marketing. */
 const theirs = clips.filter((c) => c.kind === 'restaurant');
 
-const tabbar = (cart = 1) => `
+const tabbar = (cart = 1, active = 'Clips') => `
   <div class="tabbar">
-    <div><span class="ic">&#9750;</span>Home</div>
-    <div class="on"><span class="ic">&#9654;</span>Clips</div>
+    <div class="${active === 'Home' ? 'on' : ''}"><span class="ic">&#9750;</span>Home</div>
+    <div class="${active === 'Clips' ? 'on' : ''}"><span class="ic">&#9654;</span>Clips</div>
     <div><span class="cartwrap"><span class="ic">&#9812;</span><span class="dot">${cart}</span></span>Cart</div>
     <div><span class="ic">&#9776;</span>Orders</div>
   </div>`;
@@ -1071,21 +1071,23 @@ const primaryFor = (clip) =>
 /** Dishes with footage, as opposed to clips: W needs the real ratio. */
 const filmedCount = (k) => k.menu.flatMap((c) => c.items).filter((d) => d.clipId).length;
 
-const menuPill = (k) =>
-  `<span class="k-menu">Menu <i>${k.menu.flatMap((c) => c.items).length}</i></span>`;
+const menuPill = () => `<span class="k-menu">Menu</span>`;
 
-/* The kitchen's identity, and — set apart by a hairline, because it is yours
-   and not theirs — the way into Saved. The Clips tab is where a clip gets
-   saved, so it is where you go looking for it again. */
-const kitchenHead = (k, saved = true) => `
+/* The kitchen's identity, and nothing of yours. Saved used to sit here behind
+   a bookmark, which put the same glyph on screen twice — once meaning "save
+   this clip" in the rail, once meaning "open my saved clips" — and NN/g names
+   that exact failure: even a slight difference in meaning hinders a user's
+   ability to rely on an icon. Instagram and TikTok both keep the verb on the
+   feed and the collection in the profile, so Saved moved to the account
+   sheet. */
+const kitchenHead = (k) => `
   <div class="u-head">
     <img src="${k.restaurant.image}" alt="" />
     <div class="u-who">
       <b>${k.name}</b>
       <span>${eta(k.restaurant)} &middot; ${fee(k.restaurant)}</span>
     </div>
-    ${menuPill(k)}
-    ${saved ? `<span class="u-saved" data-goto="Y" title="Saved clips">${icon('bookmark', 19)}</span>` : ''}
+    ${menuPill()}
   </div>`;
 
 /* ============ U — Kitchen ========================================= */
@@ -1181,7 +1183,7 @@ function variantV() {
       <div class="v-head">
         <b>${k.name}</b>
         <span>${eta(r)} &middot; ${fee(r)}</span>
-        ${menuPill(k)}
+        ${menuPill()}
       </div>
 
       <div class="v-dots">
@@ -1406,7 +1408,7 @@ function variantY() {
     html: `<div class="cell v-y" style="height:820px">
       <div class="y-head">
         <div class="y-title">
-          <span class="y-back" data-goto="Z" title="Back to Clips">&#8249;</span>
+          <span class="y-back" title="Back to the account sheet">&#8249;</span>
           <b>Saved</b>
           <span>${count} clips &middot; ${saved.length} kitchens</span>
         </div>
@@ -1426,7 +1428,7 @@ function variantY() {
                 <b>${k.name}</b>
                 <span>${eta(k.restaurant)} &middot; ${fee(k.restaurant)}</span>
               </div>
-              ${menuPill(k)}
+              ${menuPill()}
             </div>
 
             <div class="y-grid">
@@ -1457,9 +1459,9 @@ function variantY() {
           )
           .join('')}
       </div>
-      ${tabbar(2)}
+      ${tabbar(2, 'Home')}
     </div>`,
-    note: 'R moved to the screen it was always for. A shelf is the wrong shape for a feed — nine autoplaying tiles is the decoder problem the clips-feed spec fought — and the right shape for a collection, where everything is already chosen and comparison is the whole job. Posters, not video, so it costs nothing to render. Shown on the Kitchens tab, grouped under the same header the other four use, so a save is a way back into a kitchen rather than a loose clip; All would be one ungrouped shelf, which is R exactly. Reached by the bookmark on the Clips feed, which makes it a pushed screen rather than a tab — hence the back chevron, and hence the tab bar still showing Clips. Costs: saves have no order here — no recency, no “ordered twice” — and a tile is a poster, so a clip you remember by its motion is hard to find.',
+    note: 'R moved to the screen it was always for. A shelf is the wrong shape for a feed — nine autoplaying tiles is the decoder problem the clips-feed spec fought — and the right shape for a collection, where everything is already chosen and comparison is the whole job. Posters, not video, so it costs nothing to render. Shown on the Kitchens tab, grouped under the same header the other four use, so a save is a way back into a kitchen rather than a loose clip; All would be one ungrouped shelf, which is R exactly. Reached from the account sheet, which is what Instagram and TikTok do — the verb stays on the feed, the collection lives in the profile — so Home is the lit tab and the chevron goes back there. Costs: our account sheet is behind the identity chip on Home rather than a profile tab, so this is three taps and unreachable from Clips, where the clip was saved. Saves also have no order here — no recency, no “ordered twice” — and a tile is a poster, so a clip you remember by its motion is hard to find.',
   };
 }
 
@@ -1515,7 +1517,7 @@ function variantZ() {
           <div class="u-line">${dishLine}</div>
           ${acts}
 
-          <div class="u-lip" data-goto="Z">
+          <div class="u-lip">
             <div class="u-grab"></div>
             <div class="u-lip-row">
               <div class="u-thumbs">${also.map((d) => `<img src="${d.image}" alt="" />`).join('')}</div>
@@ -1582,7 +1584,7 @@ function variantZ() {
 
   return {
     html: `<div class="feed">${kitchens.map(page).join('')}</div>`,
-    note: 'The chosen one: U’s screen with W’s drawer. Resting it is U — kitchen header, the dish in M’s type, three actions, and a lip naming the rest of what is in the clip. Pulled up, that same lip is W’s menu by category, with the filmed dishes badged, so the drawer is never behind a bag and the menu is never a separate screen. Cells alternate between the two heights so both are visible: scroll down to see it open and shut. The bookmark beside Menu, set off by a hairline because it is yours and not the kitchen’s, opens Saved — tap it. Costs: the lip and the Add button are neighbours at the bottom edge and a thumb will sometimes take the wrong one; and raised, the video is a 300dp header, so the clip stops being the point exactly when someone is deciding.',
+    note: 'The chosen one: U’s screen with W’s drawer. Resting it is U — kitchen header, the dish in M’s type, three actions, and a lip naming the rest of what is in the clip. Pulled up, that same lip is W’s menu by category, with the filmed dishes badged, so the drawer is never behind a bag and the menu is never a separate screen. Cells alternate between the two heights so both are visible: scroll down to see it open and shut. Nothing in the top-right corner belongs to you — the Menu pill is the kitchen’s, and Saved lives in the account sheet, because a bookmark here would have been the second bookmark on a screen that already has one meaning “save this clip”. Costs: the lip and the Add button are neighbours at the bottom edge and a thumb will sometimes take the wrong one; and raised, the video is a 300dp header, so the clip stops being the point exactly when someone is deciding.',
   };
 }
 
@@ -1675,17 +1677,6 @@ const VARIANTS = [
 ];
 
 const screen = document.getElementById('screen');
-
-/* Prototype navigation: anything carrying data-goto jumps to that variant,
-   so the bookmark actually reaches Saved instead of only looking like it. */
-screen.addEventListener('click', (event) => {
-  const hit = event.target.closest('[data-goto]');
-  if (!hit) return;
-  const url = new URL(location.href);
-  url.searchParams.set('variant', hit.dataset.goto);
-  history.replaceState({}, '', url);
-  render();
-});
 
 /** Only the clip you are looking at plays — ten at once stalls the page. */
 function wirePlayback() {

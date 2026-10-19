@@ -209,21 +209,32 @@ alternate between the two heights so both are visible without interaction.
 
 #### Where Saved is reached from
 
-A bookmark on the Clips feed, beside the Menu pill and set off from it by a
-hairline — the pill is the kitchen's, the bookmark is yours. Chosen over a row
-in the account sheet, a strip on Home, and a fifth tab.
+**The account sheet**, beside _Your orders_ and _Delivery addresses_. The Clips
+feed carries the verb only — the bookmark in the action row that saves a clip.
 
-Two consequences, both now built:
+This reverses an earlier call to put a bookmark in the Clips header. That put
+the same glyph on one screen twice: a bookmark in the header meaning _open my
+saved clips_, and a bookmark in the rail meaning _save this clip_. NN/g names
+that failure directly — "Even a slight difference in meaning and functionality
+hinders the ability for a user to understand and rely on an icon" — and also
+rules out fixing it with a different icon, since "a text label must be present
+alongside an icon to clarify its meaning" and labels "should be visible at all
+times".
 
-- **Saved is a pushed screen, not a tab.** The tab bar still shows Clips as
-  active, so Y carries a back chevron. A tab would not need one.
-- **It costs frame on the one screen built to have none.** The Clips feed was
-  deliberately chrome-free; this is the second thing in its top-right corner
-  after the Menu pill, and the mute icon was removed from U partly to make
-  room.
+Both reference feeds agree: Instagram saves with a bookmark on the post and
+opens the collection at **profile → menu → Saved**, a text label; TikTok saves
+on the video and keeps a **Favorites tab on the profile**. The verb lives on
+the feed, the collection lives in the profile.
 
-The bookmark and the chevron are both live in the prototype — tap through
-`Z → Y → Z`.
+The cost is real and worth stating, because this is where the convention stops
+transferring. Instagram and TikTok both have a **profile tab in the bottom
+bar**, so their path is two taps from anywhere. Foodio has no profile tab — the
+account sheet is behind the identity chip on Home — so Saved is three taps and
+cannot be reached from the Clips tab where the clip was saved. If that proves
+painful in use, the fix is a text label in the Clips header, not an icon.
+
+Consequences built: Y is pushed from Home, so **Home is the lit tab**, not
+Clips, and it carries a back chevron.
 
 ### U to Y — built from the four things that survived
 

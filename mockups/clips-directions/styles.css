@@ -2491,13 +2491,15 @@ body {
 
 /* A flag, not a list: the lip underneath names the dishes. */
 .v-u .u-more {
-  margin-left: 9px;
+  margin-left: 5px;
   font-size: 12.5px;
   font-weight: 500;
   font-style: normal;
   letter-spacing: 0;
   color: rgba(255, 255, 255, 0.66);
-  vertical-align: middle;
+  /* Sat on the title's centre line, which floated it against a 25px cap
+     height. Baseline puts it on the floor of the word beside it. */
+  vertical-align: baseline;
 }
 
 .v-u .u-line {
@@ -3360,37 +3362,10 @@ body {
   color: rgba(255, 255, 255, 0.74);
 }
 
-/* Yours, not the kitchen's — so it sits past a hairline, outside the
-   avatar/name/Menu cluster that belongs to the restaurant. */
-.v-u .u-saved {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  margin-left: 11px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.42);
-}
-
-.v-u .u-saved::before {
-  content: '';
-  position: absolute;
-  left: -6px;
-  top: 7px;
-  bottom: 7px;
-  width: 1px;
-  background: rgba(255, 255, 255, 0.24);
-}
-
 /* Z raised: the sheet is the menu, so it is taller than W's and the video
    keeps only a header's worth of room. */
 .v-z.up .w-sheet-head b {
   font-size: 13.5px;
-}
-
-.v-z .u-lip {
-  cursor: pointer;
 }
 
 /* Saved is pushed from the Clips feed, not a tab, so it owes the user a
