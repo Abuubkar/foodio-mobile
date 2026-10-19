@@ -15,8 +15,7 @@ describe('saved store', () => {
     useSavedStore.setState(useSavedStore.getInitialState());
   });
 
-  const hydrated = (clipIds: string[]) =>
-    useSavedStore.setState({ clipIds, isHydrated: true });
+  const hydrated = (clipIds: string[]) => useSavedStore.setState({ clipIds, isHydrated: true });
 
   it('saves newest first, so Saved reads in the order things were kept', () => {
     hydrated([]);
