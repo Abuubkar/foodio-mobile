@@ -8,8 +8,9 @@ import { FlashList } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { EmptyState, ErrorState, LoadingState } from '@/components/shared';
+import { EmptyState, ErrorState, LoadingState, SignInRequired } from '@/components/shared';
 import { Text } from '@/components/ui';
+import { useSessionStore } from '@/stores/session.store';
 import { colors } from '@/theme';
 
 import { SavedClipTile } from '../components/SavedClipTile';
@@ -35,9 +36,22 @@ export function SavedClipsScreen() {
   const insets = useSafeAreaInsets();
 
   const [view, setView] = useState<View_>('kitchens');
+  const isSignedIn = useSessionStore((state) => state.person !== null);
   const { clips, kitchens, isPending, error, refetch } = useSavedClips();
 
   const body = () => {
+    /* Saving needs a session, so this screen does too. It is normally reached
+       from the account sheet, which is already behind one — but the route is
+       addressable, and a deep link should not land on an empty shelf that
+       looks like "you have saved nothing". */
+    if (!isSignedIn) {
+      return (
+        <SignInRequired
+          message={t('saved.signInRequired')}
+          className="flex-1 items-center justify-center px-8"
+        />
+      );
+    }
     if (isPending) return <LoadingState className="flex-1 items-center justify-center" />;
     if (error) {
       return (
@@ -122,7 +136,7 @@ export function SavedClipsScreen() {
             {t('saved.title')}
           </Text>
 
-          {clips && clips.length > 0 ? (
+          {isSignedIn && clips && clips.length > 0 ? (
             <Text variant="caption" className="ml-2.5 text-gray-400">
               {t('saved.count', {
                 clips: t('saved.clipCount', { count: clips.length }),
@@ -132,7 +146,7 @@ export function SavedClipsScreen() {
           ) : null}
         </View>
 
-        {clips && clips.length > 0 ? (
+        {isSignedIn && clips && clips.length > 0 ? (
           <View className="mt-3 flex-row">
             {(['all', 'kitchens'] as const).map((option) => (
               <Pressable

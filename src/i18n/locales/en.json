@@ -648,6 +648,7 @@
     "clipCount_other": "{{count}} clips",
     "kitchenCount_one": "{{count}} kitchen",
     "kitchenCount_other": "{{count}} kitchens",
-    "count": "{{clips}} · {{kitchens}}"
+    "count": "{{clips}} · {{kitchens}}",
+    "signInRequired": "Sign in to keep clips and find them again."
   }
 }
