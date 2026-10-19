@@ -2491,7 +2491,7 @@ body {
 
 /* A flag, not a list: the lip underneath names the dishes. */
 .v-u .u-more {
-  margin-left: 3px;
+  margin-left: 0;
   font-size: 12.5px;
   font-weight: 500;
   font-style: normal;
