@@ -11,6 +11,7 @@ import { QueryProvider } from '@/providers/QueryProvider';
 import { useActiveAddressStore } from '@/stores/activeAddress.store';
 import { useCartStore } from '@/stores/cart.store';
 import { OnboardingStep, useOnboardingStore } from '@/stores/onboarding.store';
+import { useSavedStore } from '@/stores/saved.store';
 import { useSessionStore } from '@/stores/session.store';
 import { colors } from '@/theme';
 
@@ -83,6 +84,17 @@ function RootNavigator() {
     // this settles.
     void hydrateCart();
   }, [cartHydrated, hydrateCart]);
+
+  const savedHydrated = useSavedStore((state) => state.isHydrated);
+  const hydrateSaved = useSavedStore((state) => state.hydrate);
+
+  useEffect(() => {
+    if (savedHydrated) return;
+
+    // Same reasoning as the Cart: nothing renders differently for the instant
+    // before this settles, except a bookmark that is briefly not filled in.
+    void hydrateSaved();
+  }, [savedHydrated, hydrateSaved]);
 
   // Neither gates the splash screen: a push isn't needed for any screen to render.
   useSyncPushToken();

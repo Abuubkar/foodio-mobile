@@ -292,7 +292,27 @@
     "notFound": "This clip is gone.",
     "dishHeading": "How it looked · How it came",
     "dishYours": "A customer",
-    "pause": "Pause"
+    "pause": "Pause",
+    "menu": "Menu",
+    "openMenu": "Open {{restaurant}}'s menu",
+    "closeMenu": "Close the menu",
+    "chapter": "Clip {{number}} of {{count}}",
+    "andMore": "and more",
+    "untagged": "No dish tagged — the menu is the only way in",
+    "pickA": "pick a {{group}}",
+    "list": "List",
+    "share": "Share",
+    "save": "Save this clip",
+    "unsave": "Remove from saved",
+    "hasAClip": "has a clip",
+    "soldOut": "Sold out",
+    "addNamed": "Add {{dish}}",
+    "filmedRatio": "{{filmed}} of {{total}} dishes filmed",
+    "action": {
+      "add": "Add",
+      "choose": "Choose",
+      "menu": "See the menu"
+    }
   },
   "tabs": {
     "home": "Home",
