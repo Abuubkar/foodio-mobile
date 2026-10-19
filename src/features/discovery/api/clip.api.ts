@@ -27,3 +27,19 @@ export async function fetchClipsByMenuItem(menuItemId: string): Promise<Clip[]> 
   );
   return parseResponse(clipListSchema, data, 'GET /clips?menuItemId');
 }
+
+/**
+ * The clips behind a batch of saved ids.
+ *
+ * The API answers `?ids=a,b,c` in its own order, so the caller restores save
+ * order itself. It rejects an empty batch, which is why this returns early
+ * rather than asking — an empty list is a question not worth a round trip.
+ */
+export async function fetchClipsByIds(ids: readonly string[]): Promise<Clip[]> {
+  if (ids.length === 0) return [];
+
+  const { data } = await apiClient.get<unknown>(
+    `/clips?ids=${ids.map(encodeURIComponent).join(',')}`,
+  );
+  return parseResponse(clipListSchema, data, 'GET /clips?ids');
+}

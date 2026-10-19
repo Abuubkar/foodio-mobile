@@ -1,37 +1,35 @@
+import { skipToken, useQuery } from '@tanstack/react-query';
+
+import { queryKeys } from '@/constants/queryKeys';
 import { useSavedStore } from '@/stores/saved.store';
 
+import { fetchClipsByIds } from '../api/clip.api';
 import { kitchensFrom } from '../lib/kitchens';
-
-import { useClips } from './useClips';
 
 /**
  * The saved clips, newest save first, grouped the way the feed groups.
  *
- * Filtered from the feed rather than fetched by id. The API has no by-id
- * filter — `GET /clips?id=…` and `?ids=…` are both ignored and answer with
- * every clip, which is how the first version of this screen came to show all
- * ten when one was saved. Reusing the feed's own query also means Saved costs
- * no extra request and reads from a cache the Clips tab has usually warmed.
+ * Fetched by id rather than filtered out of the feed, so a clip saved long ago
+ * is found whether or not the feed has paged that far. The endpoint answers in
+ * its own order, so save order is restored here — Saved promises newest kept
+ * first, and the API has no reason to know that.
  *
- * The limitation this leaves: a saved clip that sits beyond the pages loaded
- * so far will not appear until the feed has reached it. That wants a real
- * endpoint — `GET /clips?ids=` or `/me/saved` — which lives in the backend
- * repo, not this one.
+ * Idle until the store has hydrated: querying an empty list first would cache
+ * "nothing saved" against the real answer arriving a tick later.
  */
 export function useSavedClips() {
   const clipIds = useSavedStore((state) => state.clipIds);
   const isHydrated = useSavedStore((state) => state.isHydrated);
 
-  const query = useClips();
+  const query = useQuery({
+    queryKey: queryKeys.clips.byIds(clipIds),
+    queryFn: isHydrated ? () => fetchClipsByIds(clipIds) : skipToken,
+  });
 
-  // Save order, not feed order: Saved promises newest kept first.
   const rank = new Map(clipIds.map((id, index) => [id, index]));
-  const clips =
-    query.data && isHydrated
-      ? query.data
-          .filter((clip) => rank.has(clip.id))
-          .sort((a, b) => (rank.get(a.id) ?? 0) - (rank.get(b.id) ?? 0))
-      : undefined;
+  const clips = query.data
+    ? [...query.data].sort((a, b) => (rank.get(a.id) ?? 0) - (rank.get(b.id) ?? 0))
+    : undefined;
 
   return {
     ...query,

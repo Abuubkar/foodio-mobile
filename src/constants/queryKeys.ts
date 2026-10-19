@@ -21,6 +21,8 @@ export const queryKeys = {
     byRestaurant: (restaurantId: string) =>
       [...queryKeys.clips.all, 'restaurant', restaurantId] as const,
     byMenuItem: (menuItemId: string) => [...queryKeys.clips.all, 'menuItem', menuItemId] as const,
+    /** Sorted, so two different save orders of the same set share a cache entry. */
+    byIds: (ids: readonly string[]) => [...queryKeys.clips.all, 'ids', [...ids].sort()] as const,
   },
   plans: {
     all: ['plans'] as const,
