@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SheetContainer, Text } from '@/components/ui';
 import { useRestaurants } from '@/features/restaurants/hooks/useRestaurants';
+import { selectSavedCount, useSavedStore } from '@/stores/saved.store';
 import { useSessionStore } from '@/stores/session.store';
 import { colors } from '@/theme';
 
@@ -70,6 +71,8 @@ export function AccountSheet({ visible, onClose }: AccountSheetProps) {
   const signOut = useSessionStore((state) => state.signOut);
 
   // Names, not ids: "Taco Fiesta · Kitchen" is a place, "rest-1" is a slug.
+  const savedCount = useSavedStore(selectSavedCount);
+
   const { data: restaurants } = useRestaurants();
   const nameOf = (id: string) => restaurants?.find((item) => item.id === id)?.name ?? id;
 
@@ -166,6 +169,18 @@ export function AccountSheet({ visible, onClose }: AccountSheetProps) {
             icon="receipt-outline"
             label={t('identity.yourOrders')}
             onPress={() => go('/orders')}
+          />
+          <Row
+            icon="bookmark-outline"
+            label={t('identity.savedClips')}
+            onPress={() => go('/saved')}
+            trailing={
+              savedCount > 0 ? (
+                <Text variant="caption" className="text-gray-400">
+                  {savedCount}
+                </Text>
+              ) : undefined
+            }
           />
           <Row
             icon="location-outline"

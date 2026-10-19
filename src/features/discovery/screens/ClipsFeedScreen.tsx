@@ -7,13 +7,15 @@ import { EmptyState, ErrorState, LoadingState } from '@/components/shared';
 import { useReduceMotion } from '@/hooks/useReduceMotion';
 
 import { ClipEndCard } from '../components/ClipEndCard';
-import { ClipFeedCell } from '../components/ClipFeedCell';
+import { KitchenFeedCell } from '../components/KitchenFeedCell';
 import { useClips } from '../hooks/useClips';
-import type { Clip } from '../types/clip.types';
+import type { Kitchen } from '../lib/kitchens';
+import { kitchensFrom } from '../lib/kitchens';
 
-type FeedItem = { kind: 'clip'; clip: Clip } | { kind: 'end' };
+type FeedItem = { kind: 'kitchen'; kitchen: Kitchen } | { kind: 'end' };
 
-const keyOf = (item: FeedItem): string => (item.kind === 'clip' ? item.clip.id : 'end');
+const keyOf = (item: FeedItem): string =>
+  item.kind === 'kitchen' ? item.kitchen.restaurantId : 'end';
 
 export function ClipsFeedScreen() {
   const { t } = useTranslation();
@@ -22,6 +24,8 @@ export function ClipsFeedScreen() {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [pageHeight, setPageHeight] = useState(0);
+  /** The feed must hold still while a kitchen's menu is up. */
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // One threshold only — setting both throws (RN source, via #23).
   const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 80 }).current;
@@ -35,11 +39,12 @@ export function ClipsFeedScreen() {
       item.kind === 'end' ? (
         <ClipEndCard height={pageHeight} />
       ) : (
-        <ClipFeedCell
-          clip={item.clip}
+        <KitchenFeedCell
+          kitchen={item.kitchen}
           height={pageHeight}
           isActive={index === activeIndex}
           reduceMotion={reduceMotion}
+          onMenuOpenChange={setMenuOpen}
         />
       ),
     [pageHeight, activeIndex, reduceMotion],
@@ -66,9 +71,14 @@ export function ClipsFeedScreen() {
     );
   }
 
-  // The end card means the true end of the feed, not just this page's tail.
+  /*
+    The feed scrolls through kitchens, not clips. Grouping happens here, over
+    everything loaded so far, so a later page can still add a chapter to a
+    kitchen already on screen rather than repeating it further down.
+  */
   const items: FeedItem[] = [
-    ...clips.map((clip) => ({ kind: 'clip', clip }) as FeedItem),
+    ...kitchensFrom(clips).map((kitchen) => ({ kind: 'kitchen', kitchen }) as FeedItem),
+    // The end card means the true end of the feed, not just this page's tail.
     ...(hasNextPage === false ? [{ kind: 'end' } as FeedItem] : []),
   ];
 
@@ -80,6 +90,7 @@ export function ClipsFeedScreen() {
           keyExtractor={keyOf}
           renderItem={renderItem}
           pagingEnabled
+          scrollEnabled={!menuOpen}
           showsVerticalScrollIndicator={false}
           // 5, not 3: neighbours stay mounted through a fast fling, so a fresh
           // cell's black flash cannot outrun the scroll.

@@ -11,6 +11,7 @@ import { QueryProvider } from '@/providers/QueryProvider';
 import { useActiveAddressStore } from '@/stores/activeAddress.store';
 import { useCartStore } from '@/stores/cart.store';
 import { OnboardingStep, useOnboardingStore } from '@/stores/onboarding.store';
+import { useSavedStore } from '@/stores/saved.store';
 import { useSessionStore } from '@/stores/session.store';
 import { colors } from '@/theme';
 
@@ -84,6 +85,17 @@ function RootNavigator() {
     void hydrateCart();
   }, [cartHydrated, hydrateCart]);
 
+  const savedHydrated = useSavedStore((state) => state.isHydrated);
+  const hydrateSaved = useSavedStore((state) => state.hydrate);
+
+  useEffect(() => {
+    if (savedHydrated) return;
+
+    // Same reasoning as the Cart: nothing renders differently for the instant
+    // before this settles, except a bookmark that is briefly not filled in.
+    void hydrateSaved();
+  }, [savedHydrated, hydrateSaved]);
+
   // Neither gates the splash screen: a push isn't needed for any screen to render.
   useSyncPushToken();
   useNotificationListener();
@@ -153,6 +165,8 @@ function RootNavigator() {
         <Stack.Screen name="clip/[id]" options={{ contentStyle: { backgroundColor: 'black' } }} />
         <Stack.Screen name="checkout" />
         <Stack.Screen name="address" />
+        {/* Dark like the Clips feed it collects from, not the white app. */}
+        <Stack.Screen name="saved" options={{ contentStyle: { backgroundColor: colors.black } }} />
         <Stack.Screen name="order/[id]" />
       </Stack.Protected>
 
