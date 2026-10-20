@@ -45,7 +45,7 @@ export function usePhotoUpload() {
       });
 
       const file = await fetch(photo.uri).then((response) => response.blob());
-      await uploadPhoto(signed, file, UPLOAD_CONTENT_TYPE);
+      await uploadPhoto(signed.uploadUrl, file, UPLOAD_CONTENT_TYPE);
 
       return signed.publicUrl;
     },

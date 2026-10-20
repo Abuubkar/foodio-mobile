@@ -37,11 +37,11 @@ export async function signPhotoUpload({
  * looking at the file on disk.
  */
 export async function uploadPhoto(
-  upload: SignedUpload,
+  uploadUrl: string,
   file: Blob,
   contentType: PhotoContentType,
 ): Promise<void> {
-  const response = await fetch(upload.uploadUrl, {
+  const response = await fetch(uploadUrl, {
     method: 'PUT',
     headers: { 'Content-Type': contentType },
     body: file,

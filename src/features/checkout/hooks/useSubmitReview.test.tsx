@@ -23,6 +23,7 @@ const postedReview: Review = {
   rating: 5,
   comment: '',
   postedAt: '2026-08-08T12:00:00Z',
+  photos: [],
   restaurantId: 'rest-1',
   orderId: 'order-1',
 };

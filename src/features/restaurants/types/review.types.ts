@@ -24,6 +24,23 @@ export const reviewSchema = restaurantReviewSchema.extend({
 
 export const reviewListSchema = z.array(reviewSchema);
 
+/** The most a review carries. The server enforces it; this keeps the UI honest. */
+export const REVIEW_PHOTO_MAX = 5;
+
+/**
+ * `POST /reviews/:reviewId/photos`.
+ *
+ * No public URL comes back, unlike the staff path: the photograph is not
+ * served until it is confirmed, so there is nothing to show yet and nothing
+ * for a caller to save.
+ */
+export const signedReviewPhotoSchema = z.object({
+  mediaId: z.string(),
+  /** Absolute. PUT the bytes here, with no Authorization header. */
+  uploadUrl: z.string(),
+  expiresAt: z.string(),
+});
+
 /**
  * What the sheet collects. `comment` stays a plain string while typing;
  * `toNewReview` drops it from the payload when it is only whitespace.
@@ -35,6 +52,7 @@ export const reviewFormSchema = z.object({
 
 export type NewReview = z.infer<typeof newReviewSchema>;
 export type Review = z.infer<typeof reviewSchema>;
+export type SignedReviewPhoto = z.infer<typeof signedReviewPhotoSchema>;
 export type ReviewFormValues = z.infer<typeof reviewFormSchema>;
 
 export function toNewReview(values: ReviewFormValues): NewReview {

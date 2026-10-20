@@ -11,6 +11,7 @@ import { formatDate } from '@/utils/date';
 import type { RestaurantReview } from '../types/restaurant.types';
 
 import { ReviewAvatar } from './ReviewAvatar';
+import { ReviewPhotos } from './ReviewPhotos';
 
 type ReviewCardProps = {
   review: RestaurantReview;
@@ -45,6 +46,8 @@ export function ReviewCard({ review }: ReviewCardProps) {
           {review.comment}
         </Text>
       ) : null}
+
+      <ReviewPhotos photos={review.photos} />
     </View>
   );
 }

@@ -273,7 +273,21 @@
     "errors": {
       "rating": "Tap a star to rate.",
       "comment": "That is too long."
-    }
+    },
+    "photosLabel": "Photos",
+    "photosHint": "Up to {{count}}. Added after your rating is sent.",
+    "photosFull": "That's all {{count}}.",
+    "addPhoto": "Add a photo",
+    "removePhoto": "Remove this photo",
+    "sendingPhotos": "Sending photos…",
+    "photosFailed_one": "Your rating was sent. {{count}} photo didn't upload.",
+    "photosFailed_other": "Your rating was sent. {{count}} photos didn't upload.",
+    "photoLabel": "Photo on this review",
+    "reportHint": "Press and hold to report",
+    "reportTitle": "Report this photo?",
+    "reportBody": "Someone will look at it. The review stays up meanwhile.",
+    "reportConfirm": "Report",
+    "reportedShort": "Reported"
   },
   "clips": {
     "title": "Clips",
