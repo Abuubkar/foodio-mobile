@@ -10,6 +10,11 @@ export const openingHoursSchema = z.object({
   closesAt: z.string(),
 });
 
+export const reviewPhotoSchema = z.object({
+  id: z.string(),
+  url: z.string(),
+});
+
 export const restaurantReviewSchema = z.object({
   id: z.string(),
   author: z.string(),
@@ -18,6 +23,15 @@ export const restaurantReviewSchema = z.object({
   comment: z.string(),
   /** ISO 8601 date. */
   postedAt: z.string(),
+  /**
+   * Photographs the customer attached, in the order they chose. Defaulted: a
+   * review without any is the normal case, and an API that has not shipped
+   * this yet must still parse.
+   *
+   * Each carries its id as well as its URL, because reporting needs the id and
+   * the two are not derivable from each other.
+   */
+  photos: z.array(reviewPhotoSchema).default([]),
 });
 
 export const deliveryEstimateSchema = z.object({
@@ -78,3 +92,5 @@ export type DeliveryEstimate = z.infer<typeof deliveryEstimateSchema>;
 export type RestaurantReview = z.infer<typeof restaurantReviewSchema>;
 export type RestaurantSummary = z.infer<typeof restaurantSummarySchema>;
 export type Restaurant = z.infer<typeof restaurantSchema>;
+
+export type ReviewPhoto = z.infer<typeof reviewPhotoSchema>;

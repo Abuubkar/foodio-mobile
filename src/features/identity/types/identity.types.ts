@@ -30,8 +30,14 @@ export const personSchema = z.object({
  * E.164. Contact information rather than a credential since ADR-0019 — stored
  * and compared in this exact form, so the client normalises before sending.
  */
-/** Who vouched for a person. The server verifies the token; this only names it. */
-export const IDENTITY_PROVIDERS = ['google', 'apple'] as const;
+/**
+ * Who vouched for a person. The server verifies the token; this only names it.
+ *
+ * `dev` is a local testing door rather than a provider: the API refuses it
+ * unless `DEV_SIGN_IN` is on, which its environment schema will not allow in
+ * production. See backend ADR-0022.
+ */
+export const IDENTITY_PROVIDERS = ['google', 'apple', 'dev'] as const;
 
 export const identityProviderSchema = z.enum(IDENTITY_PROVIDERS);
 

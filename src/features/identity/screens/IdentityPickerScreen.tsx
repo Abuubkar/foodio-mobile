@@ -9,7 +9,8 @@ import { ErrorState, ScreenHeader } from '@/components/shared';
 import { Button, Text } from '@/components/ui';
 import { colors } from '@/theme';
 
-import { useProviderSignIn } from '../hooks/useProviderSignIn';
+import { DevSignIn } from '../components/DevSignIn';
+import { devSignInOffered, useProviderSignIn } from '../hooks/useProviderSignIn';
 
 /**
  * Two ways in, and no code to type.
@@ -25,7 +26,7 @@ import { useProviderSignIn } from '../hooks/useProviderSignIn';
 export function IdentityPickerScreen() {
   const { t } = useTranslation();
   const router = useRouter();
-  const { google, apple, appleAvailable, pending, error } = useProviderSignIn();
+  const { google, apple, dev, appleAvailable, pending, error } = useProviderSignIn();
 
   // Only on success. A cancelled sheet leaves the Person here, and a failed one
   // leaves them here with the reason on screen.
@@ -59,6 +60,10 @@ export function IdentityPickerScreen() {
           >
             {pending === 'apple' ? t('identity.signingIn') : t('identity.continueWithApple')}
           </Button>
+        ) : null}
+
+        {devSignInOffered ? (
+          <DevSignIn onSignIn={(handle) => void dev(handle).then(leaveIfSignedIn)} busy={pending} />
         ) : null}
 
         {error !== null ? <ErrorState error={error} /> : null}

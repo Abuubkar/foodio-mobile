@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -17,8 +17,11 @@ import {
 } from '@/features/restaurants/types/review.types';
 import { colors } from '@/theme';
 
+import { useReviewPhotos } from '../hooks/useReviewPhotos';
 import { useSubmitReview } from '../hooks/useSubmitReview';
 import { isAlreadyReviewed } from '../lib/reviewSubmission';
+
+import { ReviewPhotoPicker } from './ReviewPhotoPicker';
 
 const STARS = Array.from({ length: REVIEW_RATING_MAX }, (_, index) => index + 1);
 
@@ -34,6 +37,14 @@ export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: Ra
   const { t } = useTranslation();
   const submitReview = useSubmitReview();
 
+  /*
+    Local files, not uploads. Photographs attach to a review that exists, so
+    nothing leaves the phone until the rating has been accepted — see
+    backend ADR-0021 for why that order is the one that works.
+  */
+  const [photos, setPhotos] = useState<string[]>([]);
+  const { pick, isPicking, sendPhotos, isSending, outcome, resetPhotos } = useReviewPhotos();
+
   const { control, handleSubmit, reset } = useForm<ReviewFormValues>({
     resolver: zodResolver(reviewFormSchema),
     // `rating: 0` means "nothing picked yet"; the schema refuses it.
@@ -45,6 +56,8 @@ export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: Ra
     if (visible) {
       reset();
       submitReview.reset();
+      setPhotos([]);
+      resetPhotos();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- reset refs are stable
   }, [visible]);
@@ -53,13 +66,33 @@ export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: Ra
     submitReview.mutate(
       { orderId, review: toNewReview(values) },
       {
-        onSuccess: onClose,
+        onSuccess: (review) => {
+          if (photos.length === 0) {
+            onClose();
+            return;
+          }
+
+          /*
+            The review is posted. Photographs follow, and a failure among them
+            is not a failed review — so the sheet stays open only long enough
+            to say what happened, and never reopens the rating for editing.
+          */
+          void sendPhotos(review.id, photos).then((result) => {
+            if (result.failed === 0) onClose();
+          });
+        },
         // Already reviewed settles the affordance into "Rated" — close quietly.
         onError: (error) => {
           if (isAlreadyReviewed(error)) onClose();
         },
       },
     );
+  };
+
+  const addPhoto = () => {
+    void pick().then((uri) => {
+      if (uri) setPhotos((current) => [...current, uri]);
+    });
   };
 
   const submitError =
@@ -127,6 +160,19 @@ export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: Ra
         )}
       />
 
+      <ReviewPhotoPicker
+        uris={photos}
+        onAdd={addPhoto}
+        onRemove={(uri) => setPhotos((current) => current.filter((item) => item !== uri))}
+        busy={isPicking}
+      />
+
+      {outcome && outcome.failed > 0 ? (
+        <Text variant="caption" className="mt-3 text-warning-700" accessibilityLiveRegion="polite">
+          {t('review.photosFailed', { count: outcome.failed })}
+        </Text>
+      ) : null}
+
       {submitError ? (
         <Text variant="caption" className="mt-3 text-error-500" accessibilityLiveRegion="polite">
           {submitError.message}
@@ -139,10 +185,10 @@ export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: Ra
         </Button>
         <Button
           onPress={() => void handleSubmit(submit)()}
-          disabled={submitReview.isPending}
+          disabled={submitReview.isPending || isSending}
           className="flex-1"
         >
-          {t('review.submit')}
+          {isSending ? t('review.sendingPhotos') : t('review.submit')}
         </Button>
       </View>
     </SheetContainer>

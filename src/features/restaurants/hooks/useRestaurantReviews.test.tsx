@@ -20,6 +20,7 @@ const reviewWith = (id: string): Review => ({
   rating: 5,
   comment: 'Great.',
   postedAt: '2026-08-01',
+  photos: [],
   restaurantId: 'rest-1',
   orderId: `order-${id}`,
 });
