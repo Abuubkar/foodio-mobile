@@ -34,6 +34,16 @@ function configureGoogle(): void {
   configured = true;
 }
 
+/**
+ * Whether this build offers the dev door at all.
+ *
+ * Two gates, both compile-time-ish: `__DEV__` is false in any release build,
+ * and the flag has to be set on purpose. The API is the real guard — it
+ * refuses `dev` unless its own switch is on — but a release binary should not
+ * even draw the button.
+ */
+export const devSignInOffered = __DEV__ && process.env.EXPO_PUBLIC_DEV_SIGN_IN?.trim() === 'true';
+
 /** Apple hands over a name only on the very first sign-in, in pieces. */
 function nameFrom(
   credential: AppleAuthentication.AppleAuthenticationCredential,
@@ -136,5 +146,15 @@ export function useProviderSignIn() {
         const displayName = nameFrom(credential);
         return displayName === undefined ? { idToken } : { idToken, displayName };
       }),
+
+    /**
+     * The local door. No sheet, no provider, no network beyond our own API.
+     *
+     * The handle is both the identity and the person picker: the same handle
+     * is the same person every time, so a test can place an order, restart,
+     * sign back in and still own it.
+     */
+    dev: (handle: string): Promise<boolean> =>
+      run('dev', () => Promise.resolve({ idToken: handle.trim() })),
   };
 }
