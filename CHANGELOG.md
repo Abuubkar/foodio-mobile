@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.0](https://github.com/Abuubkar/foodio-mobile/compare/v1.4.0...v1.5.0) (2026-10-21)
+
+
+### Features
+
+* **identity:** the dev sign-in door, drawn only in a dev build ([#235](https://github.com/Abuubkar/foodio-mobile/issues/235)) ([520eb79](https://github.com/Abuubkar/foodio-mobile/commit/520eb793f9354a92ed8af052f5d91823888e8a46))
+* **reviews:** photographs on a review, picked before and sent after ([#234](https://github.com/Abuubkar/foodio-mobile/issues/234)) ([b995295](https://github.com/Abuubkar/foodio-mobile/commit/b995295dd3babdcc90e39a4fbc31c1d376ef32ad))
+* **saved:** saving needs a session, and sign-out empties the list ([#231](https://github.com/Abuubkar/foodio-mobile/issues/231)) ([b218761](https://github.com/Abuubkar/foodio-mobile/commit/b21876166ba450111eec62f02fca2c6dd4c2a340))
+
 ## [1.4.0](https://github.com/Abuubkar/foodio-mobile/compare/v1.3.0...v1.4.0) (2026-10-19)
 
 
