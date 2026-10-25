@@ -171,6 +171,11 @@ export function AccountSheet({ visible, onClose }: AccountSheetProps) {
             onPress={() => go('/orders')}
           />
           <Row
+            icon="person-circle-outline"
+            label={t('identity.yourProfile')}
+            onPress={() => go('/edit-profile')}
+          />
+          <Row
             icon="bookmark-outline"
             label={t('identity.savedClips')}
             onPress={() => go('/saved')}

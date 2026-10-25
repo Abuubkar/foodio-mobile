@@ -28,6 +28,8 @@ import '@/i18n';
 const customer: Person = {
   id: 'aisha',
   displayName: 'Aisha K.',
+  handle: null,
+  avatarUrl: '',
   phone: '+923001230001',
   entitlements: [],
 };
@@ -35,6 +37,8 @@ const customer: Person = {
 const cook: Person = {
   id: 'marco',
   displayName: 'Marco R.',
+  handle: null,
+  avatarUrl: '',
   phone: null,
   entitlements: [{ restaurantId: 'rest-1', capabilities: ['kitchen'] }],
 };

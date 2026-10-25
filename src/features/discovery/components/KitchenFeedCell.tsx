@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Photo, Text } from '@/components/ui';
+import { ClipAuthorLink } from '@/features/clips/components/ClipAuthorLink';
 import { useReportClip } from '@/features/clips/hooks/useReportClip';
 import { useRestaurantMenu } from '@/features/menu/hooks/useRestaurantMenu';
 import type { MenuItem } from '@/features/menu/types/menu.types';
@@ -331,6 +332,12 @@ export function KitchenFeedCell({
         <Text variant="caption" className="mt-1 text-white/80" numberOfLines={1}>
           {dishLine}
         </Text>
+
+        {/* Under the dish, not over it: the kitchen's header owns the top of
+            the cell, and a customer's clip is still about the food first. */}
+        <View className="mt-2">
+          <ClipAuthorLink clip={clip} onDark />
+        </View>
 
         <ClipActions
           primary={primary}
