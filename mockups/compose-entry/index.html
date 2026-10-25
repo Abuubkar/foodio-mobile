@@ -1,0 +1,41 @@
+<!doctype html>
+<!--
+  THROWAWAY PROTOTYPE — not production code, not React Native.
+
+  Question it answers: where does "post a clip" live? It is currently a 44px
+  circle in the top-right of the feed, under the kitchen's Menu pill, and that
+  is a weak place for the app's main creation action.
+
+  Six directions, switchable with ?variant=A..F or the arrows. Each is the
+  pattern a large app actually shipped, applied to Foodio's four-tab bar.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Foodio — where "post a clip" lives</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="stage">
+      <div class="phone">
+        <div class="phone-notch" aria-hidden="true"></div>
+        <div class="screen" id="screen"></div>
+      </div>
+    </div>
+
+    <nav class="switcher" aria-label="Prototype variant switcher">
+      <button id="prev" aria-label="Previous variant">&larr;</button>
+      <span class="switcher-label">
+        <b id="vkey">A</b>
+        <span id="vname"></span>
+      </span>
+      <button id="next" aria-label="Next variant">&rarr;</button>
+    </nav>
+
+    <p class="note" id="vnote"></p>
+    <p class="note dim" id="vcost"></p>
+
+    <script src="variants.js"></script>
+  </body>
+</html>
