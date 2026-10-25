@@ -287,7 +287,18 @@
     "reportTitle": "Report this photo?",
     "reportBody": "Someone will look at it. The review stays up meanwhile.",
     "reportConfirm": "Report",
-    "reportedShort": "Reported"
+    "reportedShort": "Reported",
+    "video": {
+      "add": "Film the meal (up to {{seconds}}s)",
+      "opening": "Opening the camera…",
+      "again": "Film again",
+      "filmed": "Video attached",
+      "seconds": "{{seconds}} seconds",
+      "alsoPost": "Also post this to Clips",
+      "sending": "Sending video…",
+      "failed": "The video did not upload. Your rating was still posted.",
+      "play": "Play the video on this review"
+    }
   },
   "clips": {
     "title": "Clips",

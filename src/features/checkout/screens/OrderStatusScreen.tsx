@@ -177,6 +177,7 @@ export function OrderStatusScreen() {
       <RateOrderSheet
         visible={rating}
         orderId={order.id}
+        restaurantId={order.restaurantId}
         restaurantName={order.restaurantName}
         onClose={() => setRating(false)}
       />

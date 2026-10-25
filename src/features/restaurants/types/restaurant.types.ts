@@ -15,6 +15,16 @@ export const reviewPhotoSchema = z.object({
   url: z.string(),
 });
 
+/** A video on a review: enough to draw a poster and then play it. */
+export const reviewVideoSchema = z.object({
+  /** The Clip this is, underneath. One object serving two surfaces. */
+  clipId: z.string(),
+  url: z.string(),
+  /** Shown before any decoder runs — a review must render without one working. */
+  posterUrl: z.string(),
+  durationSeconds: z.number().int().positive(),
+});
+
 export const restaurantReviewSchema = z.object({
   id: z.string(),
   author: z.string(),
@@ -32,6 +42,13 @@ export const restaurantReviewSchema = z.object({
    * the two are not derivable from each other.
    */
   photos: z.array(reviewPhotoSchema).default([]),
+  /**
+   * The video the customer filmed, when they filmed one.
+   *
+   * Optional rather than defaulted: a review without one is the normal case,
+   * and the server omits the field entirely rather than sending null.
+   */
+  video: reviewVideoSchema.optional(),
 });
 
 export const deliveryEstimateSchema = z.object({
@@ -89,6 +106,7 @@ export const restaurantSchema = restaurantSummarySchema.extend({
 export const restaurantSummaryListSchema = z.array(restaurantSummarySchema);
 
 export type DeliveryEstimate = z.infer<typeof deliveryEstimateSchema>;
+export type ReviewVideo = z.infer<typeof reviewVideoSchema>;
 export type RestaurantReview = z.infer<typeof restaurantReviewSchema>;
 export type RestaurantSummary = z.infer<typeof restaurantSummarySchema>;
 export type Restaurant = z.infer<typeof restaurantSchema>;

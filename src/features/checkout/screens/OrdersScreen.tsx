@@ -47,7 +47,7 @@ export function OrdersScreen() {
   /* One sheet for the whole list, not one per row: a Modal inside renderItem
      is mounted once per delivered order, and loses its first tap to the list
      while the comment keyboard is up (#211). */
-  const rating = useSheetTarget<{ id: string; restaurantName: string }>();
+  const rating = useSheetTarget<{ id: string; restaurantId: string; restaurantName: string }>();
 
   /* Orders belong to a Person. Signed out this screen showed the server's own
      "Not authenticated.", with no way to sign in — issue #177. */
@@ -139,7 +139,13 @@ export function OrdersScreen() {
                 <RateOrderAffordance
                   orderId={order.id}
                   variant="row"
-                  onRate={() => rating.open({ id: order.id, restaurantName: order.restaurantName })}
+                  onRate={() =>
+                    rating.open({
+                      id: order.id,
+                      restaurantId: order.restaurantId,
+                      restaurantName: order.restaurantName,
+                    })
+                  }
                 />
               ) : null}
             </Pressable>
@@ -150,6 +156,7 @@ export function OrdersScreen() {
       <RateOrderSheet
         visible={rating.visible}
         orderId={rating.target?.id ?? ''}
+        restaurantId={rating.target?.restaurantId ?? ''}
         restaurantName={rating.target?.restaurantName ?? ''}
         onClose={rating.close}
       />

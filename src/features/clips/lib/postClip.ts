@@ -17,6 +17,7 @@ export type ClipPoster = {
     restaurantId?: string | undefined;
     menuItemId?: string | undefined;
     orderId?: string | undefined;
+    postToFeed?: boolean | undefined;
   }) => Promise<{ id: string }>;
 };
 
@@ -52,5 +53,6 @@ export async function postClipDraft(draft: ClipDraft, deps: ClipPoster): Promise
     ...(draft.restaurantId === undefined ? {} : { restaurantId: draft.restaurantId }),
     ...(draft.menuItemId === undefined ? {} : { menuItemId: draft.menuItemId }),
     ...(draft.orderId === undefined ? {} : { orderId: draft.orderId }),
+    ...(draft.postToFeed === undefined ? {} : { postToFeed: draft.postToFeed }),
   });
 }

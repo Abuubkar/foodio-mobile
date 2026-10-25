@@ -8,6 +8,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Button, SheetContainer, Text, TextField } from '@/components/ui';
+import type { ClipTake } from '@/features/clips/hooks/usePostClip';
+import { usePostClip } from '@/features/clips/hooks/usePostClip';
 import type { ReviewFormValues } from '@/features/restaurants/types/review.types';
 import {
   REVIEW_COMMENT_MAX,
@@ -15,6 +17,7 @@ import {
   reviewFormSchema,
   toNewReview,
 } from '@/features/restaurants/types/review.types';
+import { logError } from '@/lib/logger';
 import { colors } from '@/theme';
 
 import { useReviewPhotos } from '../hooks/useReviewPhotos';
@@ -22,18 +25,27 @@ import { useSubmitReview } from '../hooks/useSubmitReview';
 import { isAlreadyReviewed } from '../lib/reviewSubmission';
 
 import { ReviewPhotoPicker } from './ReviewPhotoPicker';
+import { ReviewVideoPicker } from './ReviewVideoPicker';
 
 const STARS = Array.from({ length: REVIEW_RATING_MAX }, (_, index) => index + 1);
 
 type RateOrderSheetProps = {
   visible: boolean;
   orderId: string;
+  /** The video is a Clip, and a Clip about an order names the restaurant too. */
+  restaurantId: string;
   restaurantName: string;
   onClose: () => void;
 };
 
 /** Five stars, an optional comment, one submission. */
-export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: RateOrderSheetProps) {
+export function RateOrderSheet({
+  visible,
+  orderId,
+  restaurantId,
+  restaurantName,
+  onClose,
+}: RateOrderSheetProps) {
   const { t } = useTranslation();
   const submitReview = useSubmitReview();
 
@@ -44,6 +56,17 @@ export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: Ra
   */
   const [photos, setPhotos] = useState<string[]>([]);
   const { pick, isPicking, sendPhotos, isSending, outcome, resetPhotos } = useReviewPhotos();
+
+  /*
+    The video goes the other way round from the photographs: it has to exist
+    before the review, because the review carries its Clip id. Unchecked is the
+    default — publishing somebody's footage to a public feed is a different act
+    from leaving a review. See backend ADR-0023.
+  */
+  const [take, setTake] = useState<ClipTake | null>(null);
+  const [alsoPostToClips, setAlsoPostToClips] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const { film, isFilming, send: sendClip } = usePostClip();
 
   const { control, handleSubmit, reset } = useForm<ReviewFormValues>({
     resolver: zodResolver(reviewFormSchema),
@@ -58,19 +81,56 @@ export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: Ra
       submitReview.reset();
       setPhotos([]);
       resetPhotos();
+      setTake(null);
+      setAlsoPostToClips(false);
+      setVideoFailed(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- reset refs are stable
   }, [visible]);
 
-  const submit = (values: ReviewFormValues) => {
+  /**
+   * Sends the video first, because the review carries its Clip id.
+   *
+   * A failure here does **not** fail the review — the same rule the
+   * photographs follow. Losing the rating and the comment because an upload
+   * timed out is the worse outcome by a long way, so the review goes without
+   * the video and the sheet says so.
+   */
+  const sendVideoFirst = async (): Promise<string | undefined> => {
+    if (!take) return undefined;
+
+    try {
+      const clip = await sendClip.mutateAsync({
+        videoUri: take.videoUri,
+        posterUri: take.posterUri,
+        durationSeconds: take.durationSeconds,
+        caption: '',
+        restaurantId,
+        orderId,
+        postToFeed: alsoPostToClips,
+      });
+
+      return clip.id;
+    } catch (error) {
+      logError('review.video.send', error);
+      setVideoFailed(true);
+      return undefined;
+    }
+  };
+
+  const submit = async (values: ReviewFormValues) => {
+    const clipId = await sendVideoFirst();
+
     submitReview.mutate(
-      { orderId, review: toNewReview(values) },
+      { orderId, review: toNewReview(values, clipId) },
       {
         onSuccess: (review) => {
-          if (photos.length === 0) {
+          // Held open when the video failed, so the note below can be read.
+          if (photos.length === 0 && !videoFailed) {
             onClose();
             return;
           }
+          if (photos.length === 0) return;
 
           /*
             The review is posted. Photographs follow, and a failure among them
@@ -87,6 +147,16 @@ export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: Ra
         },
       },
     );
+  };
+
+  const onFilm = () => {
+    void film().then((filmed) => {
+      // Backing out of the camera must not discard a take they already have.
+      if (filmed) {
+        setTake(filmed);
+        setVideoFailed(false);
+      }
+    });
   };
 
   const addPhoto = () => {
@@ -167,6 +237,21 @@ export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: Ra
         busy={isPicking}
       />
 
+      <ReviewVideoPicker
+        take={take}
+        onFilm={onFilm}
+        isFilming={isFilming}
+        alsoPostToClips={alsoPostToClips}
+        onAlsoPostToClipsChange={setAlsoPostToClips}
+        disabled={submitReview.isPending || sendClip.isPending}
+      />
+
+      {videoFailed ? (
+        <Text variant="caption" className="mt-3 text-warning-700" accessibilityLiveRegion="polite">
+          {t('review.video.failed')}
+        </Text>
+      ) : null}
+
       {outcome && outcome.failed > 0 ? (
         <Text variant="caption" className="mt-3 text-warning-700" accessibilityLiveRegion="polite">
           {t('review.photosFailed', { count: outcome.failed })}
@@ -185,10 +270,14 @@ export function RateOrderSheet({ visible, orderId, restaurantName, onClose }: Ra
         </Button>
         <Button
           onPress={() => void handleSubmit(submit)()}
-          disabled={submitReview.isPending || isSending}
+          disabled={submitReview.isPending || isSending || sendClip.isPending}
           className="flex-1"
         >
-          {isSending ? t('review.sendingPhotos') : t('review.submit')}
+          {sendClip.isPending
+            ? t('review.video.sending')
+            : isSending
+              ? t('review.sendingPhotos')
+              : t('review.submit')}
         </Button>
       </View>
     </SheetContainer>
