@@ -71,17 +71,21 @@ export function ProfileScreen() {
               <EmptyState message={t('profile.noClips')} className="py-6" />
             ) : null}
 
-            <View className="flex-row flex-wrap gap-2">
+            <View className="flex-row flex-wrap justify-between">
               {(clips.data ?? []).map((clip, index) => (
-                <SavedClipTile
-                  key={clip.id}
-                  clip={clip}
-                  title={clip.caption}
-                  subtitle={clipHeading(clip)}
-                  // Every third tile taller, so the grid has a rhythm rather
-                  // than reading as a spreadsheet.
-                  tall={index % 3 === 2}
-                />
+                /* The tile sizes itself to its parent, so the parent has to
+                   have a width — dropped into a bare wrapping row it collapses
+                   to nothing and the grid renders empty. */
+                <View key={clip.id} className="w-[48%]">
+                  <SavedClipTile
+                    clip={clip}
+                    title={clip.caption}
+                    subtitle={clipHeading(clip)}
+                    // Every third tile taller, so the grid has a rhythm rather
+                    // than reading as a spreadsheet.
+                    tall={index % 3 === 2}
+                  />
+                </View>
               ))}
             </View>
           </View>
