@@ -5,8 +5,13 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { useTranslation } from 'react-i18next';
 
+import { ComposeTabButton } from '@/features/clips/components/ComposeTabButton';
 import { selectItemCount, useCartStore } from '@/stores/cart.store';
 import { colors } from '@/theme';
+
+/* Hoisted: an inline arrow here is a new component identity on every render
+   of the bar, which makes the navigator remount the button each time. */
+const renderComposeButton = () => <ComposeTabButton />;
 
 export default function TabsLayout() {
   const { t } = useTranslation();
@@ -59,6 +64,15 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="play-circle-outline" size={size} color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="post"
+        options={{
+          title: t('tabs.post'),
+          /* Renders itself entirely: it is a button that pushes a screen, not
+             a destination you switch to, so none of the tab chrome applies. */
+          tabBarButton: renderComposeButton,
         }}
       />
       <Tabs.Screen
