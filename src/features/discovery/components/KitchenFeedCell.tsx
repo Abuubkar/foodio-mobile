@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Photo, Text } from '@/components/ui';
+import { useReportClip } from '@/features/clips/hooks/useReportClip';
 import { useRestaurantMenu } from '@/features/menu/hooks/useRestaurantMenu';
 import type { MenuItem } from '@/features/menu/types/menu.types';
 import { useRestaurant } from '@/features/restaurants/hooks/useRestaurant';
@@ -61,6 +62,7 @@ export function KitchenFeedCell({
   onMenuOpenChange,
 }: KitchenFeedCellProps) {
   const { t, i18n } = useTranslation();
+  const { report, isReported } = useReportClip();
   const router = useRouter();
   const guard = useNavigationGuard();
   const insets = useSafeAreaInsets();
@@ -246,10 +248,25 @@ export function KitchenFeedCell({
       {/* Under every control: later siblings take their own taps. */}
       <Pressable
         onPress={togglePlayback}
+        onLongPress={() => report(clip.id)}
+        delayLongPress={600}
         accessibilityRole="button"
         accessibilityLabel={isPlaying ? t('clips.pause') : t('clips.play')}
+        accessibilityHint={t('clips.report.hint')}
         className="absolute inset-0"
       />
+
+      {isReported(clip.id) ? (
+        <View
+          pointerEvents="none"
+          className="absolute inset-0 items-center justify-center bg-black/65"
+        >
+          <Ionicons name="flag" size={22} color={colors.white} />
+          <Text variant="caption" className="mt-1 text-white">
+            {t('clips.report.reportedShort')}
+          </Text>
+        </View>
+      ) : null}
 
       {pausedByTap ? (
         <View pointerEvents="none" className="absolute inset-0 items-center justify-center">
