@@ -70,6 +70,50 @@ export function looseClips(clips: readonly Clip[]): Clip[] {
   return clips.filter((clip) => clip.restaurantId === undefined);
 }
 
+/**
+ * How often a loose clip is dealt into the run of kitchens.
+ *
+ * Revenue is restaurant subscriptions, and a community cell has no path to an
+ * order — no menu, no Add, no drawer. Purely chronological would let community
+ * content compete for the same scroll as the cells that convert, while a
+ * subscribing restaurant pays for the feed. One in three is a starting point
+ * and the number is here, in one place, so changing it is a one-line decision
+ * rather than an archaeology exercise. See backend ADR-0023.
+ */
+export const KITCHENS_PER_LOOSE_CLIP = 2;
+
+/**
+ * Deals loose clips into the run of kitchens at a fixed ratio.
+ *
+ * Both orders are preserved — this only decides where the two streams meet.
+ * Whatever is left over goes on the end rather than being dropped, so a feed
+ * with two kitchens and nine community clips still shows all nine.
+ */
+export function interleave<K, L>(
+  kitchens: readonly K[],
+  loose: readonly L[],
+  perLoose = KITCHENS_PER_LOOSE_CLIP,
+): ({ kind: 'kitchen'; value: K } | { kind: 'loose'; value: L })[] {
+  const mixed: ({ kind: 'kitchen'; value: K } | { kind: 'loose'; value: L })[] = [];
+  let next = 0;
+
+  kitchens.forEach((kitchen, index) => {
+    mixed.push({ kind: 'kitchen', value: kitchen });
+
+    const due = (index + 1) % perLoose === 0;
+    const remaining = next < loose.length;
+    if (due && remaining) {
+      const value = loose[next];
+      if (value !== undefined) mixed.push({ kind: 'loose', value });
+      next += 1;
+    }
+  });
+
+  for (const value of loose.slice(next)) mixed.push({ kind: 'loose', value });
+
+  return mixed;
+}
+
 const allItems = (menu: RestaurantMenu): MenuItem[] =>
   menu.flatMap((category) => category.menuItems);
 

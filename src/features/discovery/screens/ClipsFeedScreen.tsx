@@ -8,15 +8,21 @@ import { ComposeClipButton } from '@/features/clips/components/ComposeClipButton
 import { useReduceMotion } from '@/hooks/useReduceMotion';
 
 import { ClipEndCard } from '../components/ClipEndCard';
+import { CommunityFeedCell } from '../components/CommunityFeedCell';
 import { KitchenFeedCell } from '../components/KitchenFeedCell';
 import { useClips } from '../hooks/useClips';
 import type { Kitchen } from '../lib/kitchens';
-import { kitchensFrom } from '../lib/kitchens';
+import { interleave, kitchensFrom, looseClips } from '../lib/kitchens';
+import type { Clip } from '../types/clip.types';
 
-type FeedItem = { kind: 'kitchen'; kitchen: Kitchen } | { kind: 'end' };
+type FeedItem =
+  { kind: 'kitchen'; kitchen: Kitchen } | { kind: 'loose'; clip: Clip } | { kind: 'end' };
 
-const keyOf = (item: FeedItem): string =>
-  item.kind === 'kitchen' ? item.kitchen.restaurantId : 'end';
+const keyOf = (item: FeedItem): string => {
+  if (item.kind === 'kitchen') return `kitchen:${item.kitchen.restaurantId}`;
+  if (item.kind === 'loose') return `clip:${item.clip.id}`;
+  return 'end';
+};
 
 export function ClipsFeedScreen() {
   const { t } = useTranslation();
@@ -36,10 +42,21 @@ export function ClipsFeedScreen() {
   }).current;
 
   const renderItem = useCallback(
-    ({ item, index }: { item: FeedItem; index: number }) =>
-      item.kind === 'end' ? (
-        <ClipEndCard height={pageHeight} />
-      ) : (
+    ({ item, index }: { item: FeedItem; index: number }) => {
+      if (item.kind === 'end') return <ClipEndCard height={pageHeight} />;
+
+      if (item.kind === 'loose') {
+        return (
+          <CommunityFeedCell
+            clip={item.clip}
+            height={pageHeight}
+            isActive={index === activeIndex}
+            reduceMotion={reduceMotion}
+          />
+        );
+      }
+
+      return (
         <KitchenFeedCell
           kitchen={item.kitchen}
           height={pageHeight}
@@ -47,7 +64,8 @@ export function ClipsFeedScreen() {
           reduceMotion={reduceMotion}
           onMenuOpenChange={setMenuOpen}
         />
-      ),
+      );
+    },
     [pageHeight, activeIndex, reduceMotion],
   );
 
@@ -73,12 +91,20 @@ export function ClipsFeedScreen() {
   }
 
   /*
-    The feed scrolls through kitchens, not clips. Grouping happens here, over
-    everything loaded so far, so a later page can still add a chapter to a
+    The feed scrolls through kitchens *and loose clips*. Grouping happens here,
+    over everything loaded so far, so a later page can still add a chapter to a
     kitchen already on screen rather than repeating it further down.
+
+    The two streams are dealt together at a ratio rather than merged by date:
+    a community clip has no path to an order, and purely chronological lets it
+    compete for the same scroll as the cells that do. See `interleave`.
   */
   const items: FeedItem[] = [
-    ...kitchensFrom(clips).map((kitchen) => ({ kind: 'kitchen', kitchen }) as FeedItem),
+    ...interleave(kitchensFrom(clips), looseClips(clips)).map((entry) =>
+      entry.kind === 'kitchen'
+        ? ({ kind: 'kitchen', kitchen: entry.value } as FeedItem)
+        : ({ kind: 'loose', clip: entry.value } as FeedItem),
+    ),
     // The end card means the true end of the feed, not just this page's tail.
     ...(hasNextPage === false ? [{ kind: 'end' } as FeedItem] : []),
   ];

@@ -5,6 +5,7 @@ import type { Clip } from '../types/clip.types';
 import {
   dishesInClip,
   filmedCount,
+  interleave,
   kitchensFrom,
   looseClips,
   primaryAction,
@@ -199,5 +200,47 @@ describe('kitchensFrom with loose clips in the feed', () => {
 
     expect(kitchens.map((k) => k.restaurantId)).toEqual(['rest-1']);
     expect(kitchens[0]?.clips.map((c) => c.id)).toEqual(['grouped']);
+  });
+});
+
+describe('interleave', () => {
+  const deal = (kitchens: number, loose: number, perLoose?: number) =>
+    interleave(
+      Array.from({ length: kitchens }, (_, i) => `k${i}`),
+      Array.from({ length: loose }, (_, i) => `l${i}`),
+      perLoose,
+    ).map((entry) => entry.value);
+
+  it('deals one loose clip after every two kitchens', () => {
+    expect(deal(4, 2, 2)).toEqual(['k0', 'k1', 'l0', 'k2', 'k3', 'l1']);
+  });
+
+  it('keeps both orders, and only decides where they meet', () => {
+    expect(deal(6, 3, 2)).toEqual(['k0', 'k1', 'l0', 'k2', 'k3', 'l1', 'k4', 'k5', 'l2']);
+  });
+
+  it('puts what is left over on the end rather than dropping it', () => {
+    // Two kitchens and four community clips still shows all four.
+    expect(deal(2, 4, 2)).toEqual(['k0', 'k1', 'l0', 'l1', 'l2', 'l3']);
+  });
+
+  it('is just the kitchens when nothing is loose', () => {
+    expect(deal(3, 0, 2)).toEqual(['k0', 'k1', 'k2']);
+  });
+
+  it('is just the loose clips when there are no kitchens', () => {
+    expect(deal(0, 2, 2)).toEqual(['l0', 'l1']);
+  });
+
+  it('alternates when every kitchen is due one', () => {
+    expect(deal(3, 3, 1)).toEqual(['k0', 'l0', 'k1', 'l1', 'k2', 'l2']);
+  });
+
+  it('labels which stream each entry came from', () => {
+    expect(interleave(['k0', 'k1'], ['l0'], 2).map((entry) => entry.kind)).toEqual([
+      'kitchen',
+      'kitchen',
+      'loose',
+    ]);
   });
 });
