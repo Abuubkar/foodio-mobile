@@ -1,0 +1,45 @@
+<!doctype html>
+<!--
+  THROWAWAY PROTOTYPE — second pass at the centre plus, after the first was
+  rejected as inelegant.
+
+  What the well-regarded work does and the first attempt did not:
+    1. the bar floats, inset from the edges, rather than spanning the screen
+    2. the plus OVERLAPS the bar's top edge rather than sitting inline in it
+    3. it is small and unlabelled — a modest circle, not a filled slot
+    4. the colour covers a small area, so it reads as a jewel not a traffic sign
+
+  Four takes, ?v=1..4, each shown over the dark clips feed and over light Home.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Foodio — the centre plus, second pass</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="refined.css" />
+  </head>
+  <body>
+    <div class="stage">
+      <div class="phone">
+        <div class="phone-notch" aria-hidden="true"></div>
+        <div class="screen" id="screen"></div>
+      </div>
+      <div class="phone">
+        <div class="phone-notch" aria-hidden="true"></div>
+        <div class="screen light" id="screen-light"></div>
+      </div>
+    </div>
+
+    <nav class="switcher" aria-label="Variant switcher">
+      <button id="prev" aria-label="Previous">&larr;</button>
+      <span class="switcher-label"><b id="vkey">1</b><span id="vname"></span></span>
+      <button id="next" aria-label="Next">&rarr;</button>
+    </nav>
+
+    <p class="note" id="vnote"></p>
+    <p class="note dim">Left: over the clips feed. Right: over Home, where the bar is light.</p>
+
+    <script src="refined.js"></script>
+  </body>
+</html>

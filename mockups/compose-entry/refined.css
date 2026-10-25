@@ -1,0 +1,177 @@
+/* Second pass. Everything here is about the bar and the plus. */
+
+.stage {
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.phone {
+  width: 340px;
+  height: 736px;
+}
+
+.screen.light {
+  background: #fff;
+}
+
+/* A light stand-in for Home, so the plus is judged on both backgrounds. */
+.home-stub {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  padding: 54px 16px 0;
+}
+
+.home-stub .search {
+  height: 42px;
+  border-radius: 999px;
+  background: #f3f4f6;
+}
+
+.home-stub .h {
+  margin: 20px 0 10px;
+  height: 20px;
+  width: 190px;
+  border-radius: 6px;
+  background: #e5e7eb;
+}
+
+.home-stub .cards {
+  display: flex;
+  gap: 10px;
+}
+
+.home-stub .cards i {
+  flex: 1;
+  height: 150px;
+  border-radius: 14px;
+  background: #eef0f3;
+}
+
+/* ---------- 1 & 2: the bar still spans, the plus overlaps its edge ---------- */
+
+.bar-span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 76px;
+  padding-bottom: 14px;
+  display: flex;
+  align-items: center;
+  z-index: 20;
+}
+
+.bar-span.on-dark {
+  background: #0a0a0a;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bar-span.on-light {
+  background: #fff;
+  border-top: 1px solid #eceef1;
+}
+
+.slot {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  color: #9ca3af;
+}
+
+.slot.on {
+  color: var(--primary);
+}
+
+/* The plus, lifted so it breaks the bar's top edge. */
+.lift {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 38px;
+  z-index: 30;
+}
+
+.dot {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+}
+
+.dot.ink {
+  background: #15171d;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.dot.ink.light-shadow {
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.26);
+}
+
+.dot.amber {
+  background: var(--primary);
+  box-shadow: 0 6px 18px rgba(251, 140, 0, 0.42);
+}
+
+/* A hairline ring so the dot separates from whatever is behind it. */
+.ring {
+  padding: 3px;
+  border-radius: 999px;
+  background: #0a0a0a;
+}
+
+.ring.on-light {
+  background: #fff;
+}
+
+/* ---------- 3 & 4: the bar detaches and floats ---------- */
+
+.bar-float {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 18px;
+  height: 60px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  z-index: 20;
+}
+
+.bar-float.on-dark {
+  background: rgba(22, 24, 29, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.bar-float.on-light {
+  background: #fff;
+  border: 1px solid #edeff2;
+  box-shadow: 0 10px 28px rgba(17, 24, 39, 0.14);
+}
+
+.bar-float .slot {
+  font-size: 18px;
+}
+
+/* The pill the active item wears, which is where the label goes. */
+.active-pill {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: rgba(255, 152, 0, 0.16);
+  color: var(--primary);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.bar-float .inline-dot {
+  flex: none;
+  margin: 0 2px;
+}
