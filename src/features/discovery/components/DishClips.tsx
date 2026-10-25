@@ -12,7 +12,7 @@ import { colors } from '@/theme';
 
 import { useMenuItemClips } from '../hooks/useMenuItemClips';
 import type { Clip } from '../types/clip.types';
-import { isCustomerClip } from '../types/clip.types';
+import { clipHeading, isCustomerClip } from '../types/clip.types';
 
 type DishClipsProps = {
   menuItemId: string;
@@ -52,8 +52,8 @@ function ClipTile({ clip }: { clip: Clip }) {
 
   const isCustomer = isCustomerClip(clip);
   const label = isCustomer
-    ? t('clips.customerClipLabel', { restaurant: clip.restaurantName, caption: clip.caption })
-    : t('clips.restaurantClipLabel', { restaurant: clip.restaurantName, caption: clip.caption });
+    ? t('clips.customerClipLabel', { restaurant: clipHeading(clip), caption: clip.caption })
+    : t('clips.restaurantClipLabel', { restaurant: clipHeading(clip), caption: clip.caption });
 
   return (
     <Pressable
@@ -85,7 +85,7 @@ function ClipTile({ clip }: { clip: Clip }) {
           className={isCustomer ? 'ml-1 text-success-500' : 'ml-1 text-gray-500'}
           numberOfLines={1}
         >
-          {isCustomer ? t('clips.dishYours') : clip.restaurantName}
+          {isCustomer ? t('clips.dishYours') : clipHeading(clip)}
         </Text>
       </View>
     </Pressable>

@@ -6,14 +6,17 @@ import {
   dishesInClip,
   filmedCount,
   kitchensFrom,
+  looseClips,
   primaryAction,
   requiredGroupName,
   taggedDish,
 } from './kitchens';
 
-const clip = (overrides: Partial<Clip> & Pick<Clip, 'id' | 'restaurantId'>): Clip => ({
+const clip = (overrides: Partial<Clip> & Pick<Clip, 'id'>): Clip => ({
+  restaurantId: 'rest-1',
   restaurantName: 'Taco Fiesta',
   mediaUrl: 'https://example.test/a.mp4',
+  mediaKind: 'mp4',
   thumbnailUrl: 'https://example.test/a.jpg',
   caption: 'A clip',
   durationSeconds: 12,
@@ -21,6 +24,18 @@ const clip = (overrides: Partial<Clip> & Pick<Clip, 'id' | 'restaurantId'>): Cli
   author: { kind: 'restaurant' },
   ...overrides,
 });
+
+/** A customer author, with the identity a cell header now needs. */
+const customer = (overrides: Record<string, unknown> = {}) =>
+  ({
+    kind: 'customer',
+    orderId: 'o1',
+    personId: 'p1',
+    displayName: 'Sana',
+    avatarUrl: '',
+    handle: 'sana',
+    ...overrides,
+  }) as Clip['author'];
 
 const dish = (overrides: Partial<MenuItem> & Pick<MenuItem, 'id' | 'name'>): MenuItem => ({
   restaurantId: 'rest-1',
@@ -53,7 +68,7 @@ describe('kitchensFrom', () => {
       clip({
         id: 'ours',
         restaurantId: 'rest-1',
-        author: { kind: 'customer', orderId: 'o1', personId: 'p1' },
+        author: customer(),
       }),
       clip({ id: 'theirs', restaurantId: 'rest-1' }),
     ]);
@@ -156,5 +171,33 @@ describe('primaryAction', () => {
   it('sends an untagged clip to the menu rather than a button that cannot work', () => {
     expect(primaryAction(undefined)).toBe('menu');
     expect(requiredGroupName(undefined)).toBeUndefined();
+  });
+});
+
+describe('looseClips', () => {
+  it('keeps the clips that belong to no kitchen, in feed order', () => {
+    const loose = looseClips([
+      clip({ id: 'about-a-kitchen' }),
+      clip({ id: 'loose-1', restaurantId: undefined, author: customer({ orderId: undefined }) }),
+      clip({ id: 'loose-2', restaurantId: undefined, author: customer({ orderId: undefined }) }),
+    ]);
+
+    expect(loose.map((c) => c.id)).toEqual(['loose-1', 'loose-2']);
+  });
+
+  it('is empty when every clip is about a kitchen', () => {
+    expect(looseClips([clip({ id: 'c1' })])).toEqual([]);
+  });
+});
+
+describe('kitchensFrom with loose clips in the feed', () => {
+  it('does not try to group a clip that names no restaurant', () => {
+    const kitchens = kitchensFrom([
+      clip({ id: 'loose', restaurantId: undefined, author: customer({ orderId: undefined }) }),
+      clip({ id: 'grouped', restaurantId: 'rest-1' }),
+    ]);
+
+    expect(kitchens.map((k) => k.restaurantId)).toEqual(['rest-1']);
+    expect(kitchens[0]?.clips.map((c) => c.id)).toEqual(['grouped']);
   });
 });

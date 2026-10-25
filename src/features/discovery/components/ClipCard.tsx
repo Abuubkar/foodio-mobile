@@ -11,7 +11,7 @@ import { useNavigationGuard } from '@/hooks/useNavigationGuard';
 import { colors } from '@/theme';
 
 import type { Clip } from '../types/clip.types';
-import { isCustomerClip } from '../types/clip.types';
+import { clipHeading, isCustomerClip } from '../types/clip.types';
 
 type ClipCardProps = {
   clip: Clip;
@@ -25,8 +25,8 @@ export function ClipCard({ clip, showRestaurantName = true }: ClipCardProps) {
   const guard = useNavigationGuard();
 
   const label = isCustomerClip(clip)
-    ? t('clips.customerClipLabel', { restaurant: clip.restaurantName, caption: clip.caption })
-    : t('clips.restaurantClipLabel', { restaurant: clip.restaurantName, caption: clip.caption });
+    ? t('clips.customerClipLabel', { restaurant: clipHeading(clip), caption: clip.caption })
+    : t('clips.restaurantClipLabel', { restaurant: clipHeading(clip), caption: clip.caption });
 
   return (
     <Pressable
@@ -77,7 +77,7 @@ export function ClipCard({ clip, showRestaurantName = true }: ClipCardProps) {
                 textShadowRadius: 2,
               }}
             >
-              {clip.restaurantName}
+              {clipHeading(clip)}
             </Text>
           </View>
         ) : null}

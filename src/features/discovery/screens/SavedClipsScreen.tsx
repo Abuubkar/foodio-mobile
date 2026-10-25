@@ -16,6 +16,7 @@ import { colors } from '@/theme';
 import { SavedClipTile } from '../components/SavedClipTile';
 import { SavedKitchenGroup } from '../components/SavedKitchenGroup';
 import { useSavedClips } from '../hooks/useSavedClips';
+import { clipHeading } from '../types/clip.types';
 
 type View_ = 'all' | 'kitchens';
 
@@ -107,7 +108,7 @@ export function SavedClipsScreen() {
                   key={clip.id}
                   clip={clip}
                   title={clip.caption}
-                  subtitle={clip.restaurantName}
+                  subtitle={clipHeading(clip)}
                   tall={(index + columnIndex) % 3 === 0}
                 />
               ))}
