@@ -35,11 +35,14 @@ export async function signPhotoUpload({
  * That failure is silent end to end: the PUT returns 200, the record saves, and
  * only the picture is wrong. It was caught by uploading a real photograph and
  * looking at the file on disk.
+ *
+ * `contentType` is a plain string here because a clip's video goes the same
+ * way, and the trap above has nothing to do with what kind of file it is.
  */
-export async function uploadPhoto(
+export async function uploadMedia(
   uploadUrl: string,
   file: Blob,
-  contentType: PhotoContentType,
+  contentType: string,
 ): Promise<void> {
   const response = await fetch(uploadUrl, {
     method: 'PUT',
@@ -51,4 +54,13 @@ export async function uploadPhoto(
   if (!response.ok) {
     throw new Error(`Upload failed with ${response.status}`);
   }
+}
+
+/** The photograph-shaped door onto `uploadMedia`, which keeps the narrow type. */
+export function uploadPhoto(
+  uploadUrl: string,
+  file: Blob,
+  contentType: PhotoContentType,
+): Promise<void> {
+  return uploadMedia(uploadUrl, file, contentType);
 }

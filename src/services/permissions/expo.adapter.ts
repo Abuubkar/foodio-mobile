@@ -19,6 +19,12 @@ async function requestPhotoLibrary(): Promise<PermissionResult> {
   return { status, type: PermissionType.PhotoLibrary };
 }
 
+async function requestCamera(): Promise<PermissionResult> {
+  const ImagePicker = await import('expo-image-picker');
+  const { status } = await ImagePicker.requestCameraPermissionsAsync();
+  return { status, type: PermissionType.Camera };
+}
+
 async function statusOfLocation(): Promise<PermissionResult> {
   const Location = await import('expo-location');
   const { status } = await Location.getForegroundPermissionsAsync();
@@ -37,16 +43,24 @@ async function statusOfPhotoLibrary(): Promise<PermissionResult> {
   return { status, type: PermissionType.PhotoLibrary };
 }
 
+async function statusOfCamera(): Promise<PermissionResult> {
+  const ImagePicker = await import('expo-image-picker');
+  const { status } = await ImagePicker.getCameraPermissionsAsync();
+  return { status, type: PermissionType.Camera };
+}
+
 const handlers: Record<PermissionType, () => Promise<PermissionResult>> = {
   [PermissionType.Location]: requestLocation,
   [PermissionType.Notification]: requestNotification,
   [PermissionType.PhotoLibrary]: requestPhotoLibrary,
+  [PermissionType.Camera]: requestCamera,
 };
 
 const readers: Record<PermissionType, () => Promise<PermissionResult>> = {
   [PermissionType.Location]: statusOfLocation,
   [PermissionType.Notification]: statusOfNotification,
   [PermissionType.PhotoLibrary]: statusOfPhotoLibrary,
+  [PermissionType.Camera]: statusOfCamera,
 };
 
 export const expoPermissionAdapter: PermissionPort = {

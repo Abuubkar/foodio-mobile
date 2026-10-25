@@ -326,6 +326,23 @@
       "add": "Add",
       "choose": "Choose",
       "menu": "See the menu"
+    },
+    "post": {
+      "title": "Post a clip",
+      "compose": "Post a clip",
+      "aboutKitchen": "About {{name}}",
+      "aboutNothing": "For the feed — no restaurant attached",
+      "explain": "Film up to {{seconds}} seconds. Recording in the app keeps the video playable everywhere.",
+      "film": "Film a clip",
+      "filming": "Opening the camera…",
+      "filmAgain": "Film it again",
+      "took": "{{seconds}} seconds",
+      "caption": "Caption",
+      "post": "Post",
+      "posting": "Posting…",
+      "failedTitle": "That did not post",
+      "failedBody": "Nothing was published. Check your connection and try again.",
+      "signInRequired": "Sign in to post a clip."
     }
   },
   "tabs": {
