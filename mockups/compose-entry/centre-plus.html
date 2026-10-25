@@ -1,0 +1,43 @@
+<!doctype html>
+<!--
+  THROWAWAY PROTOTYPE — refining the one direction chosen: a centre plus.
+
+  The first pass was a flat white disc with a thin text "+", and it read as a
+  blob dropped on the bar rather than part of it. Three things were wrong:
+  the colour belonged to another app, the glyph was a font character so it was
+  never optically centred, and it broke the icon-over-label rhythm the other
+  four tabs share.
+
+  Four takes, switchable with ?v=1..4. The strip underneath shows all four
+  bars at 1:1 so the difference is judged where it actually matters.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Foodio — the centre plus, done properly</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="centre-plus.css" />
+  </head>
+  <body>
+    <div class="stage">
+      <div class="phone">
+        <div class="phone-notch" aria-hidden="true"></div>
+        <div class="screen" id="screen"></div>
+      </div>
+    </div>
+
+    <nav class="switcher" aria-label="Variant switcher">
+      <button id="prev" aria-label="Previous">&larr;</button>
+      <span class="switcher-label"><b id="vkey">1</b><span id="vname"></span></span>
+      <button id="next" aria-label="Next">&rarr;</button>
+    </nav>
+
+    <p class="note" id="vnote"></p>
+
+    <h2 class="strip-title">All four bars, 1:1</h2>
+    <div class="strip" id="strip"></div>
+
+    <script src="centre-plus.js"></script>
+  </body>
+</html>

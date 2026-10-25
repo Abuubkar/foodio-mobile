@@ -1,0 +1,125 @@
+/* Refinements to the centre plus. Everything here is about the bar. */
+
+.strip-title {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin: 26px 0 12px;
+}
+
+.strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 40px;
+}
+
+.strip .holder {
+  width: 390px;
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #1b1f28;
+}
+
+.strip .holder .tabbar {
+  position: relative;
+}
+
+.strip .caption {
+  width: 390px;
+  font-size: 11.5px;
+  color: #8b93a1;
+  padding: 0 2px;
+}
+
+/* The bar in every take: the four tabs keep their icon-over-label stack. */
+.tabbar.refined {
+  height: 82px;
+  padding-bottom: 16px;
+  background: #0a0a0a;
+}
+
+.tabbar.refined .tab .ic {
+  font-size: 20px;
+}
+
+/* The plus itself, as an SVG so the stroke is centred by geometry rather
+   than by a font's idea of where a "+" sits on its baseline. */
+.plus {
+  flex: none;
+  display: grid;
+  place-items: center;
+}
+
+.plus svg {
+  display: block;
+}
+
+/* 1 — flush disc: optically centred on the icon row, no raise. */
+.plus.flush .disc {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffa726, #fb8c00);
+  display: grid;
+  place-items: center;
+  box-shadow:
+    0 2px 10px rgba(251, 140, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  margin-bottom: 14px;
+}
+
+/* 2 — labelled: keeps the five-column rhythm exactly. */
+.plus.labelled {
+  text-align: center;
+}
+
+.plus.labelled .disc {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffa726, #fb8c00);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 3px;
+  box-shadow:
+    0 2px 8px rgba(251, 140, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.plus.labelled .lbl {
+  font-size: 10.5px;
+  color: var(--primary);
+  line-height: 1.45;
+}
+
+/* 3 — squircle: the app's own card radius rather than a circle. */
+.plus.squircle .disc {
+  width: 46px;
+  height: 42px;
+  border-radius: 15px;
+  background: linear-gradient(180deg, #ffa726, #fb8c00);
+  display: grid;
+  place-items: center;
+  box-shadow:
+    0 2px 10px rgba(251, 140, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  margin-bottom: 14px;
+}
+
+/* 4 — quiet: a ring, not a fill. Recedes until looked for. */
+.plus.quiet .disc {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background: rgba(255, 152, 0, 0.14);
+  border: 1.5px solid rgba(255, 167, 38, 0.75);
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+}
