@@ -19,6 +19,8 @@ type ComposeClipButtonProps = {
  *
  * Over the feed rather than in a header, because the feed has no header — it
  * is a full-screen pager, and the one thing that must not move is the video.
+ * It sits below the kitchen header rather than level with it, because that row
+ * already ends in a Menu pill and the two overlapped.
  */
 export function ComposeClipButton({ restaurantId, restaurantName }: ComposeClipButtonProps) {
   const { t } = useTranslation();
@@ -39,7 +41,9 @@ export function ComposeClipButton({ restaurantId, restaurantName }: ComposeClipB
       accessibilityRole="button"
       accessibilityLabel={t('clips.post.compose')}
       className="absolute right-4 h-11 w-11 items-center justify-center rounded-full bg-black/55"
-      style={{ top: insets.top + 8 }}
+      /* Below the header, not level with it: a kitchen cell puts its Menu pill
+         at the top right, and the two landed on top of each other. */
+      style={{ top: insets.top + 76 }}
       hitSlop={8}
     >
       <Ionicons name="videocam-outline" size={22} color={colors.white} />
