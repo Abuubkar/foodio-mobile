@@ -6,12 +6,19 @@ import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme';
 
-/** Bigger than a 24dp tab icon, small enough to clear the bar's top rule. */
-const DISC = 30;
+/**
+ * Reads as the same weight as a 24dp icon beside it.
+ *
+ * A filled circle looks smaller than an outlined glyph of the same bounding
+ * box, because the glyph's strokes reach the edges while the circle is
+ * inscribed. At 30 the disc measured the same height as its neighbours and
+ * still looked undersized; this is the size that matches them by eye.
+ */
+const DISC = 34;
 
 /** The glyph: two rounded bars, so the ends are round and the crossing is clean. */
-const ARM = 13;
-const STROKE = 2.5;
+const ARM = 15;
+const STROKE = 2.75;
 
 /**
  * Measured, not derived.
