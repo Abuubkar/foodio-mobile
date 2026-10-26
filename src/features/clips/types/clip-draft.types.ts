@@ -32,6 +32,14 @@ export type ClipDraft = {
   restaurantId?: string | undefined;
   menuItemId?: string | undefined;
   orderId?: string | undefined;
+  /**
+   * Whether the public feed carries it. Default true.
+   *
+   * `false` is what the rate-your-order sheet's unchecked "also post this to
+   * Clips" box sends: the clip is real and the review shows it, but it is
+   * nowhere in the feed. See backend ADR-0023.
+   */
+  postToFeed?: boolean | undefined;
 };
 
 export type SignedUpload = z.infer<typeof signedUploadSchema>;

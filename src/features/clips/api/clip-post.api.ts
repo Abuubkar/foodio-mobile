@@ -20,6 +20,7 @@ export type NewClipBody = {
   restaurantId?: string | undefined;
   menuItemId?: string | undefined;
   orderId?: string | undefined;
+  postToFeed?: boolean | undefined;
 };
 
 /**

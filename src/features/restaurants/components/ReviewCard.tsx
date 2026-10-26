@@ -12,6 +12,7 @@ import type { RestaurantReview } from '../types/restaurant.types';
 
 import { ReviewAvatar } from './ReviewAvatar';
 import { ReviewPhotos } from './ReviewPhotos';
+import { ReviewVideo } from './ReviewVideo';
 
 type ReviewCardProps = {
   review: RestaurantReview;
@@ -48,6 +49,10 @@ export function ReviewCard({ review }: ReviewCardProps) {
       ) : null}
 
       <ReviewPhotos photos={review.photos} />
+
+      {/* After the photographs: a video is one thing and the photographs are
+          up to five, so leading with it would push them off the card. */}
+      {review.video ? <ReviewVideo video={review.video} /> : null}
     </View>
   );
 }

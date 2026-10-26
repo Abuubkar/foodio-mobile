@@ -14,6 +14,11 @@ export const REVIEW_COMMENT_MAX = 1000;
 export const newReviewSchema = z.object({
   rating: z.number().int().min(REVIEW_RATING_MIN).max(REVIEW_RATING_MAX),
   comment: z.string().max(REVIEW_COMMENT_MAX).optional(),
+  /**
+   * A Clip already posted for this order, which becomes the video on the
+   * review. The server checks it is the caller's and from that order.
+   */
+  clipId: z.string().optional(),
 });
 
 /** A posted review: the embedded shape plus the ids that anchor it. */
@@ -55,7 +60,13 @@ export type Review = z.infer<typeof reviewSchema>;
 export type SignedReviewPhoto = z.infer<typeof signedReviewPhotoSchema>;
 export type ReviewFormValues = z.infer<typeof reviewFormSchema>;
 
-export function toNewReview(values: ReviewFormValues): NewReview {
+export function toNewReview(values: ReviewFormValues, clipId?: string): NewReview {
   const comment = values.comment.trim();
-  return { rating: values.rating, ...(comment ? { comment } : {}) };
+  return {
+    rating: values.rating,
+    ...(comment ? { comment } : {}),
+    // Absent rather than undefined-valued: the server tells "no video" from
+    // "a video I could not name".
+    ...(clipId === undefined ? {} : { clipId }),
+  };
 }

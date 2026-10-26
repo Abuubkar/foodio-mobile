@@ -50,3 +50,28 @@ describe('toNewReview', () => {
     });
   });
 });
+
+describe('toNewReview with a video', () => {
+  const values = { rating: 4, comment: '  Exactly as pictured  ' };
+
+  it('carries the clip id when one was filmed', () => {
+    expect(toNewReview(values, 'clip-1')).toEqual({
+      rating: 4,
+      comment: 'Exactly as pictured',
+      clipId: 'clip-1',
+    });
+  });
+
+  it('omits the clip id entirely when nothing was filmed', () => {
+    // Absent rather than undefined-valued: the server tells "no video" from
+    // "a video I could not name".
+    expect(toNewReview(values)).not.toHaveProperty('clipId');
+  });
+
+  it('still drops a whitespace-only comment', () => {
+    expect(toNewReview({ rating: 5, comment: '   ' }, 'clip-1')).toEqual({
+      rating: 5,
+      clipId: 'clip-1',
+    });
+  });
+});
