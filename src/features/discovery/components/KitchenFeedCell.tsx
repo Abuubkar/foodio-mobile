@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { useEvent } from 'expo';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useVideoPlayer, VideoView } from 'expo-video';
+import { VideoView } from 'expo-video';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useTranslation } from 'react-i18next';
@@ -19,12 +18,12 @@ import type { MenuItem } from '@/features/menu/types/menu.types';
 import { useRestaurant } from '@/features/restaurants/hooks/useRestaurant';
 import { useNavigationGuard } from '@/hooks/useNavigationGuard';
 import { useCartStore } from '@/stores/cart.store';
-import { usePlaybackStore } from '@/stores/playback.store';
 import { selectIsSaved, useSavedStore } from '@/stores/saved.store';
 import { useSessionStore } from '@/stores/session.store';
 import { colors } from '@/theme';
 import { formatMoney } from '@/utils/currency';
 
+import { useClipPlayback } from '../hooks/useClipPlayback';
 import type { Kitchen } from '../lib/kitchens';
 import { dishesInClip, primaryAction, requiredGroupName, taggedDish } from '../lib/kitchens';
 
@@ -87,53 +86,15 @@ export function KitchenFeedCell({
   const { data: restaurant } = useRestaurant(seen ? kitchen.restaurantId : undefined);
   const { data: menu } = useRestaurantMenu(seen ? kitchen.restaurantId : undefined);
 
-  const muted = usePlaybackStore((state) => state.muted);
   const addItem = useCartStore((state) => state.addItem);
   const isSaved = useSavedStore(selectIsSaved(clip?.id ?? ''));
   const toggleSaved = useSavedStore((state) => state.toggle);
   const isSignedIn = useSessionStore((state) => state.person !== null);
 
-  const player = useVideoPlayer(clip?.mediaUrl ?? null, (instance) => {
-    instance.loop = true;
-    instance.audioMixingMode = 'auto';
-  });
-
-  const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
-
-  const [pausedByTap, setPausedByTap] = useState(false);
-  // "Playing" is ExoPlayer's clock, not its canvas. The poster must outlive
-  // play() until pixels actually land, or the cell flashes black.
-  const [hasRenderedFrame, setHasRenderedFrame] = useState(false);
-
-  /*
-    Chapters swap the source on one player rather than mounting a second.
-    `replaceAsync` loads off the UI thread — `replace` blocks it on iOS, and
-    this runs on a tap. The poster latch drops because the first frame of the
-    new track has not arrived yet.
-  */
-  const mediaUrl = clip?.mediaUrl;
-  useEffect(() => {
-    if (!mediaUrl) return;
-    setHasRenderedFrame(false);
-    void player.replaceAsync(mediaUrl);
-  }, [player, mediaUrl]);
-
-  useEffect(() => {
-    player.muted = muted;
-  }, [player, muted]);
-
-  useEffect(() => {
-    player.loop = !reduceMotion;
-    player.timeUpdateEventInterval = 0.25;
-    setPausedByTap(false);
-
-    if (!isActive) {
-      player.pause();
-      player.currentTime = 0;
-      return;
-    }
-    if (!reduceMotion) player.play();
-  }, [player, isActive, reduceMotion]);
+  /* Chapters swap the source on this one player. Everything about keeping it
+     from flashing black lives in the hook, which the community cell shares. */
+  const { player, isPlaying, hasRenderedFrame, onFirstFrameRender, pausedByTap, togglePlayback } =
+    useClipPlayback({ mediaUrl: clip?.mediaUrl, isActive, reduceMotion });
 
   // A kitchen scrolled away and back opens on its own footage again, with the
   // menu shut: coming back to someone else's open drawer is disorienting.
@@ -146,16 +107,6 @@ export function KitchenFeedCell({
   useEffect(() => {
     onMenuOpenChange(menuOpen);
   }, [menuOpen, onMenuOpenChange]);
-
-  const togglePlayback = () => {
-    if (player.playing) {
-      player.pause();
-      setPausedByTap(true);
-      return;
-    }
-    player.play();
-    setPausedByTap(false);
-  };
 
   const dish = menu && clip ? taggedDish(menu, clip) : undefined;
   const inClip = menu && clip ? dishesInClip(menu, clip) : [];
@@ -233,7 +184,7 @@ export function KitchenFeedCell({
         // TextureView: a SurfaceView detached by list recycling goes black and
         // stays black; a TextureView survives the round trip.
         surfaceType="textureView"
-        onFirstFrameRender={() => setHasRenderedFrame(true)}
+        onFirstFrameRender={onFirstFrameRender}
         importantForAccessibility="no"
         accessibilityElementsHidden
       />
