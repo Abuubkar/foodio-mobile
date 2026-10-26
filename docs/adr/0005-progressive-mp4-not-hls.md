@@ -14,5 +14,6 @@ Two independent research passes converged on the same answer, so it is recorded 
 - No adaptive bitrate. On a poor connection a clip buffers rather than degrading, which makes the cellular question in the feed's playback policy sharper, not softer.
 - DASH is Android-only per the SDK 57 docs, so it is not a cross-platform escape hatch.
 - Revisit when clips are self-hosted: owning the transcode removes both constraints at once, since the iOS caching gap is the only reason to prefer progressive at this size.
+- **Live is what will force that revisit.** There is no progressive-MP4 live stream — live is LL-HLS or WebRTC — so the clip media carries a `kind` and the player chooses its source, rather than every call site assuming a file. See backend [ADR-0023](https://github.com/Abuubkar/foodio-backend/blob/main/docs/adr/0023-a-clips-context-is-optional-and-moderation-is-the-gate.md).
 
 Detail in the research on branches `research/expo-video-feed` and `research/playable-clips`.

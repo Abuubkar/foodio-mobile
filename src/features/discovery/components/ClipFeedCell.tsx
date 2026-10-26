@@ -17,7 +17,7 @@ import { usePlaybackStore } from '@/stores/playback.store';
 import { colors } from '@/theme';
 
 import type { Clip } from '../types/clip.types';
-import { isCustomerClip } from '../types/clip.types';
+import { clipHeading, isCustomerClip } from '../types/clip.types';
 
 import { ClipProgress } from './ClipProgress';
 
@@ -111,8 +111,8 @@ export function ClipFeedCell({
   };
 
   const author = isCustomerClip(clip)
-    ? t('clips.customerClipLabel', { restaurant: clip.restaurantName, caption: clip.caption })
-    : t('clips.restaurantClipLabel', { restaurant: clip.restaurantName, caption: clip.caption });
+    ? t('clips.customerClipLabel', { restaurant: clipHeading(clip), caption: clip.caption })
+    : t('clips.restaurantClipLabel', { restaurant: clipHeading(clip), caption: clip.caption });
 
   return (
     <View style={{ height }} className="bg-black" accessible accessibilityLabel={author}>
@@ -222,7 +222,7 @@ export function ClipFeedCell({
         </View>
 
         <Text variant="bodyMedium" className="text-white">
-          {clip.restaurantName}
+          {clipHeading(clip)}
         </Text>
         <Text variant="caption" className="mt-0.5 text-gray-200" numberOfLines={2}>
           {clip.caption}

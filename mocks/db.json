@@ -1711,7 +1711,8 @@
       "author": {
         "kind": "restaurant"
       },
-      "menuItemId": "r1-pop-1"
+      "menuItemId": "r1-pop-1",
+      "mediaKind": "mp4"
     },
     {
       "id": "clip-r2",
@@ -1725,7 +1726,8 @@
       "author": {
         "kind": "restaurant"
       },
-      "menuItemId": "r2-pop-1"
+      "menuItemId": "r2-pop-1",
+      "mediaKind": "mp4"
     },
     {
       "id": "clip-r3",
@@ -1739,7 +1741,8 @@
       "author": {
         "kind": "restaurant"
       },
-      "menuItemId": "r3-pop-1"
+      "menuItemId": "r3-pop-1",
+      "mediaKind": "mp4"
     },
     {
       "id": "clip-r4",
@@ -1753,7 +1756,8 @@
       "author": {
         "kind": "restaurant"
       },
-      "menuItemId": "r4-pop-1"
+      "menuItemId": "r4-pop-1",
+      "mediaKind": "mp4"
     },
     {
       "id": "clip-r5",
@@ -1766,7 +1770,8 @@
       "postedAt": "2026-07-28T10:00:00.000Z",
       "author": {
         "kind": "restaurant"
-      }
+      },
+      "mediaKind": "mp4"
     },
     {
       "id": "clip-r6",
@@ -1779,7 +1784,8 @@
       "postedAt": "2026-07-30T10:00:00.000Z",
       "author": {
         "kind": "restaurant"
-      }
+      },
+      "mediaKind": "mp4"
     },
     {
       "id": "clip-c1",
@@ -1794,8 +1800,12 @@
       "author": {
         "kind": "customer",
         "orderId": "order-seed-1",
-        "personId": "maria"
-      }
+        "personId": "maria",
+        "displayName": "Maria G.",
+        "avatarUrl": "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=200",
+        "handle": "maria"
+      },
+      "mediaKind": "mp4"
     },
     {
       "id": "clip-c2",
@@ -1810,8 +1820,12 @@
       "author": {
         "kind": "customer",
         "orderId": "order-seed-2",
-        "personId": "james"
-      }
+        "personId": "james",
+        "displayName": "James T.",
+        "avatarUrl": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=200",
+        "handle": "james"
+      },
+      "mediaKind": "mp4"
     },
     {
       "id": "clip-c3",
@@ -1826,8 +1840,12 @@
       "author": {
         "kind": "customer",
         "orderId": "order-seed-3",
-        "personId": "aiko"
-      }
+        "personId": "aiko",
+        "displayName": "Aiko N.",
+        "avatarUrl": "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=200",
+        "handle": "aiko"
+      },
+      "mediaKind": "mp4"
     },
     {
       "id": "clip-c4",
@@ -1842,7 +1860,43 @@
       "author": {
         "kind": "customer",
         "orderId": "order-seed-4",
-        "personId": "derek"
+        "personId": "derek",
+        "displayName": "Derek P.",
+        "avatarUrl": "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=200",
+        "handle": "derek"
+      },
+      "mediaKind": "mp4"
+    },
+    {
+      "id": "clip-x1",
+      "mediaUrl": "https://videos.pexels.com/video-files/6247888/6247888-hd_720_1280_24fps.mp4",
+      "thumbnailUrl": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "mediaKind": "mp4",
+      "caption": "Craving something spicy tonight. What should I get?",
+      "durationSeconds": 9,
+      "postedAt": "2026-07-28T19:05:00.000Z",
+      "author": {
+        "kind": "customer",
+        "personId": "aiko",
+        "displayName": "Aiko N.",
+        "avatarUrl": "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=200",
+        "handle": "aiko"
+      }
+    },
+    {
+      "id": "clip-x2",
+      "mediaUrl": "https://videos.pexels.com/video-files/6353432/6353432-hd_720_1280_60fps.mp4",
+      "thumbnailUrl": "https://images.pexels.com/photos/2092507/pexels-photo-2092507.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "mediaKind": "mp4",
+      "caption": "Street food run. Nobody told me it would be this good.",
+      "durationSeconds": 11,
+      "postedAt": "2026-07-28T20:40:00.000Z",
+      "author": {
+        "kind": "customer",
+        "personId": "derek",
+        "displayName": "Derek P.",
+        "avatarUrl": "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=200",
+        "handle": "derek"
       }
     }
   ],
@@ -1851,7 +1905,9 @@
       "id": "aisha",
       "displayName": "Aisha K.",
       "phone": "+923001230001",
-      "entitlements": []
+      "entitlements": [],
+      "handle": null,
+      "avatarUrl": ""
     },
     {
       "id": "marco",
@@ -1862,7 +1918,9 @@
           "restaurantId": "rest-1",
           "capabilities": ["kitchen", "delivery"]
         }
-      ]
+      ],
+      "handle": null,
+      "avatarUrl": ""
     },
     {
       "id": "sofia",
@@ -1873,7 +1931,9 @@
           "restaurantId": "rest-2",
           "capabilities": ["kitchen"]
         }
-      ]
+      ],
+      "handle": null,
+      "avatarUrl": ""
     },
     {
       "id": "tomas",
@@ -1888,31 +1948,41 @@
           "restaurantId": "rest-3",
           "capabilities": ["kitchen"]
         }
-      ]
+      ],
+      "handle": null,
+      "avatarUrl": ""
     },
     {
       "id": "maria",
       "displayName": "Maria G.",
       "phone": "+923001230002",
-      "entitlements": []
+      "entitlements": [],
+      "handle": "maria",
+      "avatarUrl": "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=200"
     },
     {
       "id": "james",
       "displayName": "James T.",
       "phone": "+923001230003",
-      "entitlements": []
+      "entitlements": [],
+      "handle": "james",
+      "avatarUrl": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=200"
     },
     {
       "id": "aiko",
       "displayName": "Aiko N.",
       "phone": "+923001230004",
-      "entitlements": []
+      "entitlements": [],
+      "handle": "aiko",
+      "avatarUrl": "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=200"
     },
     {
       "id": "derek",
       "displayName": "Derek P.",
       "phone": "+923001230005",
-      "entitlements": []
+      "entitlements": [],
+      "handle": "derek",
+      "avatarUrl": "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=200"
     }
   ],
   "reviews": [

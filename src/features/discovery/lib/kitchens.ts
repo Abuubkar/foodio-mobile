@@ -31,13 +31,18 @@ export function kitchensFrom(clips: readonly Clip[]): Kitchen[] {
   const byRestaurant = new Map<string, Clip[]>();
 
   for (const clip of clips) {
-    const existing = byRestaurant.get(clip.restaurantId);
+    // A Clip about no Restaurant is not a kitchen and cannot be grouped into
+    // one. `looseClips` is where those go. See backend ADR-0023.
+    const restaurantId = clip.restaurantId;
+    if (restaurantId === undefined) continue;
+
+    const existing = byRestaurant.get(restaurantId);
     if (existing) {
       existing.push(clip);
       continue;
     }
-    order.push(clip.restaurantId);
-    byRestaurant.set(clip.restaurantId, [clip]);
+    order.push(restaurantId);
+    byRestaurant.set(restaurantId, [clip]);
   }
 
   return order.map((restaurantId) => {
@@ -51,6 +56,18 @@ export function kitchensFrom(clips: readonly Clip[]): Kitchen[] {
       ],
     };
   });
+}
+
+/**
+ * The Clips that belong to no kitchen, in the order they arrived.
+ *
+ * The feed stops being "kitchens" and becomes kitchens *and loose clips*.
+ * Kept as its own function rather than a fourth field on `Kitchen`, because a
+ * community Clip has none of what a Kitchen carries — no menu, no dishes, no
+ * Add or Choose.
+ */
+export function looseClips(clips: readonly Clip[]): Clip[] {
+  return clips.filter((clip) => clip.restaurantId === undefined);
 }
 
 const allItems = (menu: RestaurantMenu): MenuItem[] =>
