@@ -6,18 +6,22 @@ import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme';
 
-/** Bigger than a 24dp tab icon, small enough to still belong to the row. */
-const DISC = 34;
+/** Bigger than a 24dp tab icon, small enough to clear the bar's top rule. */
+const DISC = 30;
 
 /** The glyph: two rounded bars, so the ends are round and the crossing is clean. */
-const ARM = 14;
+const ARM = 13;
 const STROKE = 2.5;
 
 /**
- * Reserves the height the other tabs spend on their label, so the disc lands
- * on the same line as their icons rather than halfway down the column.
+ * Measured, not derived.
+ *
+ * The bar does not lay its items out the way a plain centred stack would, so
+ * reasoning about icon and label heights put the disc 12dp too high — close
+ * enough to the top rule to look like it was touching. This is the offset that
+ * actually puts the disc's centre on the icons' centre, read off a screenshot.
  */
-const LABEL_ROW = 9;
+const DROP = 12;
 
 /**
  * Posting a clip, in the middle of the tab bar.
@@ -55,7 +59,7 @@ export function ComposeTabButton() {
       onPress={() => router.push('/post-clip')}
       accessibilityRole="button"
       accessibilityLabel={t('clips.post.compose')}
-      style={{ width: 72, alignItems: 'center', justifyContent: 'center' }}
+      style={{ width: 72, alignItems: 'center', justifyContent: 'center', paddingTop: DROP }}
       android_ripple={{
         color: onDarkBar ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.18)',
         borderless: true,
@@ -75,8 +79,6 @@ export function ComposeTabButton() {
         <View style={{ ...arm, width: ARM, height: STROKE }} />
         <View style={{ ...arm, position: 'absolute', width: STROKE, height: ARM }} />
       </View>
-
-      <View style={{ height: LABEL_ROW }} />
     </Pressable>
   );
 }
