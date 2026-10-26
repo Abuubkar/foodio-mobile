@@ -7,28 +7,28 @@ import { useTranslation } from 'react-i18next';
 import { colors } from '@/theme';
 
 /**
- * Reads as the same weight as a 24dp icon beside it.
+ * As tall as a whole sibling item — its icon *and* its label.
  *
- * A filled circle looks smaller than an outlined glyph of the same bounding
- * box, because the glyph's strokes reach the edges while the circle is
- * inscribed. At 30 the disc measured the same height as its neighbours and
- * still looked undersized; this is the size that matches them by eye.
+ * Measured on the device: a tab's icon and label together span 35.3dp, so the
+ * disc matches that rather than matching the icon alone. Sized to the icon it
+ * read as the smaller thing on the row, because the item beside it is two
+ * stacked elements and the disc is one.
  */
-const DISC = 34;
+const DISC = 36;
 
 /** The glyph: two rounded bars, so the ends are round and the crossing is clean. */
-const ARM = 15;
+const ARM = 16;
 const STROKE = 2.75;
 
 /**
  * Measured, not derived.
  *
  * The bar does not lay its items out the way a plain centred stack would, so
- * reasoning about icon and label heights put the disc 12dp too high — close
- * enough to the top rule to look like it was touching. This is the offset that
- * actually puts the disc's centre on the icons' centre, read off a screenshot.
+ * reasoning about it put the disc well out of place twice. This is the offset
+ * that actually lands the disc's centre on the centre of a sibling's whole
+ * block — icon plus label — read off a screenshot.
  */
-const DROP = 12;
+const DROP = 8;
 
 /**
  * Posting a clip, in the middle of the tab bar.
