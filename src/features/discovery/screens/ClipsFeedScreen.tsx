@@ -4,7 +4,6 @@ import { FlatList, View, type ViewToken } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { EmptyState, ErrorState, LoadingState } from '@/components/shared';
-import { ComposeClipButton } from '@/features/clips/components/ComposeClipButton';
 import { useReduceMotion } from '@/hooks/useReduceMotion';
 
 import { ClipEndCard } from '../components/ClipEndCard';
@@ -140,10 +139,6 @@ export function ClipsFeedScreen() {
           })}
         />
       ) : null}
-
-      {/* Hidden while a kitchen's menu is up: the drawer is the whole screen's
-          attention, and a second control over it is a mis-tap waiting. */}
-      {menuOpen ? null : <ComposeClipButton />}
     </View>
   );
 }
