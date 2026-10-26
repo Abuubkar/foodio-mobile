@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.6.0](https://github.com/Abuubkar/foodio-mobile/compare/v1.5.0...v1.6.0) (2026-10-26)
+
+
+### Features
+
+* **clips:** a clip's restaurant is optional, and its author has a name ([#245](https://github.com/Abuubkar/foodio-mobile/issues/245)) ([4eeb560](https://github.com/Abuubkar/foodio-mobile/commit/4eeb560d6f17bbc31eb43d1669e2e762cc475a2e))
+* **clips:** a second cell for the clips that belong to no kitchen ([#249](https://github.com/Abuubkar/foodio-mobile/issues/249)) ([ab6fe72](https://github.com/Abuubkar/foodio-mobile/commit/ab6fe72f71b3f4f55f9f5f7c4591c72496a1e1c9))
+* **clips:** film a clip in the app and post it ([#246](https://github.com/Abuubkar/foodio-mobile/issues/246)) ([a445f9f](https://github.com/Abuubkar/foodio-mobile/commit/a445f9f33be0731e4f7dd0582a2e3ba54c0df4ed))
+* **clips:** post a clip from the middle of the tab bar ([#251](https://github.com/Abuubkar/foodio-mobile/issues/251)) ([cfe89f6](https://github.com/Abuubkar/foodio-mobile/commit/cfe89f64e152a91bc080811cfbf0d04bf40be606))
+* **clips:** press and hold a clip to report it ([#247](https://github.com/Abuubkar/foodio-mobile/issues/247)) ([9677c73](https://github.com/Abuubkar/foodio-mobile/commit/9677c73721149673ae6528e8985278d055a644f1))
+* **identity:** a profile, a handle, and a face that is never a stock one ([#248](https://github.com/Abuubkar/foodio-mobile/issues/248)) ([f8fb4b7](https://github.com/Abuubkar/foodio-mobile/commit/f8fb4b72d3d921c6d61d56612d5ad0778cae9928))
+* **reviews:** film the meal, and a checkbox that also posts it to clips ([#250](https://github.com/Abuubkar/foodio-mobile/issues/250)) ([b9b1703](https://github.com/Abuubkar/foodio-mobile/commit/b9b170392949807a369d231ba25f05930e8b597a))
+
 ## [1.5.0](https://github.com/Abuubkar/foodio-mobile/compare/v1.4.0...v1.5.0) (2026-10-21)
 
 
