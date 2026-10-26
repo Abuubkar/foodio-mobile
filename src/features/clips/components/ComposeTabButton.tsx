@@ -1,46 +1,54 @@
 import { Pressable, View } from 'react-native';
 
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { usePathname, useRouter } from 'expo-router';
 
 import { useTranslation } from 'react-i18next';
 
-import { Text } from '@/components/ui';
 import { colors } from '@/theme';
 
-/**
- * A few points larger than the 24dp tab icons, not half as large again.
- *
- * At 38 it dominated the bar and pushed its own label a visible step below the
- * other four, which is the rhythm this was supposed to keep. 32 reads as "the
- * filled one" without becoming a different kind of object.
- */
-const DISC = 32;
+/** Bigger than a 24dp tab icon, small enough to still belong to the row. */
+const DISC = 34;
 
-/** Pulls the disc up so "Post" lands on the same baseline as the other labels. */
-const LIFT = 4;
+/** The glyph: two rounded bars, so the ends are round and the crossing is clean. */
+const ARM = 14;
+const STROKE = 2.5;
+
+/**
+ * Reserves the height the other tabs spend on their label, so the disc lands
+ * on the same line as their icons rather than halfway down the column.
+ */
+const LABEL_ROW = 9;
 
 /**
  * Posting a clip, in the middle of the tab bar.
  *
- * It keeps the bar's rhythm rather than breaking it: a disc where the other
- * four have an icon, a label where they have a label, five columns on one
- * baseline. The first attempt was a floating circle in the corner of the feed,
- * which collided with the kitchen's Menu pill and explained nothing.
+ * Inline and on the icons' own line — not lifted out of the bar, not carrying
+ * a label. One filled circle among four outlined icons is enough to say which
+ * one is the action.
  *
- * Filled in the brand orange, like the Add button a clip already offers, so
- * the one solid-orange thing on screen is always the action. The glyph is
- * `add` rather than a typed "+", which sits on a text baseline and reads high
- * inside a circle. It carries a label because that was the actual complaint:
- * an unlabelled icon in a corner is only discoverable by pressing it.
+ * The plus is drawn from two rounded bars rather than set as a font glyph.
+ * `Ionicons` `add` has square ends and sits on a text baseline, which is why
+ * it looked slightly off-centre and slightly hard inside a circle.
  *
- * Sized rather than flexed. A `flex: 1` child inside a bar that measures its
- * own items is a measure loop, and it hung the JS thread hard enough for
- * Android to offer to close the app.
+ * Ink rather than the brand orange. A saturated fill at this size reads heavy,
+ * and it put the button in the same colour as the active tab, so the one thing
+ * that marks *where you are* and the one thing that marks *what to do* were
+ * competing. The Clips tab owns a black bar, where ink would disappear, so the
+ * disc inverts there.
+ *
+ * Sized rather than flexed: a `flex: 1` child inside a bar that measures its
+ * own items is a measure loop, and it hung the JS thread.
  */
 export function ComposeTabButton() {
   const { t } = useTranslation();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const onDarkBar = pathname.startsWith('/clips');
+  const disc = onDarkBar ? colors.white : colors.gray[900];
+  const glyph = onDarkBar ? colors.gray[900] : colors.white;
+
+  const arm = { backgroundColor: glyph, borderRadius: STROKE / 2 };
 
   return (
     <Pressable
@@ -48,24 +56,27 @@ export function ComposeTabButton() {
       accessibilityRole="button"
       accessibilityLabel={t('clips.post.compose')}
       style={{ width: 72, alignItems: 'center', justifyContent: 'center' }}
+      android_ripple={{
+        color: onDarkBar ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.18)',
+        borderless: true,
+        radius: 28,
+      }}
     >
       <View
         style={{
           width: DISC,
           height: DISC,
           borderRadius: DISC / 2,
-          backgroundColor: colors.primary[500],
+          backgroundColor: disc,
           alignItems: 'center',
           justifyContent: 'center',
-          marginTop: -LIFT,
         }}
       >
-        <Ionicons name="add" size={21} color={colors.gray[900]} />
+        <View style={{ ...arm, width: ARM, height: STROKE }} />
+        <View style={{ ...arm, position: 'absolute', width: STROKE, height: ARM }} />
       </View>
 
-      <Text variant="caption" style={{ fontSize: 10, color: colors.primary[400], marginTop: 3 }}>
-        {t('tabs.post')}
-      </Text>
+      <View style={{ height: LABEL_ROW }} />
     </Pressable>
   );
 }

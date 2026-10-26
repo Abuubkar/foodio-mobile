@@ -69,7 +69,6 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="post"
         options={{
-          title: t('tabs.post'),
           /* Renders itself entirely: it is a button that pushes a screen, not
              a destination you switch to, so none of the tab chrome applies. */
           tabBarButton: renderComposeButton,
