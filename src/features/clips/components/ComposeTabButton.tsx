@@ -9,15 +9,16 @@ import { colors } from '@/theme';
 /**
  * As tall as a whole sibling item — its icon *and* its label.
  *
- * Measured on the device: a tab's icon and label together span 35.3dp, so the
- * disc matches that rather than matching the icon alone. Sized to the icon it
- * read as the smaller thing on the row, because the item beside it is two
- * stacked elements and the disc is one.
+ * A tab's icon and label together span 35.3dp on the device. The disc was
+ * matched to exactly that and then taken 4 up from it, so it carries a little
+ * more weight than its neighbours rather than exactly theirs. Sized to the
+ * icon alone it read as the smaller thing on the row, because the item beside
+ * it is two stacked elements and the disc is one.
  */
-const DISC = 36;
+const DISC = 40;
 
 /** The glyph: two rounded bars, so the ends are round and the crossing is clean. */
-const ARM = 16;
+const ARM = 17;
 const STROKE = 2.75;
 
 /**
@@ -28,7 +29,7 @@ const STROKE = 2.75;
  * that actually lands the disc's centre on the centre of a sibling's whole
  * block — icon plus label — read off a screenshot.
  */
-const DROP = 8;
+const DROP = 5;
 
 /**
  * Posting a clip, in the middle of the tab bar.
