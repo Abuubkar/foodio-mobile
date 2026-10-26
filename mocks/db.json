@@ -520,7 +520,7 @@
       "deliveryRadiusMeters": 3500,
       "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
       "status": "active",
-      "description": "Artisanal pastries, celebration cakes, and specialty coffee. Everything is baked fresh daily using traditional French p\u00e2tisserie techniques.",
+      "description": "Artisanal pastries, celebration cakes, and specialty coffee. Everything is baked fresh daily using traditional French pâtisserie techniques.",
       "address": "16 Sugar Street, Hayes Valley, San Francisco, CA 94102",
       "gallery": [
         "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80",
@@ -826,7 +826,7 @@
       "restaurantId": "rest-1",
       "menuCategoryId": "rest-1-popular",
       "name": "Birria Tacos",
-      "description": "Three slow-braised beef tacos with melted cheese, served with consom\u00e9 for dipping.",
+      "description": "Three slow-braised beef tacos with melted cheese, served with consomé for dipping.",
       "priceMinor": 1499,
       "image": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80",
       "rating": 4.9,
@@ -868,12 +868,12 @@
             },
             {
               "id": "r1-pop-1-extras-consome",
-              "name": "Extra consom\u00e9",
+              "name": "Extra consomé",
               "priceDeltaMinor": 100
             },
             {
               "id": "r1-pop-1-extras-jalapeno",
-              "name": "Jalape\u00f1os",
+              "name": "Jalapeños",
               "priceDeltaMinor": 0
             },
             {
@@ -891,7 +891,7 @@
       "restaurantId": "rest-1",
       "menuCategoryId": "rest-1-popular",
       "name": "Loaded Nachos",
-      "description": "House chips topped with queso, refried beans, jalape\u00f1os, pico de gallo, and crema.",
+      "description": "House chips topped with queso, refried beans, jalapeños, pico de gallo, and crema.",
       "priceMinor": 1150,
       "image": "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=600&q=80",
       "rating": 4.7,
@@ -1057,7 +1057,7 @@
       "restaurantId": "rest-2",
       "menuCategoryId": "rest-2-pasta",
       "name": "Lasagna Bolognese",
-      "description": "Slow-simmered rag\u00f9 layered with fresh pasta sheets and b\u00e9chamel.",
+      "description": "Slow-simmered ragù layered with fresh pasta sheets and béchamel.",
       "priceMinor": 2200,
       "image": "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=600&q=80"
     },
@@ -1201,7 +1201,7 @@
       "restaurantId": "rest-4",
       "menuCategoryId": "rest-4-burgers",
       "name": "Mushroom Swiss Burger",
-      "description": "Saut\u00e9ed cremini mushrooms, Swiss cheese, garlic aioli.",
+      "description": "Sautéed cremini mushrooms, Swiss cheese, garlic aioli.",
       "priceMinor": 1300,
       "image": "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=600&q=80"
     },
@@ -1227,8 +1227,8 @@
       "id": "r5-pop-1",
       "restaurantId": "rest-5",
       "menuCategoryId": "rest-5-popular",
-      "name": "A\u00e7a\u00ed Power Bowl",
-      "description": "Organic a\u00e7a\u00ed blend topped with granola, banana, berries, and honey.",
+      "name": "Açaí Power Bowl",
+      "description": "Organic açaí blend topped with granola, banana, berries, and honey.",
       "priceMinor": 1250,
       "image": "https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=600&q=80",
       "rating": 4.9,
@@ -1705,7 +1705,7 @@
       "restaurantName": "Taco Fiesta",
       "mediaUrl": "https://videos.pexels.com/video-files/4676745/4676745-hd_720_1366_25fps.mp4",
       "thumbnailUrl": "https://images.pexels.com/videos/4676745/pexels-photo-4676745.jpeg?auto=compress&cs=tinysrgb&w=600",
-      "caption": "Sizzling Birria Tacos with Consom\u00e9",
+      "caption": "Sizzling Birria Tacos with Consomé",
       "durationSeconds": 12,
       "postedAt": "2026-07-20T10:00:00.000Z",
       "author": {
@@ -1794,7 +1794,7 @@
       "menuItemId": "r1-pop-1",
       "mediaUrl": "https://videos.pexels.com/video-files/7246453/7246453-hd_720_1280_50fps.mp4",
       "thumbnailUrl": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80",
-      "caption": "What actually turned up \u2014 Birria Tacos",
+      "caption": "What actually turned up — Birria Tacos",
       "durationSeconds": 7,
       "postedAt": "2026-07-27T18:30:00.000Z",
       "author": {
@@ -1814,7 +1814,7 @@
       "menuItemId": "r2-pop-1",
       "mediaUrl": "https://videos.pexels.com/video-files/7599852/7599852-hd_720_1280_25fps.mp4",
       "thumbnailUrl": "https://images.pexels.com/videos/7599852/pexels-photo-7599852.jpeg?auto=compress&cs=tinysrgb&w=600",
-      "caption": "What actually turned up \u2014 Truffle Tagliatelle",
+      "caption": "What actually turned up — Truffle Tagliatelle",
       "durationSeconds": 10,
       "postedAt": "2026-07-29T18:30:00.000Z",
       "author": {
@@ -1834,7 +1834,7 @@
       "menuItemId": "r3-pop-1",
       "mediaUrl": "https://videos.pexels.com/video-files/7929034/7929034-hd_720_1280_24fps.mp4",
       "thumbnailUrl": "https://images.pexels.com/videos/7929034/pexels-photo-7929034.jpeg?auto=compress&cs=tinysrgb&w=600",
-      "caption": "What actually turned up \u2014 Dragon Roll",
+      "caption": "What actually turned up — Dragon Roll",
       "durationSeconds": 6,
       "postedAt": "2026-07-30T18:30:00.000Z",
       "author": {
@@ -1854,7 +1854,7 @@
       "menuItemId": "r4-pop-1",
       "mediaUrl": "https://videos.pexels.com/video-files/7930814/7930814-hd_720_1280_24fps.mp4",
       "thumbnailUrl": "https://images.pexels.com/videos/7930814/pexels-photo-7930814.jpeg?auto=compress&cs=tinysrgb&w=600",
-      "caption": "What actually turned up \u2014 Double Smash Burger",
+      "caption": "What actually turned up — Double Smash Burger",
       "durationSeconds": 9,
       "postedAt": "2026-07-31T18:30:00.000Z",
       "author": {
@@ -1869,7 +1869,7 @@
     },
     {
       "id": "clip-x1",
-      "mediaUrl": "https://videos.pexels.com/video-files/3298778/3298778-hd_720_1280_25fps.mp4",
+      "mediaUrl": "https://videos.pexels.com/video-files/6247888/6247888-hd_720_1280_24fps.mp4",
       "thumbnailUrl": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600",
       "mediaKind": "mp4",
       "caption": "Craving something spicy tonight. What should I get?",
@@ -1885,7 +1885,7 @@
     },
     {
       "id": "clip-x2",
-      "mediaUrl": "https://videos.pexels.com/video-files/5538137/5538137-hd_720_1280_30fps.mp4",
+      "mediaUrl": "https://videos.pexels.com/video-files/6353432/6353432-hd_720_1280_60fps.mp4",
       "thumbnailUrl": "https://images.pexels.com/photos/2092507/pexels-photo-2092507.jpeg?auto=compress&cs=tinysrgb&w=600",
       "mediaKind": "mp4",
       "caption": "Street food run. Nobody told me it would be this good.",
@@ -1937,7 +1937,7 @@
     },
     {
       "id": "tomas",
-      "displayName": "Tom\u00e1s L.",
+      "displayName": "Tomás L.",
       "phone": null,
       "entitlements": [
         {
@@ -1991,7 +1991,7 @@
       "author": "Maria G.",
       "avatar": "https://i.pravatar.cc/150?img=47",
       "rating": 5,
-      "comment": "Best birria tacos I have had outside Mexico! The consom\u00e9 is absolutely divine.",
+      "comment": "Best birria tacos I have had outside Mexico! The consomé is absolutely divine.",
       "postedAt": "2026-07-18",
       "restaurantId": "rest-1",
       "orderId": "order-seed-1"
@@ -2141,7 +2141,7 @@
       "author": "Derek W.",
       "avatar": "",
       "rating": 3,
-      "comment": "Good flavour but my order was missing the extra consom\u00e9.",
+      "comment": "Good flavour but my order was missing the extra consomé.",
       "postedAt": "2026-06-28",
       "restaurantId": "rest-1",
       "orderId": "order-hist-104"
