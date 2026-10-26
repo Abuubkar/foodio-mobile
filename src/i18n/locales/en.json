@@ -343,6 +343,13 @@
       "failedTitle": "That did not post",
       "failedBody": "Nothing was published. Check your connection and try again.",
       "signInRequired": "Sign in to post a clip."
+    },
+    "report": {
+      "title": "Report this clip?",
+      "body": "Somebody will look at it. It stops showing in your feed either way.",
+      "confirm": "Report",
+      "hint": "Press and hold to report this clip",
+      "reportedShort": "Reported"
     }
   },
   "tabs": {
