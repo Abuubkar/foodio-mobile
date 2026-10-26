@@ -28,6 +28,13 @@ export async function fetchClipsByMenuItem(menuItemId: string): Promise<Clip[]> 
   return parseResponse(clipListSchema, data, 'GET /clips?menuItemId');
 }
 
+export async function fetchClipsByPerson(personId: string): Promise<Clip[]> {
+  const { data } = await apiClient.get<unknown>(
+    `/clips?personId=${encodeURIComponent(personId)}&_sort=postedAt&_order=desc`,
+  );
+  return parseResponse(clipListSchema, data, 'GET /clips?personId');
+}
+
 /**
  * The clips behind a batch of saved ids.
  *

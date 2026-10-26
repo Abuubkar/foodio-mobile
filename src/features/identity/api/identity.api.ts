@@ -1,8 +1,10 @@
 import { apiClient } from '@/api/client';
 import { parseResponse } from '@/api/parse';
+import type { PhotoContentType, SignedUpload } from '@/features/photos/types/photo.types';
+import { signedUploadSchema } from '@/features/photos/types/photo.types';
 
-import type { IdentityProvider, Person, Session } from '../types/identity.types';
-import { personSchema, sessionSchema } from '../types/identity.types';
+import type { IdentityProvider, Person, PublicProfile, Session } from '../types/identity.types';
+import { personSchema, publicProfileSchema, sessionSchema } from '../types/identity.types';
 
 /**
  * Hands the provider's signed token to the API, which verifies it against
@@ -43,7 +45,32 @@ export async function fetchMe(): Promise<Person> {
   return parseResponse(personSchema, data, 'GET /me');
 }
 
-export async function updateMe(update: { displayName?: string; phone?: string }): Promise<Person> {
+export type MeUpdate = {
+  displayName?: string;
+  phone?: string;
+  handle?: string;
+  /**
+   * A path from `signAvatarUpload`, never a URL. An avatar a client could name
+   * by URL is an avatar that can be somebody else's photograph, or a tracker
+   * on every feed cell they appear in. See backend ADR-0023.
+   */
+  avatarPath?: string;
+};
+
+export async function updateMe(update: MeUpdate): Promise<Person> {
   const { data } = await apiClient.patch<unknown>('/me', update);
   return parseResponse(personSchema, data, 'PATCH /me');
+}
+
+/** Signs a place to PUT a person's own photograph. */
+export async function signAvatarUpload(contentType: PhotoContentType): Promise<SignedUpload> {
+  const { data } = await apiClient.post<unknown>('/avatar-uploads', { contentType });
+  return parseResponse(signedUploadSchema, data, 'POST /avatar-uploads');
+}
+
+/** Anybody's profile, by the handle that addresses it. Public. */
+export async function fetchProfile(handle: string): Promise<PublicProfile> {
+  const endpoint = `/profiles/${encodeURIComponent(handle)}`;
+  const { data } = await apiClient.get<unknown>(endpoint);
+  return parseResponse(publicProfileSchema, data, `GET ${endpoint}`);
 }

@@ -4,6 +4,8 @@ import { CUSTOMER_ROLE, resolveRole, roleOptionsFor, sameRole } from './identity
 const person = (entitlements: Person['entitlements']): Person => ({
   id: 'marco',
   displayName: 'Marco R.',
+  handle: null,
+  avatarUrl: '',
   phone: null,
   entitlements,
 });

@@ -14,9 +14,29 @@ export const entitlementSchema = z.object({
   capabilities: z.array(capabilitySchema).nonempty(),
 });
 
+/**
+ * A person's public name, and the only thing that is theirs to pick.
+ *
+ * Lowercase, because `@Sana` and `@sana` must not be two people — the server
+ * holds the case typed and compares on `lower(handle)`. Narrow on purpose: a
+ * handle sits beside a caption in a feed cell, and anything that can carry
+ * spaces or punctuation can be made to look like somebody else.
+ */
+export const handleSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .min(3)
+  .max(20)
+  .regex(/^[a-z0-9_]+$/);
+
 export const personSchema = z.object({
   id: z.string(),
   displayName: z.string(),
+  /** Null until they pick one. Somebody with no handle still has a name. */
+  handle: z.string().nullable().default(null),
+  /** Empty means no photograph; the app draws initials rather than a stock face. */
+  avatarUrl: z.string().default(''),
   /**
    * Contact information, not a credential — a rider calls it. Null until
    * checkout asks for one. See the backend's ADR-0019.
@@ -24,6 +44,17 @@ export const personSchema = z.object({
   phone: z.string().nullable(),
   /** Empty means customer — the baseline, not a row. */
   entitlements: z.array(entitlementSchema),
+});
+
+/**
+ * What anybody may see of a person: a name, a face, and the handle that
+ * addresses them. Never the phone or the email — a public page keyed to a
+ * guessable name is the one place that mistake is permanent.
+ */
+export const publicProfileSchema = z.object({
+  handle: z.string(),
+  displayName: z.string(),
+  avatarUrl: z.string(),
 });
 
 /**
@@ -57,6 +88,7 @@ export type IdentityProvider = z.infer<typeof identityProviderSchema>;
 export type Capability = z.infer<typeof capabilitySchema>;
 export type Entitlement = z.infer<typeof entitlementSchema>;
 export type Person = z.infer<typeof personSchema>;
+export type PublicProfile = z.infer<typeof publicProfileSchema>;
 export type Session = z.infer<typeof sessionSchema>;
 
 /**

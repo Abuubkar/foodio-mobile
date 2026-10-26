@@ -387,7 +387,8 @@
     "actingAs": "Acting as",
     "yourOrders": "Your orders",
     "deliveryAddresses": "Delivery addresses",
-    "savedClips": "Saved clips"
+    "savedClips": "Saved clips",
+    "yourProfile": "Your profile"
   },
   "work": {
     "tabs": {
@@ -688,5 +689,21 @@
     "kitchenCount_other": "{{count}} kitchens",
     "count": "{{clips}} · {{kitchens}}",
     "signInRequired": "Sign in to keep clips and find them again."
+  },
+  "profile": {
+    "title": "Profile",
+    "editTitle": "Your profile",
+    "theirClips": "Clips",
+    "noClips": "Nothing posted yet.",
+    "displayName": "Name",
+    "handle": "Handle",
+    "handleHint": "Letters, numbers and underscores. This is how people find you.",
+    "handleRule": "A handle is 3–20 characters: letters, numbers and underscores.",
+    "changeFace": "Change photo",
+    "save": "Save",
+    "saving": "Saving…",
+    "saveFailedTitle": "That did not save",
+    "saveFailedBody": "Check your connection, and whether somebody already uses that handle.",
+    "signInRequired": "Sign in to set up your profile."
   }
 }
