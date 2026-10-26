@@ -3,6 +3,9 @@ export enum PermissionType {
   Notification = 'notification',
   /** The photo library, for putting a picture on a restaurant or a dish. */
   PhotoLibrary = 'photoLibrary',
+  /** The camera, for filming a clip. Recording rather than browsing is what keeps
+   * the container a progressive MP4 — see ADR-0005 and `recordClip`. */
+  Camera = 'camera',
 }
 
 export type ExpoPermissionStatus = 'granted' | 'denied' | 'undetermined';
