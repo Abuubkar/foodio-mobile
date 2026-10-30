@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { EmptyState, ErrorState, LoadingState } from '@/components/shared';
 import { CART_BAR_CLEARANCE, CartBar, type CartRestaurant } from '@/features/cart';
+import { PostClipRow } from '@/features/clips/components/PostClipRow';
 // Deep import, not the barrel: discovery's barrel pulls RestaurantCarousel,
 // which imports this feature back — a require cycle Metro warns about.
 import { RestaurantClips } from '@/features/discovery/components/RestaurantClips';
@@ -147,6 +148,9 @@ export function RestaurantDetailsScreen() {
         />
         {/* After the menu — people came to order; the clips argue for it (#26). */}
         <RestaurantClips restaurantId={restaurant.id} restaurantName={restaurant.name} />
+        {/* Under the shelf it feeds, and standing on its own: the shelf above
+            draws nothing until somebody has posted the first one. */}
+        <PostClipRow restaurantId={restaurant.id} restaurantName={restaurant.name} />
         <RestaurantAbout description={restaurant.description} />
         <RestaurantGallery images={restaurant.gallery} />
         <RestaurantHours openingHours={restaurant.openingHours} />
