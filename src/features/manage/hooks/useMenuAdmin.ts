@@ -7,6 +7,7 @@ import type { DishFields } from '../api/menuAdmin.api';
 import {
   createCategory,
   createDish,
+  deleteCategory,
   deleteDish,
   renameCategory,
   updateDish,
@@ -41,6 +42,9 @@ export const useRenameCategory = (restaurantId: string) =>
   useMenuMutation(restaurantId, (args: { categoryId: string; name: string }) =>
     renameCategory({ restaurantId, ...args }),
   );
+
+export const useDeleteCategory = (restaurantId: string) =>
+  useMenuMutation(restaurantId, (categoryId: string) => deleteCategory(restaurantId, categoryId));
 
 export const useCreateDish = (restaurantId: string) =>
   useMenuMutation(restaurantId, (fields: DishFields) => createDish(restaurantId, fields));
