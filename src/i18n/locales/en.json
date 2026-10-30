@@ -369,6 +369,15 @@
       "confirm": "Report",
       "hint": "Press and hold to report this clip",
       "reportedShort": "Reported"
+    },
+    "remove": {
+      "label": "Remove your clip",
+      "title": "Remove this clip?",
+      "body": "It stops showing in the feed and any link to it stops working. This cannot be undone.",
+      "confirm": "Remove",
+      "removedShort": "Removed",
+      "failedTitle": "That clip is still up",
+      "failedBody": "Nothing was removed. Check your connection and try again."
     }
   },
   "tabs": {

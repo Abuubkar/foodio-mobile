@@ -11,7 +11,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Text } from '@/components/ui';
 import { ClipAuthorLink } from '@/features/clips/components/ClipAuthorLink';
+import { ClipRemovedOverlay } from '@/features/clips/components/ClipRemovedOverlay';
+import { RemoveClipButton } from '@/features/clips/components/RemoveClipButton';
+import { useRemoveClip } from '@/features/clips/hooks/useRemoveClip';
 import { useReportClip } from '@/features/clips/hooks/useReportClip';
+import { canRemoveClip } from '@/features/clips/lib/ownClip';
 import { useNavigationGuard } from '@/hooks/useNavigationGuard';
 import { selectIsSaved, useSavedStore } from '@/stores/saved.store';
 import { useSessionStore } from '@/stores/session.store';
@@ -54,9 +58,12 @@ export function CommunityFeedCell({
   const insets = useSafeAreaInsets();
 
   const { report, isReported } = useReportClip();
+  const { remove, isRemoved, isRemoving } = useRemoveClip();
   const isSaved = useSavedStore(selectIsSaved(clip.id));
   const toggleSaved = useSavedStore((state) => state.toggle);
-  const isSignedIn = useSessionStore((state) => state.person !== null);
+  const person = useSessionStore((state) => state.person);
+  const isSignedIn = person !== null;
+  const canRemove = canRemoveClip(clip, person);
 
   const { player, isPlaying, hasRenderedFrame, onFirstFrameRender, pausedByTap, togglePlayback } =
     useClipPlayback({ mediaUrl: clip.mediaUrl, isActive, reduceMotion });
@@ -124,6 +131,8 @@ export function CommunityFeedCell({
         </View>
       ) : null}
 
+      {isRemoved(clip.id) ? <ClipRemovedOverlay /> : null}
+
       <LinearGradient
         colors={['rgba(0,0,0,0.5)', 'transparent']}
         pointerEvents="none"
@@ -133,9 +142,15 @@ export function CommunityFeedCell({
       <View
         pointerEvents="box-none"
         style={{ top: insets.top + 8 }}
-        className="absolute inset-x-0 px-3.5"
+        className="absolute inset-x-0 flex-row items-center justify-between px-3.5"
       >
         <ClipAuthorLink clip={clip} onDark />
+
+        {/* Opposite the byline, which is the only other thing up here: there
+            is no kitchen header to crowd, and the foot belongs to saving. */}
+        {canRemove && !isRemoved(clip.id) ? (
+          <RemoveClipButton onPress={() => remove(clip.id)} isRemoving={isRemoving} />
+        ) : null}
       </View>
 
       <LinearGradient
