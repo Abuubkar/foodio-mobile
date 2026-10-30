@@ -33,6 +33,16 @@ export async function renameCategory({
   return parseResponse(categoryResponseSchema, data, `PATCH ${endpoint}`);
 }
 
+/**
+ * 409 when any dish in the section has ever been ordered: the delete cascades
+ * to the section's items and `order_lines` pins every one that has been sold.
+ * In practice that makes an established section permanent, which the screen
+ * says before offering this rather than after.
+ */
+export async function deleteCategory(restaurantId: string, categoryId: string): Promise<void> {
+  await apiClient.delete(`/restaurants/${restaurantId}/menu-categories/${categoryId}`);
+}
+
 export type DishFields = {
   menuCategoryId: string;
   name: string;

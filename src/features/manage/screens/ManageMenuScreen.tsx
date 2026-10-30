@@ -17,7 +17,7 @@ import { useRestaurants } from '@/features/restaurants';
 import { useSessionStore } from '@/stores/session.store';
 import { colors } from '@/theme';
 
-import { useCreateCategory, useRenameCategory } from '../hooks/useMenuAdmin';
+import { useCreateCategory, useDeleteCategory, useRenameCategory } from '../hooks/useMenuAdmin';
 
 /**
  * The menu as a restaurant owner edits it: sections, and the dishes inside
@@ -25,9 +25,15 @@ import { useCreateCategory, useRenameCategory } from '../hooks/useMenuAdmin';
  * here — a cook flipping a dish off mid-rush should never be one mistap from
  * renaming it.
  *
- * Sections can be created and renamed. Reordering and deleting them are
+ * Sections can be created, renamed and deleted. Reordering is still
  * deliberately absent: structure changes about once, prices weekly, and
  * drag-to-reorder is the fiddliest UI on the map for the rarest need.
+ *
+ * Deleting was absent for the same reason until the server's own delete turned
+ * out to be unreachable from anywhere. It lives in the rename sheet rather than
+ * on the section header: that sheet is already "edit this section", and a
+ * destructive swipe on a row that doubles as a heading is a mistap waiting to
+ * happen next to the sold-out toggle.
  */
 export function ManageMenuScreen() {
   const { t } = useTranslation();
@@ -42,6 +48,7 @@ export function ManageMenuScreen() {
   const { data: menu, isPending, error, refetch } = useRestaurantMenu(restaurantId);
   const createCategory = useCreateCategory(restaurantId);
   const renameCategory = useRenameCategory(restaurantId);
+  const deleteCategory = useDeleteCategory(restaurantId);
 
   /** Null when closed; a category when renaming; `'new'` when creating. */
   const [editing, setEditing] = useState<MenuCategory | 'new' | null>(null);
@@ -60,6 +67,42 @@ export function ManageMenuScreen() {
         { onSuccess: () => setEditing(null), onError },
       );
     }
+  };
+
+  /**
+   * The cascade reaches the section's dishes, so the confirm counts them. A
+   * section holding anything ever ordered is refused by the server, and that
+   * refusal is the common case rather than the edge — so it gets copy of its
+   * own instead of the shared message, which tells a dish to be marked
+   * unavailable and means nothing for a section.
+   */
+  const confirmDelete = (category: MenuCategory) => {
+    const count = category.menuItems.length;
+
+    Alert.alert(
+      t('manage.menu.deleteSectionTitle'),
+      count === 0
+        ? t('manage.menu.deleteSectionBodyEmpty', { name: category.name })
+        : t('manage.menu.deleteSectionBody', { name: category.name, count }),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('manage.menu.deleteSectionAction'),
+          style: 'destructive',
+          onPress: () =>
+            deleteCategory.mutate(category.id, {
+              onSuccess: () => setEditing(null),
+              onError: (cause) => {
+                const failure = toApiError(cause);
+                Alert.alert(
+                  t('manage.menu.deleteSectionFailed'),
+                  failure.status === 409 ? t('manage.menu.deleteSectionOrdered') : failure.message,
+                );
+              },
+            }),
+        },
+      ],
+    );
   };
 
   return (
@@ -167,8 +210,10 @@ export function ManageMenuScreen() {
       <SectionSheet
         target={editing}
         isBusy={createCategory.isPending || renameCategory.isPending}
+        isDeleting={deleteCategory.isPending}
         onClose={() => setEditing(null)}
         onSubmit={submitSection}
+        onDelete={confirmDelete}
       />
     </SafeAreaView>
   );
@@ -177,12 +222,21 @@ export function ManageMenuScreen() {
 type SectionSheetProps = {
   target: MenuCategory | 'new' | null;
   isBusy: boolean;
+  isDeleting: boolean;
   onClose: () => void;
   onSubmit: (name: string) => void;
+  onDelete: (category: MenuCategory) => void;
 };
 
 /** One field, so a sheet rather than a screen — see t4 on hours and staff. */
-function SectionSheet({ target, isBusy, onClose, onSubmit }: SectionSheetProps) {
+function SectionSheet({
+  target,
+  isBusy,
+  isDeleting,
+  onClose,
+  onSubmit,
+  onDelete,
+}: SectionSheetProps) {
   const { t } = useTranslation();
   const [name, setName] = useState('');
 
@@ -207,6 +261,28 @@ function SectionSheet({ target, isBusy, onClose, onSubmit }: SectionSheetProps) 
         <Button onPress={() => onSubmit(name)} disabled={name.trim() === '' || isBusy}>
           {isBusy ? t('common.saving') : t('common.save')}
         </Button>
+
+        {/* Only an existing section can go, and the hint sets the expectation
+            before the tap rather than explaining the refusal afterwards. */}
+        {target === 'new' || target === null ? null : (
+          <>
+            <Text variant="caption" className="text-center text-gray-400">
+              {t('manage.menu.deleteSectionHint')}
+            </Text>
+
+            <Pressable
+              onPress={() => onDelete(target)}
+              disabled={isDeleting}
+              accessibilityRole="button"
+              className="flex-row items-center justify-center gap-1.5 py-2 active:opacity-70"
+            >
+              <Ionicons name="trash-outline" size={15} color={colors.error[500]} />
+              <Text variant="label" className="text-error-500">
+                {t('manage.menu.deleteSectionAction')}
+              </Text>
+            </Pressable>
+          </>
+        )}
       </View>
     </SheetContainer>
   );
