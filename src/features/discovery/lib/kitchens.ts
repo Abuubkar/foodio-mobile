@@ -59,6 +59,81 @@ export function kitchensFrom(clips: readonly Clip[]): Kitchen[] {
 }
 
 /**
+ * One dish and the clips tagged to it, in the order the feed met them.
+ *
+ * A level below `Kitchen`: the kitchen is the place that cooks it, this is the
+ * thing itself. Keyed by the Menu Item, so the restaurant's own clip of a dish
+ * and a customer's receipt clip of the same dish land in one group — the pair
+ * worth seeing side by side, which no other view puts together.
+ *
+ * The name and the price are not here. Only the Menu Item id travels on a
+ * Clip, so whoever draws a group reads the rest from that kitchen's menu.
+ */
+export type SavedDish = {
+  readonly menuItemId: string;
+  readonly restaurantId: string;
+  /** Denormalised on the Clip, so a group can name the kitchen unasked. */
+  readonly restaurantName: string;
+  readonly clips: readonly Clip[];
+};
+
+/**
+ * Group clips by the dish they are tagged to, keeping first-appearance order.
+ *
+ * Grouped by Menu Item id alone and not by restaurant too: a Menu Item belongs
+ * to exactly one Restaurant, so the pair cannot disagree and the id is already
+ * the narrower key.
+ *
+ * Within a dish the restaurant's own footage leads, as in `kitchensFrom` — the
+ * kitchen's claim first, then the receipt that answers it.
+ */
+export function dishesFrom(clips: readonly Clip[]): SavedDish[] {
+  const order: string[] = [];
+  const byDish = new Map<string, Clip[]>();
+
+  for (const clip of clips) {
+    // Both or neither: a dish group needs a menu to price it, and a menu is
+    // only reachable through a Restaurant. `untaggedClips` is where the rest go.
+    const { menuItemId, restaurantId } = clip;
+    if (menuItemId === undefined || restaurantId === undefined) continue;
+
+    const existing = byDish.get(menuItemId);
+    if (existing) {
+      existing.push(clip);
+      continue;
+    }
+    order.push(menuItemId);
+    byDish.set(menuItemId, [clip]);
+  }
+
+  return order.map((menuItemId) => {
+    const mine = byDish.get(menuItemId) ?? [];
+    const first = mine[0];
+
+    return {
+      menuItemId,
+      restaurantId: first?.restaurantId ?? '',
+      restaurantName: first?.restaurantName ?? '',
+      clips: [
+        ...mine.filter((clip) => clip.author.kind === 'restaurant'),
+        ...mine.filter((clip) => clip.author.kind === 'customer'),
+      ],
+    };
+  });
+}
+
+/**
+ * The Clips that name no dish, in the order they arrived.
+ *
+ * The exact complement of `dishesFrom`, so a dish view can say how many saves
+ * it is not showing instead of quietly dropping them. Most community clips
+ * land here, and so does a kitchen's clip of a full table.
+ */
+export function untaggedClips(clips: readonly Clip[]): Clip[] {
+  return clips.filter((clip) => clip.menuItemId === undefined || clip.restaurantId === undefined);
+}
+
+/**
  * The Clips that belong to no kitchen, in the order they arrived.
  *
  * The feed stops being "kitchens" and becomes kitchens *and loose clips*.
@@ -141,10 +216,15 @@ export function dishesInClip(menu: RestaurantMenu, clip: Clip, limit = 3): MenuI
     .slice(0, limit);
 }
 
+/** One dish by id, wherever it sits in the kitchen's categories. */
+export function dishInMenu(menu: RestaurantMenu, menuItemId: string): MenuItem | undefined {
+  return allItems(menu).find((item) => item.id === menuItemId);
+}
+
 /** The dish a clip is about, or nothing when it was never tagged to one. */
 export function taggedDish(menu: RestaurantMenu, clip: Clip): MenuItem | undefined {
   if (!clip.menuItemId) return undefined;
-  return allItems(menu).find((item) => item.id === clip.menuItemId);
+  return dishInMenu(menu, clip.menuItemId);
 }
 
 /** How many of a kitchen's dishes have a clip. The honest ratio is low. */

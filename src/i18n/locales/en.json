@@ -709,13 +709,19 @@
     "yours": "Yours",
     "view": {
       "all": "All",
-      "kitchens": "Kitchens"
+      "kitchens": "Kitchens",
+      "dishes": "Dishes"
     },
     "clipCount_one": "{{count}} clip",
     "clipCount_other": "{{count}} clips",
     "kitchenCount_one": "{{count}} kitchen",
     "kitchenCount_other": "{{count}} kitchens",
     "count": "{{clips}} · {{kitchens}}",
+    "openDish": "Open {{dish}}",
+    "noDishes": "None of your saved clips name a dish. Kitchens and All still have them.",
+    "untaggedNote_one": "{{count}} save names no dish, so it is not here.",
+    "untaggedNote_other": "{{count}} saves name no dish, so they are not here.",
+    "untaggedAction": "See all",
     "signInRequired": "Sign in to keep clips and find them again."
   },
   "profile": {

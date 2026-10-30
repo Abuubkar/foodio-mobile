@@ -4,7 +4,7 @@ import { queryKeys } from '@/constants/queryKeys';
 import { useSavedStore } from '@/stores/saved.store';
 
 import { fetchClipsByIds } from '../api/clip.api';
-import { kitchensFrom } from '../lib/kitchens';
+import { dishesFrom, kitchensFrom, untaggedClips } from '../lib/kitchens';
 
 /**
  * The saved clips, newest save first, grouped the way the feed groups.
@@ -36,5 +36,10 @@ export function useSavedClips() {
     isPending: query.isPending || !isHydrated,
     clips,
     kitchens: clips ? kitchensFrom(clips) : undefined,
+    dishes: clips ? dishesFrom(clips) : undefined,
+    /* Grouping by dish cannot hold a clip that names none. Counted here so
+       the dish view can say how many saves it is leaving out, rather than
+       losing them quietly between two chips. */
+    untagged: clips ? untaggedClips(clips) : undefined,
   };
 }
