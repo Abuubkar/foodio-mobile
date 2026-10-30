@@ -134,6 +134,49 @@ const PUSH_PLATFORMS = new Set(['ios', 'android']);
 /** E.164, the one form the contract stores and compares. */
 const PHONE = /^\+[1-9]\d{7,14}$/;
 
+/**
+ * Lowercase and narrow, mirroring the client's `handleSchema`. A handle sits
+ * beside a caption in a feed cell, so anything that can carry spaces or
+ * punctuation can be made to look like somebody else.
+ */
+const HANDLE = /^[a-z0-9_]{3,20}$/;
+
+const PROFILE_PATH = /^\/profiles\/([^/]+)$/;
+
+/** What anybody may see of a person. Never the phone — see the contract. */
+const publicProfile = (person) => ({
+  handle: person.handle,
+  displayName: person.displayName,
+  avatarUrl: person.avatarUrl ?? '',
+});
+
+/** `lower(handle)`, the way the backend compares them. */
+const findByHandle = (req, handle) =>
+  (req.app.db.get('people').value() ?? []).find(
+    (person) =>
+      typeof person.handle === 'string' && person.handle.toLowerCase() === handle.toLowerCase(),
+  ) ?? null;
+
+/** Everything the app's `clip.api.ts` sends. Anything else is a typo. */
+const CLIP_QUERY_KEYS = new Set([
+  'restaurantId',
+  'menuItemId',
+  'personId',
+  'ids',
+  '_sort',
+  '_order',
+  'cursor',
+]);
+
+/** A batch of ids is a lookup, not a feed. Mirrors the backend's cap. */
+const MAX_CLIP_IDS = 50;
+
+/** Newest first, the order every clip read in the app asks for. */
+const clipsWhere = (req, keep) =>
+  (req.app.db.get('clips').value() ?? [])
+    .filter(keep)
+    .sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt));
+
 /** Newest first — the sort the backend's reviews list and embed both use. */
 const reviewsFor = (req, restaurantId) =>
   (req.app.db.get('reviews').value() ?? [])
@@ -215,6 +258,66 @@ module.exports = function mockApi(req, res, next) {
     return;
   }
 
+  // A profile is public: a name, a face, and the handle that addresses it.
+  // Reached from an author's name under a clip, so a handle that leads to a
+  // 404 is worse than one that is not tappable at all.
+  const profileRead = req.method === 'GET' ? PROFILE_PATH.exec(req.path) : null;
+  if (profileRead) {
+    const person = findByHandle(req, decodeURIComponent(profileRead[1]));
+    if (!person) {
+      respondLater(res, 404, errorBody(404, 'Nobody by that name.'));
+      return;
+    }
+    respondLater(res, 200, publicProfile(person));
+    return;
+  }
+
+  /*
+    Clips, where the filter has to actually filter.
+
+    json-server matches on top-level keys only, so `?personId=` — the author is
+    nested — matched nothing and it answered with the whole collection. Same for
+    `?ids=`, which it does not know at all. Both read as "show me these" and
+    returned "here is everything", which is the failure the backend's clip DTO
+    now guards against by name. An unknown key is a 400 here for the same
+    reason: a filter that fails open is the worst default an endpoint can have.
+  */
+  if (req.method === 'GET' && req.path === '/clips') {
+    const unknown = Object.keys(req.query).filter((key) => !CLIP_QUERY_KEYS.has(key));
+    if (unknown.length > 0) {
+      respondLater(res, 400, errorBody(400, `Unknown query parameter: ${unknown.join(', ')}.`));
+      return;
+    }
+
+    const { personId, ids } = req.query;
+
+    if (typeof ids === 'string') {
+      const wanted = ids
+        .split(',')
+        .map((id) => id.trim())
+        .filter((id) => id !== '');
+      if (wanted.length === 0 || wanted.length > MAX_CLIP_IDS) {
+        respondLater(res, 400, errorBody(400));
+        return;
+      }
+      respondLater(
+        res,
+        200,
+        clipsWhere(req, (clip) => wanted.includes(clip.id)),
+      );
+      return;
+    }
+
+    if (typeof personId === 'string') {
+      respondLater(
+        res,
+        200,
+        clipsWhere(req, (clip) => clip.author?.personId === personId),
+      );
+      return;
+    }
+  }
+
   // Everything behind `/me` resolves through the token and nothing else, the
   // same way the backend's tenant scope does. An address row carries a
   // `personId` the client never sees, so one Person's addresses cannot be
@@ -235,19 +338,37 @@ module.exports = function mockApi(req, res, next) {
 
     // The phone arrives here from checkout, already normalised by the client.
     if (req.method === 'PATCH' && req.path === '/me') {
-      const { displayName, phone } = req.body ?? {};
+      const { displayName, phone, handle } = req.body ?? {};
       const named = typeof displayName === 'string' && displayName.trim() !== '';
       const numbered = typeof phone === 'string';
+      const renamed = typeof handle === 'string';
 
       if (numbered && !PHONE.test(phone)) {
         respondLater(res, 400, errorBody(400));
         return;
       }
 
+      // Stored lowercase, so `@Sana` and `@sana` cannot become two people.
+      const wanted = renamed ? handle.trim().toLowerCase() : '';
+      if (renamed && !HANDLE.test(wanted)) {
+        respondLater(res, 400, errorBody(400));
+        return;
+      }
+
+      const taken = renamed ? findByHandle(req, wanted) : null;
+      if (taken && taken.id !== person.id) {
+        respondLater(res, 409, errorBody(409, 'Somebody already uses that handle.'));
+        return;
+      }
+
       const people = req.app.db.get('people');
       void people
         .find({ id: person.id })
-        .assign({ ...(named ? { displayName } : {}), ...(numbered ? { phone } : {}) })
+        .assign({
+          ...(named ? { displayName } : {}),
+          ...(numbered ? { phone } : {}),
+          ...(renamed ? { handle: wanted } : {}),
+        })
         .write();
       respondLater(res, 200, people.find({ id: person.id }).value());
       return;
