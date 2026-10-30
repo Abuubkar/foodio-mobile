@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.7.0](https://github.com/Abuubkar/foodio-mobile/compare/v1.6.0...v1.7.0) (2026-10-30)
+
+
+### Features
+
+* **clips:** a way in from a kitchen's page and from the kitchen itself ([#253](https://github.com/Abuubkar/foodio-mobile/issues/253)) ([7af2b47](https://github.com/Abuubkar/foodio-mobile/commit/7af2b479de44cf754c04b07c81f87e9c72fd9131))
+* **clips:** take down a clip you posted ([#254](https://github.com/Abuubkar/foodio-mobile/issues/254)) ([b572352](https://github.com/Abuubkar/foodio-mobile/commit/b572352cbf8119869f21ec389a38160b2e4f5ba8))
+* **saved:** group saved clips by the dish they are tagged to ([#255](https://github.com/Abuubkar/foodio-mobile/issues/255)) ([f503fa6](https://github.com/Abuubkar/foodio-mobile/commit/f503fa6d1b9d7923ead6aa20de81933c17100b49)), closes [#230](https://github.com/Abuubkar/foodio-mobile/issues/230)
+
+
+### Bug Fixes
+
+* **saved:** the "Yours" badge only where it is actually yours ([#256](https://github.com/Abuubkar/foodio-mobile/issues/256)) ([eaf4ec0](https://github.com/Abuubkar/foodio-mobile/commit/eaf4ec0fad14732bec1d3e3f08189d2d0fcd7ac6))
+
 ## [1.6.0](https://github.com/Abuubkar/foodio-mobile/compare/v1.5.0...v1.6.0) (2026-10-26)
 
 
