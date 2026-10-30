@@ -89,6 +89,26 @@ export const orderPaymentSchema = z.object({
   amountMinor: z.number().int(),
 });
 
+/**
+ * Who picked the order up. A name and a face, and deliberately nothing else —
+ * the server never sends the rider's phone. See backend ADR-0024.
+ */
+export const orderRiderSchema = z.object({
+  displayName: z.string(),
+  /** Empty means no photograph; `PersonAvatar` draws initials. */
+  avatarUrl: z.string().default(''),
+});
+
+/**
+ * When the food should turn up, as a range rather than a moment. The server
+ * measures it once at pickup and never revises it, so it does not jitter
+ * across the five-second poll.
+ */
+export const arrivalWindowSchema = z.object({
+  from: z.string(),
+  to: z.string(),
+});
+
 export const orderSchema = z.object({
   /** json-server assigns a number; every caller wants a string. */
   id: z.coerce.string(),
@@ -111,6 +131,9 @@ export const orderSchema = z.object({
   payment: orderPaymentSchema.optional(),
   /** Only on staff-scoped reads, so a rider can call about a wrong gate number. */
   customerPhone: z.string().optional(),
+  /** Both present from pickup onward — the server reads them off that event. */
+  rider: orderRiderSchema.optional(),
+  arrival: arrivalWindowSchema.optional(),
 });
 
 export const orderListSchema = z.array(orderSchema);
@@ -118,6 +141,8 @@ export const orderListSchema = z.array(orderSchema);
 export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
 export type OrderPaymentState = z.infer<typeof orderPaymentStateSchema>;
 export type OrderPayment = z.infer<typeof orderPaymentSchema>;
+export type OrderRider = z.infer<typeof orderRiderSchema>;
+export type ArrivalWindow = z.infer<typeof arrivalWindowSchema>;
 export type ChosenOption = z.infer<typeof chosenOptionSchema>;
 export type OrderLine = z.infer<typeof orderLineSchema>;
 export type Order = z.infer<typeof orderSchema>;

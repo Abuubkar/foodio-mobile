@@ -75,6 +75,77 @@ function progressed(order) {
   return reached ? { ...order, status: reached.status } : order;
 }
 
+/**
+ * Who is carrying the order, and roughly when it lands.
+ *
+ * The real backend reads both off the `out_for_delivery` event — the rider is
+ * that event's actor and the window is measured from its timestamp. See its
+ * ADR-0024. There is no event log here, so the invisible kitchen's own TIMELINE
+ * stands in for the pickup moment and the restaurant's one delivery hand stands
+ * in for whoever tapped it. Close enough to build the screen against; the shape
+ * is identical, which is the part that matters.
+ */
+const PICKED_UP_AFTER = (
+  TIMELINE.find((step) => step.status === 'out_for_delivery') ?? { after: 120 }
+).after;
+
+/** Any of these three means the handover already happened. */
+const PICKED_UP = new Set(['out_for_delivery', 'delivered', 'delivery_failed']);
+
+// Mirrors the backend's `arrival.ts` exactly, so dev and production agree.
+const METRES_PER_MINUTE = 333;
+const ARRIVAL_SPREAD = 0.25;
+const ARRIVAL_FLOOR_MINUTES = 5;
+
+const EARTH_METRES = 6_371_000;
+const toRadians = (degrees) => (degrees * Math.PI) / 180;
+
+/** Haversine, because there is no PostGIS in here to ask. */
+function metresBetween(from, to) {
+  const dLat = toRadians(to.latitude - from.latitude);
+  const dLon = toRadians(to.longitude - from.longitude);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRadians(from.latitude)) * Math.cos(toRadians(to.latitude)) * Math.sin(dLon / 2) ** 2;
+
+  return 2 * EARTH_METRES * Math.asin(Math.min(1, Math.sqrt(a)));
+}
+
+/** Null when nobody at this restaurant delivers — the honest answer, not a stand-in. */
+const deliveryHandAt = (req, restaurantId) =>
+  (req.app.db.get('people').value() ?? []).find((person) =>
+    (person.entitlements ?? []).some(
+      (entitlement) =>
+        entitlement.restaurantId === restaurantId &&
+        (entitlement.capabilities ?? []).includes('delivery'),
+    ),
+  ) ?? null;
+
+function withRider(req, order) {
+  if (!order || !order.placedAt || !PICKED_UP.has(order.status)) return order;
+
+  const rider = deliveryHandAt(req, order.restaurantId);
+  if (!rider) return order;
+
+  const shaped = {
+    ...order,
+    rider: { displayName: rider.displayName, avatarUrl: rider.avatarUrl ?? '' },
+  };
+
+  const restaurant = (req.app.db.get('restaurants').value() ?? []).find(
+    (row) => row.id === order.restaurantId,
+  );
+  const address = order.address;
+  if (!restaurant || !address || typeof address.latitude !== 'number') return shaped;
+
+  const ride = metresBetween(restaurant, address) / METRES_PER_MINUTE;
+  const spread = Math.max(ARRIVAL_FLOOR_MINUTES, ride * ARRIVAL_SPREAD);
+  const pickedUpAt = Date.parse(order.placedAt) + PICKED_UP_AFTER * 1000;
+  const at = (minutes) => new Date(pickedUpAt + minutes * 60_000).toISOString();
+
+  return { ...shaped, arrival: { from: at(Math.max(0, ride - spread)), to: at(ride + spread) } };
+}
+
 /** `Bearer person:<id>` — deliberately readable, so nobody mistakes it for a credential. */
 const TOKEN_PREFIX = 'person:';
 
@@ -639,7 +710,7 @@ module.exports = function mockApi(req, res, next) {
     const phoneOf = (order) =>
       entitled ? (findPerson(req, order.customerId)?.phone ?? undefined) : undefined;
     const serve = (order) => {
-      const shaped = progressed(order);
+      const shaped = withRider(req, progressed(order));
       const phone = shaped && phoneOf(shaped);
       return phone ? { ...shaped, customerPhone: phone } : shaped;
     };
