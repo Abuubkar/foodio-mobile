@@ -1906,7 +1906,7 @@
       "displayName": "Aisha K.",
       "phone": "+923001230001",
       "entitlements": [],
-      "handle": null,
+      "handle": "aisha",
       "avatarUrl": ""
     },
     {
@@ -1919,7 +1919,7 @@
           "capabilities": ["kitchen", "delivery"]
         }
       ],
-      "handle": null,
+      "handle": "marco",
       "avatarUrl": ""
     },
     {
@@ -1932,7 +1932,7 @@
           "capabilities": ["kitchen"]
         }
       ],
-      "handle": null,
+      "handle": "sofia",
       "avatarUrl": ""
     },
     {
@@ -1949,7 +1949,7 @@
           "capabilities": ["kitchen"]
         }
       ],
-      "handle": null,
+      "handle": "tomas",
       "avatarUrl": ""
     },
     {
