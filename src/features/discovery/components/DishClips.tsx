@@ -85,7 +85,7 @@ function ClipTile({ clip }: { clip: Clip }) {
           className={isCustomer ? 'ml-1 text-success-500' : 'ml-1 text-gray-500'}
           numberOfLines={1}
         >
-          {isCustomer ? t('clips.dishYours') : clipHeading(clip)}
+          {isCustomer ? t('clips.dishByCustomer') : clipHeading(clip)}
         </Text>
       </View>
     </Pressable>
