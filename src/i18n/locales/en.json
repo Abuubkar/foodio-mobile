@@ -353,7 +353,15 @@
       "posting": "Posting…",
       "failedTitle": "That did not post",
       "failedBody": "Nothing was published. Check your connection and try again.",
-      "signInRequired": "Sign in to post a clip."
+      "signInRequired": "Sign in to post a clip.",
+      "fromRestaurant": "Post a clip of your meal",
+      "fromRestaurantHint": "Filmed in the app, and it shows on {{name}}'s page.",
+      "fromRestaurantLabel": "Post a clip about {{name}}",
+      "fromKitchen": "Post a clip as {{name}}",
+      "pausedTitle": "Posting clips is paused",
+      "pausedBody": "There is an unpaid invoice on your subscription. Your menu and your orders carry on as normal — only the restaurant's own clips stop until it is paid.",
+      "pausedCheckAgain": "Already paid? Check again",
+      "pausedChecking": "Checking…"
     },
     "report": {
       "title": "Report this clip?",

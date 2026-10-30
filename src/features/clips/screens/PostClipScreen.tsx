@@ -7,10 +7,15 @@ import { useTranslation } from 'react-i18next';
 
 import { ScreenHeader, SignInRequired } from '@/components/shared';
 import { Button, Photo, Text, TextField } from '@/components/ui';
+// Deep import, not the manage barrel: that barrel pulls every Manage screen,
+// and this needs one query.
+import { useSubscription } from '@/features/manage/hooks/useSubscription';
 import { useSessionStore } from '@/stores/session.store';
 
+import { PostingPausedNotice } from '../components/PostingPausedNotice';
 import type { ClipTake } from '../hooks/usePostClip';
 import { usePostClip } from '../hooks/usePostClip';
+import { isPostingPausedByBilling, postsAsRestaurant } from '../lib/kitchenClips';
 import { MAX_CLIP_SECONDS } from '../lib/recordClip';
 
 const CAPTION_LIMIT = 280;
@@ -35,11 +40,30 @@ export function PostClipScreen() {
     orderId?: string;
   }>();
 
-  const isSignedIn = useSessionStore((state) => state.person !== null);
+  const person = useSessionStore((state) => state.person);
   const { film, isFilming, send } = usePostClip();
 
   const [take, setTake] = useState<ClipTake | null>(null);
   const [caption, setCaption] = useState('');
+  const [refusedForBilling, setRefusedForBilling] = useState(false);
+
+  const asRestaurant = postsAsRestaurant(person, params.restaurantId);
+  // Only asked when the clip would be the restaurant's own. A customer's clip
+  // is never refused over somebody else's invoice, and asking would be a
+  // request they are not entitled to make.
+  const subscription = useSubscription(asRestaurant ? (params.restaurantId ?? '') : '');
+
+  /**
+   * Said before they film where we can, and after the refusal where we cannot.
+   * An unheard-from subscription claims nothing — that is the going-live
+   * screen's rule, and the server refuses anyway if we guessed wrong.
+   */
+  const isPaused = refusedForBilling || subscription.data?.status === 'past_due';
+
+  const checkAgain = () => {
+    setRefusedForBilling(false);
+    void subscription.refetch();
+  };
 
   const onFilm = async () => {
     const filmed = await film();
@@ -50,6 +74,8 @@ export function PostClipScreen() {
 
   const onPost = () => {
     if (!take) return;
+
+    setRefusedForBilling(false);
 
     send.mutate(
       {
@@ -63,12 +89,25 @@ export function PostClipScreen() {
       },
       {
         onSuccess: () => router.back(),
-        onError: () => Alert.alert(t('clips.post.failedTitle'), t('clips.post.failedBody')),
+        onError: (cause) => {
+          // The dunning bar is a state, not a slip — it stays on screen for
+          // the owner to act on rather than flashing past in an alert. The
+          // take survives either way.
+          //
+          // Only for the restaurant's own clip: a 402 reaching a customer is
+          // not their invoice to settle, so it stays an ordinary failure.
+          if (asRestaurant && isPostingPausedByBilling(cause)) {
+            setRefusedForBilling(true);
+            return;
+          }
+
+          Alert.alert(t('clips.post.failedTitle'), t('clips.post.failedBody'));
+        },
       },
     );
   };
 
-  if (!isSignedIn) {
+  if (person === null) {
     return (
       <View className="flex-1 bg-white">
         <ScreenHeader title={t('clips.post.title')} />
@@ -93,6 +132,10 @@ export function PostClipScreen() {
             ? t('clips.post.aboutKitchen', { name: params.restaurantName })
             : t('clips.post.aboutNothing')}
         </Text>
+
+        {isPaused ? (
+          <PostingPausedNotice onCheckAgain={checkAgain} isChecking={subscription.isFetching} />
+        ) : null}
 
         {take ? (
           <View className="gap-3">
@@ -126,7 +169,7 @@ export function PostClipScreen() {
           editable={!send.isPending}
         />
 
-        <Button onPress={onPost} disabled={take === null || send.isPending}>
+        <Button onPress={onPost} disabled={take === null || send.isPending || isPaused}>
           {send.isPending ? t('clips.post.posting') : t('clips.post.post')}
         </Button>
       </ScrollView>

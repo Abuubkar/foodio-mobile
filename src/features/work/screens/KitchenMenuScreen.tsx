@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { toApiError } from '@/api/errors';
 import { EmptyState, ErrorState, LoadingState } from '@/components/shared';
 import { Text } from '@/components/ui';
+import { ComposeKitchenClipButton } from '@/features/clips/components/ComposeKitchenClipButton';
 import { IdentityChip } from '@/features/identity/components/IdentityChip';
 import { ManageButton } from '@/features/manage';
 import { useRestaurantMenu } from '@/features/menu/hooks/useRestaurantMenu';
@@ -130,6 +131,11 @@ export function KitchenMenuScreen() {
             {t('work.menu.subtitle')}
           </Text>
         </View>
+        {/* The kitchen's own voice, so the kitchen only — a rider works for the
+            restaurant without speaking for it. Waits for the name it carries. */}
+        {role.kind === 'kitchen' && restaurant ? (
+          <ComposeKitchenClipButton restaurantId={restaurant.id} restaurantName={restaurant.name} />
+        ) : null}
         {role.kind === 'kitchen' ? <ManageButton /> : null}
         <IdentityChip />
       </View>
