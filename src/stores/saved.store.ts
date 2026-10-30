@@ -16,6 +16,11 @@ type SavedState = {
 
   toggle: (clipId: string) => void;
   /**
+   * Drops one id whether or not it was there. `toggle` cannot do this job: a
+   * clip taken down while it happened not to be saved would be *added* by one.
+   */
+  discard: (clipId: string) => void;
+  /**
    * Emptied on sign-out. Saving needs a session, so a list left behind would
    * belong to nobody: the next person on a shared device would carry a count
    * they cannot open, since Saved is behind the same session.
@@ -44,6 +49,15 @@ export const useSavedStore = create<SavedState>((set, get) => ({
 
     set({ clipIds: next });
     // Writing before hydration would persist a list built on an empty start.
+    if (isHydrated) void setStoredSavedClips(next);
+  },
+
+  discard: (clipId) => {
+    const { clipIds, isHydrated } = get();
+    if (!clipIds.includes(clipId)) return;
+
+    const next = clipIds.filter((id) => id !== clipId);
+    set({ clipIds: next });
     if (isHydrated) void setStoredSavedClips(next);
   },
 

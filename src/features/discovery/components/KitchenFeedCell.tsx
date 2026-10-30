@@ -12,7 +12,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Photo, Text } from '@/components/ui';
 import { ClipAuthorLink } from '@/features/clips/components/ClipAuthorLink';
+import { ClipRemovedOverlay } from '@/features/clips/components/ClipRemovedOverlay';
+import { RemoveClipButton } from '@/features/clips/components/RemoveClipButton';
+import { useRemoveClip } from '@/features/clips/hooks/useRemoveClip';
 import { useReportClip } from '@/features/clips/hooks/useReportClip';
+import { canRemoveClip } from '@/features/clips/lib/ownClip';
 import { useRestaurantMenu } from '@/features/menu/hooks/useRestaurantMenu';
 import type { MenuItem } from '@/features/menu/types/menu.types';
 import { useRestaurant } from '@/features/restaurants/hooks/useRestaurant';
@@ -63,6 +67,7 @@ export function KitchenFeedCell({
 }: KitchenFeedCellProps) {
   const { t, i18n } = useTranslation();
   const { report, isReported } = useReportClip();
+  const { remove, isRemoved, isRemoving } = useRemoveClip();
   const router = useRouter();
   const guard = useNavigationGuard();
   const insets = useSafeAreaInsets();
@@ -89,7 +94,8 @@ export function KitchenFeedCell({
   const addItem = useCartStore((state) => state.addItem);
   const isSaved = useSavedStore(selectIsSaved(clip?.id ?? ''));
   const toggleSaved = useSavedStore((state) => state.toggle);
-  const isSignedIn = useSessionStore((state) => state.person !== null);
+  const person = useSessionStore((state) => state.person);
+  const isSignedIn = person !== null;
 
   /* Chapters swap the source on this one player. Everything about keeping it
      from flashing black lives in the hook, which the community cell shares. */
@@ -174,6 +180,8 @@ export function KitchenFeedCell({
 
   if (!clip) return <View style={{ height }} className="bg-black" />;
 
+  const canRemove = canRemoveClip(clip, person);
+
   return (
     <View style={{ height }} className="bg-black">
       <VideoView
@@ -220,6 +228,8 @@ export function KitchenFeedCell({
         </View>
       ) : null}
 
+      {isRemoved(clip.id) ? <ClipRemovedOverlay /> : null}
+
       {pausedByTap ? (
         <View pointerEvents="none" className="absolute inset-0 items-center justify-center">
           <View className="h-16 w-16 items-center justify-center rounded-full bg-black/50">
@@ -257,6 +267,14 @@ export function KitchenFeedCell({
             onOpenMenu={() => setMenuOpen(true)}
           />
         </View>
+
+        {/* Its own row under the header: a corner of its own, away from the
+            Menu pill above and the action rail at the foot. */}
+        {canRemove && !isRemoved(clip.id) ? (
+          <View pointerEvents="box-none" className="mt-2 flex-row justify-end px-3.5">
+            <RemoveClipButton onPress={() => remove(clip.id)} isRemoving={isRemoving} />
+          </View>
+        ) : null}
       </View>
 
       <LinearGradient

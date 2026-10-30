@@ -49,6 +49,30 @@ describe('saved store', () => {
     expect(mockWrite).not.toHaveBeenCalled();
   });
 
+  it('discards a taken-down clip without toggling it back on', () => {
+    hydrated(['a', 'b']);
+    useSavedStore.getState().discard('a');
+
+    expect(useSavedStore.getState().clipIds).toEqual(['b']);
+    expect(mockWrite).toHaveBeenCalledWith(['b']);
+  });
+
+  it('discarding something never saved adds nothing — the trap toggle would fall into', () => {
+    hydrated(['a']);
+    useSavedStore.getState().discard('zzz');
+
+    expect(useSavedStore.getState().clipIds).toEqual(['a']);
+    expect(mockWrite).not.toHaveBeenCalled();
+  });
+
+  it('never writes a discard before hydration, same as a toggle', () => {
+    useSavedStore.setState({ clipIds: ['a'], isHydrated: false });
+    useSavedStore.getState().discard('a');
+
+    expect(useSavedStore.getState().clipIds).toEqual([]);
+    expect(mockWrite).not.toHaveBeenCalled();
+  });
+
   it('clears, so a sign-out does not leave a list belonging to nobody', () => {
     hydrated(['a', 'b']);
     useSavedStore.getState().clear();

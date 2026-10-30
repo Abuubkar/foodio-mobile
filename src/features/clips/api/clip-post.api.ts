@@ -38,3 +38,15 @@ export async function postClip(body: NewClipBody): Promise<Clip> {
 export async function reportClip(clipId: string, reason?: string): Promise<void> {
   await apiClient.post(`/clips/${clipId}/report`, { reason });
 }
+
+/**
+ * Takes a clip down.
+ *
+ * A soft delete on the server: the status becomes `removed`, so a link
+ * somebody already holds stops resolving rather than 404ing mid-scroll. A clip
+ * that is not theirs answers 404 — deliberately, since a stranger does not get
+ * to learn it exists.
+ */
+export async function removeClip(clipId: string): Promise<void> {
+  await apiClient.delete(`/clips/${clipId}`);
+}
