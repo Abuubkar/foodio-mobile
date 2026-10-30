@@ -3,6 +3,7 @@ import type { MenuCategory, MenuItem } from '@/features/menu/types/menu.types';
 import type { Clip } from '../types/clip.types';
 
 import {
+  dishesFrom,
   dishesInClip,
   filmedCount,
   interleave,
@@ -11,6 +12,7 @@ import {
   primaryAction,
   requiredGroupName,
   taggedDish,
+  untaggedClips,
 } from './kitchens';
 
 const clip = (overrides: Partial<Clip> & Pick<Clip, 'id'>): Clip => ({
@@ -242,5 +244,85 @@ describe('interleave', () => {
       'kitchen',
       'loose',
     ]);
+  });
+});
+
+describe('dishesFrom', () => {
+  it('groups clips by the dish they are tagged to, keeping first-appearance order', () => {
+    const dishes = dishesFrom([
+      clip({ id: 'c1', menuItemId: 'birria' }),
+      clip({ id: 'c2', menuItemId: 'horchata' }),
+      clip({ id: 'c3', menuItemId: 'birria' }),
+    ]);
+
+    expect(dishes.map((d) => d.menuItemId)).toEqual(['birria', 'horchata']);
+    expect(dishes[0]?.clips.map((c) => c.id)).toEqual(['c1', 'c3']);
+  });
+
+  it('puts ours and theirs in one group, the kitchen leading', () => {
+    const dishes = dishesFrom([
+      clip({ id: 'theirs', menuItemId: 'birria', author: customer() }),
+      clip({ id: 'ours', menuItemId: 'birria' }),
+    ]);
+
+    expect(dishes).toHaveLength(1);
+    expect(dishes[0]?.clips.map((c) => c.id)).toEqual(['ours', 'theirs']);
+  });
+
+  it('carries the kitchen a dish belongs to, so a group can name it unasked', () => {
+    const dishes = dishesFrom([
+      clip({ id: 'c1', menuItemId: 'pide', restaurantId: 'rest-2', restaurantName: 'Bella' }),
+    ]);
+
+    expect(dishes[0]?.restaurantId).toBe('rest-2');
+    expect(dishes[0]?.restaurantName).toBe('Bella');
+  });
+
+  it('skips a clip tagged to no dish', () => {
+    const dishes = dishesFrom([
+      clip({ id: 'table', menuItemId: undefined }),
+      clip({ id: 'tagged', menuItemId: 'birria' }),
+    ]);
+
+    expect(dishes.map((d) => d.menuItemId)).toEqual(['birria']);
+    expect(dishes[0]?.clips.map((c) => c.id)).toEqual(['tagged']);
+  });
+
+  it('skips a dish-tagged clip that names no restaurant, having no menu to price it', () => {
+    const dishes = dishesFrom([
+      clip({
+        id: 'loose',
+        menuItemId: 'birria',
+        restaurantId: undefined,
+        restaurantName: undefined,
+        author: customer({ orderId: undefined }),
+      }),
+    ]);
+
+    expect(dishes).toEqual([]);
+  });
+
+  it('returns nothing for an empty shelf', () => {
+    expect(dishesFrom([])).toEqual([]);
+  });
+});
+
+describe('untaggedClips', () => {
+  it('is the exact complement of dishesFrom, so a dish view can count what it hides', () => {
+    const clips = [
+      clip({ id: 'tagged', menuItemId: 'birria' }),
+      clip({ id: 'table', menuItemId: undefined }),
+      clip({ id: 'community', restaurantId: undefined, author: customer({ orderId: undefined }) }),
+    ];
+
+    const grouped = dishesFrom(clips).flatMap((dish) => dish.clips.map((c) => c.id));
+    const untagged = untaggedClips(clips).map((c) => c.id);
+
+    expect(untagged).toEqual(['table', 'community']);
+    expect([...grouped, ...untagged].sort()).toEqual(['community', 'table', 'tagged']);
+  });
+
+  it('is empty when every save names a dish', () => {
+    expect(untaggedClips([clip({ id: 'c1', menuItemId: 'birria' })])).toEqual([]);
   });
 });
