@@ -15,6 +15,7 @@ import { formatMoney } from '@/utils/currency';
 import { OrderStatusTimeline } from '../components/OrderStatusTimeline';
 import { RateOrderAffordance } from '../components/RateOrderAffordance';
 import { RateOrderSheet } from '../components/RateOrderSheet';
+import { RiderCard } from '../components/RiderCard';
 import { useCancelOrder, useOrder } from '../hooks/useOrders';
 import { customerPaymentKey } from '../lib/payment';
 import { isCancellable } from '../types/order.types';
@@ -85,6 +86,12 @@ export function OrderStatusScreen() {
         </Text>
 
         <OrderStatusTimeline status={order.status} />
+
+        {/* Under the timeline, above the address: the timeline says what stage
+            the order is at, and this says who is carrying it there. */}
+        {order.rider ? (
+          <RiderCard rider={order.rider} arrival={order.arrival} status={order.status} />
+        ) : null}
 
         {/* Only while the Order is still moving: there is nothing left to be
             told about one that has already arrived. */}

@@ -230,6 +230,13 @@
     "title": "Your order",
     "notFound": "We could not find that order.",
     "fromRestaurant": "From {{restaurant}}",
+    "rider": {
+      "onTheWay": "{{name}} is on the way",
+      "arriving": "arriving {{from}} – {{to}}",
+      "overdue": "running a little late",
+      "delivered": "Delivered by {{name}}",
+      "unknown": "on the way to you"
+    },
     "cancel": "Cancel order",
     "backToBrowsing": "Back to browsing",
     "status": {
