@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.0](https://github.com/Abuubkar/foodio-mobile/compare/v1.7.0...v1.8.0) (2026-10-30)
+
+
+### Features
+
+* **manage:** delete a menu section ([#261](https://github.com/Abuubkar/foodio-mobile/issues/261)) ([abfce86](https://github.com/Abuubkar/foodio-mobile/commit/abfce86c11e6ec0bbe6909f0984ee56777a99547))
+* **orders:** the order screen says who is bringing it and when ([#262](https://github.com/Abuubkar/foodio-mobile/issues/262)) ([52c2cd6](https://github.com/Abuubkar/foodio-mobile/commit/52c2cd6377512b8d253c39b2bcf0e49195e464ec))
+
+
+### Bug Fixes
+
+* **mocks:** a tapped handle now leads to a profile, not a 404 ([#258](https://github.com/Abuubkar/foodio-mobile/issues/258)) ([b458d62](https://github.com/Abuubkar/foodio-mobile/commit/b458d62a7349cd4d1a7258490943adec6f61f220))
+
 ## [1.7.0](https://github.com/Abuubkar/foodio-mobile/compare/v1.6.0...v1.7.0) (2026-10-30)
 
 
