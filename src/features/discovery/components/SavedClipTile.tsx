@@ -8,10 +8,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Photo, Text } from '@/components/ui';
 import { useNavigationGuard } from '@/hooks/useNavigationGuard';
+import { useSessionStore } from '@/stores/session.store';
 import { colors } from '@/theme';
 
 import type { Clip } from '../types/clip.types';
-import { isCustomerClip } from '../types/clip.types';
+import { isOwnClip } from '../types/clip.types';
 
 type SavedClipTileProps = {
   clip: Clip;
@@ -30,11 +31,17 @@ type SavedClipTileProps = {
  * decoder pressure the clips feed already fought on the A15, and on a screen
  * whose whole job is comparison, nine things moving at once is worse than
  * nine things still.
+ *
+ * The badge says "Yours" only when this person held the camera. Another
+ * customer's clip gets no badge rather than a second author line: who filmed
+ * it is the parent's to say — the Dishes tab already titles each tile with it —
+ * and the badge means one thing.
  */
 export function SavedClipTile({ clip, title, subtitle, tall }: SavedClipTileProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const guard = useNavigationGuard();
+  const personId = useSessionStore((state) => state.person?.id ?? null);
 
   return (
     <Pressable
@@ -49,7 +56,7 @@ export function SavedClipTile({ clip, title, subtitle, tall }: SavedClipTileProp
         <Ionicons name="play" size={12} color={colors.white} />
       </View>
 
-      {isCustomerClip(clip) ? (
+      {isOwnClip(clip, personId) ? (
         <View className="absolute right-2 top-2 rounded-full bg-emerald-500 px-2 py-0.5">
           <Text variant="caption" className="font-bold text-emerald-950">
             {t('saved.yours')}

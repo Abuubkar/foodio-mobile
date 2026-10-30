@@ -66,6 +66,24 @@ export type Clip = z.infer<typeof clipSchema>;
 export const isCustomerClip = (clip: Clip): boolean => clip.author.kind === 'customer';
 
 /**
+ * Whether *this* person filmed it.
+ *
+ * `isCustomerClip` only asks whether a customer filmed it, which is every
+ * stranger's clip too — so it cannot answer the question an ownership badge is
+ * asking. Takes the id rather than the Person: a predicate over a Clip has no
+ * business knowing the identity feature's types.
+ *
+ * Signed out owns nothing, which is why the id is nullable rather than the
+ * caller guarding first at three call sites.
+ */
+export function isOwnClip(clip: Clip, personId: string | null): boolean {
+  if (personId === null) return false;
+  if (clip.author.kind !== 'customer') return false;
+
+  return clip.author.personId === personId;
+}
+
+/**
  * Which of the three shapes a Clip is, from the three fields that make it up.
  *
  * One function rather than three truthiness tests at every call site. The

@@ -1,5 +1,5 @@
 import type { Clip } from './clip.types';
-import { clipAuthorHandle, clipHeading, clipSchema, clipSubject } from './clip.types';
+import { clipAuthorHandle, clipHeading, clipSchema, clipSubject, isOwnClip } from './clip.types';
 
 const base = {
   id: 'clip-1',
@@ -110,5 +110,24 @@ describe('clipAuthorHandle', () => {
 
   it('is nothing for a restaurant', () => {
     expect(clipAuthorHandle(parse({ ...base, author: { kind: 'restaurant' } }))).toBeUndefined();
+  });
+});
+
+describe('isOwnClip', () => {
+  it('is yours when you are the person the author points at', () => {
+    expect(isOwnClip(parse({ ...base, author: customer() }), 'p1')).toBe(true);
+  });
+
+  it('is not yours when another customer filmed it', () => {
+    // The bug this replaced: every customer clip wore the badge.
+    expect(isOwnClip(parse({ ...base, author: customer({ personId: 'p2' }) }), 'p1')).toBe(false);
+  });
+
+  it('is never yours when the kitchen filmed it', () => {
+    expect(isOwnClip(parse({ ...base, author: { kind: 'restaurant' } }), 'p1')).toBe(false);
+  });
+
+  it('is nobody’s while signed out', () => {
+    expect(isOwnClip(parse({ ...base, author: customer() }), null)).toBe(false);
   });
 });
